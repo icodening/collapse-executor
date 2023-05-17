@@ -1,0 +1,7 @@
+server:
+  port: 8080
+  shutdown: graceful
+collapse:
+  executor:
+    collecting-wait-time: 0
+    enabled: true

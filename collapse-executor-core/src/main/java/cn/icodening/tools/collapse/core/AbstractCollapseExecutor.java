@@ -60,7 +60,7 @@ public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> impl
 
     protected abstract BATCH_OUTPUT doExecute(Collection<Input<INPUT>> inputs) throws Throwable;
 
-    protected abstract void bindingOutput(BATCH_OUTPUT compositeOut, List<Bundle<INPUT, OUTPUT>> bundles);
+    protected abstract void bindingOutput(BATCH_OUTPUT batchOutput, List<Bundle<INPUT, OUTPUT>> bundles);
 
     @SuppressWarnings("unchecked")
     private Bundle<Object, Object> createBundle(INPUT input, ThreadlessExecutor executor, CompletableFuture<OUTPUT> completableFuture) {

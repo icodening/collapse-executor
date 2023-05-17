@@ -18,9 +18,9 @@ public abstract class SameOutputCollapseExecutor<INPUT, OUTPUT> extends Abstract
     }
 
     @Override
-    protected void bindingOutput(OUTPUT output, List<Bundle<INPUT, OUTPUT>> bundles) {
+    protected void bindingOutput(OUTPUT batchOutput, List<Bundle<INPUT, OUTPUT>> bundles) {
         for (Bundle<INPUT, OUTPUT> bundle : bundles) {
-            bundle.bindOutput(output);
+            bundle.bindOutput(batchOutput);
         }
     }
 }
