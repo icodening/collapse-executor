@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 /**
@@ -18,10 +17,6 @@ public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> impl
     private final ListeningBundleCollector collector;
 
     private InputGrouper<INPUT> inputGrouper = EqualsInputGrouper.getInstance();
-
-    public AbstractCollapseExecutor(Executor executor) {
-        this(new ListeningBundleCollector(executor));
-    }
 
     public AbstractCollapseExecutor(ListeningBundleCollector collector) {
         this.collector = Objects.requireNonNull(collector, "collector must be not null.");
