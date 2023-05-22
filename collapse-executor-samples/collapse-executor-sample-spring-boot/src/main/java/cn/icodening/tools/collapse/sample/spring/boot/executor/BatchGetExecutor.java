@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -80,12 +81,14 @@ public class BatchGetExecutor extends AbstractCollapseExecutor<Long, UserEntity,
      */
     @Override
     protected void bindingOutput(List<UserEntity> batchOutput, List<Bundle<Long, UserEntity>> bundles) {
-        Map<Long, List<Bundle<Long, UserEntity>>> idBundles = bundles.stream().collect(Collectors.groupingBy(Bundle::getInput));
+        Map<Long, UserEntity> entityMap = new HashMap<>();
         for (UserEntity userEntity : batchOutput) {
-            List<Bundle<Long, UserEntity>> idBundleGroup = idBundles.get(userEntity.getId());
-            for (Bundle<Long, UserEntity> bundle : idBundleGroup) {
-                bundle.bindOutput(userEntity);
-            }
+            entityMap.put(userEntity.getId(), userEntity);
+        }
+        for (Bundle<Long, UserEntity> bundle : bundles) {
+            Long id = bundle.getInput();
+            UserEntity userEntity = entityMap.get(id);
+            bundle.bindOutput(userEntity);
         }
     }
 }
