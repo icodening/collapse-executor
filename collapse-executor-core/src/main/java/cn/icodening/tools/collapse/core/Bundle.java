@@ -1,6 +1,7 @@
 package cn.icodening.tools.collapse.core;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 /**
  * input output bundle
@@ -18,16 +19,16 @@ public final class Bundle<INPUT, OUTPUT> {
 
     private volatile Throwable throwable;
 
-    private final ThreadlessExecutor threadlessExecutor;
+    private final Executor callbackExecutor;
 
     private final CompletableFuture<OUTPUT> completableFuture;
 
     private volatile boolean completed = false;
 
-    Bundle(CollapseExecutor<INPUT, OUTPUT> collapseExecutor, INPUT input, ThreadlessExecutor threadlessExecutor, CompletableFuture<OUTPUT> completableFuture) {
+    Bundle(CollapseExecutor<INPUT, OUTPUT> collapseExecutor, INPUT input, Executor callbackExecutor, CompletableFuture<OUTPUT> completableFuture) {
         this.collapseExecutor = collapseExecutor;
         this.input = input;
-        this.threadlessExecutor = threadlessExecutor;
+        this.callbackExecutor = callbackExecutor;
         this.completableFuture = completableFuture;
     }
 
@@ -62,14 +63,14 @@ public final class Bundle<INPUT, OUTPUT> {
         completed = true;
         if (throwable != null) {
             this.throwable = throwable;
-            threadlessExecutor.execute(() -> completableFuture.completeExceptionally(throwable));
+            callbackExecutor.execute(() -> completableFuture.completeExceptionally(throwable));
         } else {
             this.output = output;
-            threadlessExecutor.execute(() -> completableFuture.complete(output));
+            callbackExecutor.execute(() -> completableFuture.complete(output));
         }
     }
 
-    ThreadlessExecutor getThreadlessExecutor() {
-        return threadlessExecutor;
+    Executor getCallbackExecutor() {
+        return callbackExecutor;
     }
 }

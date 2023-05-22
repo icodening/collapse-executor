@@ -1,4 +1,9 @@
-package cn.icodening.tools.collapse.core;
+package cn.icodening.tools.collapse.core.support;
+
+import cn.icodening.tools.collapse.core.EqualsInputGrouper;
+import cn.icodening.tools.collapse.core.Input;
+import cn.icodening.tools.collapse.core.ListeningBundleCollector;
+import cn.icodening.tools.collapse.core.SameOutputCollapseExecutor;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -33,39 +38,6 @@ public final class CallableGroupCollapseExecutor {
         @Override
         protected R doExecute(Collection<Input<CallableGroup<R>>> inputs) throws Throwable {
             return inputs.iterator().next().value().getCallable().call();
-        }
-    }
-
-    private static class CallableGroup<R> {
-
-        private final Object group;
-
-        private final Callable<R> callable;
-
-        public CallableGroup(Object group, Callable<R> callable) {
-            this.group = group;
-            this.callable = callable;
-        }
-
-        public Object getGroup() {
-            return group;
-        }
-
-        public Callable<R> getCallable() {
-            return callable;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            CallableGroup<?> that = (CallableGroup<?>) o;
-            return Objects.equals(group, that.group);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(group);
         }
     }
 }

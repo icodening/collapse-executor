@@ -76,7 +76,7 @@ public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> impl
             }
             List<Bundle<INPUT, OUTPUT>> bundleGroup = group.stream().map(input -> (Bundle<INPUT, OUTPUT>) input.getBundle()).collect(Collectors.toList());
             Input<INPUT> input = iterator.next();
-            input.getBundle().getThreadlessExecutor().execute(() -> {
+            input.getBundle().getCallbackExecutor().execute(() -> {
                 try {
                     BATCH_OUTPUT batchOutput = this.doExecute(group);
                     this.bindingOutput(batchOutput, bundleGroup);
