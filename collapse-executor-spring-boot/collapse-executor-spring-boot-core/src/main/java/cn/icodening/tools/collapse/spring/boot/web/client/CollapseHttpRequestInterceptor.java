@@ -1,7 +1,7 @@
 package cn.icodening.tools.collapse.spring.boot.web.client;
 
-import cn.icodening.tools.collapse.core.CallableGroupCollapseExecutor;
 import cn.icodening.tools.collapse.core.ListeningBundleCollector;
+import cn.icodening.tools.collapse.core.support.CallableGroupCollapseExecutor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
@@ -32,7 +32,7 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
             return execution.execute(request, body);
         }
         try {
-            return this.callableGroupCollapseExecutor.execute(request.getURI(), () -> repeatableReadResponse(execution.execute(request, body)));
+            return this.callableGroupCollapseExecutor.execute(CollapseHttpRequestInterceptor.class.getName() + ".GET" + request.getURI(), () -> repeatableReadResponse(execution.execute(request, body)));
         } catch (RuntimeException | IOException e) {
             throw e;
         } catch (Throwable throwable) {
