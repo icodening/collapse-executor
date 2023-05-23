@@ -1,7 +1,10 @@
 package cn.icodening.tools.collapse.core;
 
+import cn.icodening.tools.collapse.core.util.CacheableSupplier;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Supplier;
 
 /**
  * @author icodening
@@ -9,41 +12,45 @@ import java.util.concurrent.Executor;
  */
 public abstract class CollapseExecutorAsyncSupport<INPUT, OUTPUT, BATCH_OUTPUT> extends AbstractCollapseExecutor<INPUT, CompletableFuture<OUTPUT>, BATCH_OUTPUT> {
 
-    private Executor executor;
+    private Supplier<Executor> executorSupplier;
 
     public CollapseExecutorAsyncSupport(ListeningBundleCollector collector) {
         super(collector);
     }
 
     public void setExecutor(Executor executor) {
-        this.executor = executor;
+        this.executorSupplier = () -> executor;
+    }
+
+    public void setExecutorSupplier(Supplier<Executor> executorSupplier) {
+        this.executorSupplier = CacheableSupplier.from(executorSupplier);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public CompletableFuture<OUTPUT> execute(INPUT input) {
-        CompletableFuture<OUTPUT> result = new CompletableFuture<>();
-        this.getCollector().enqueue((Bundle<Object, Object>) createBundle(input, executor, adaptFuture(new CompletableFuture<>(), result)));
-        return result;
+    protected Executor getCallbackExecutor() {
+        return executorSupplier.get();
     }
 
-    private CompletableFuture<CompletableFuture<OUTPUT>> adaptFuture(CompletableFuture<CompletableFuture<OUTPUT>> bundleFuture, CompletableFuture<OUTPUT> actualFuture) {
-        return bundleFuture.whenComplete((future, throwable) -> {
+    @Override
+    protected CompletableFuture<OUTPUT> returning(Bundle<INPUT, CompletableFuture<OUTPUT>> bundle) {
+        CompletableFuture<OUTPUT> result = new CompletableFuture<>();
+        CompletableFuture<CompletableFuture<OUTPUT>> listeningResult = bundle.getListeningResult();
+        Executor executor = bundle.getCallbackExecutor();
+        listeningResult.whenComplete((future, throwable) -> {
             if (throwable != null) {
-                actualFuture.completeExceptionally(throwable);
+                result.completeExceptionally(throwable);
             } else {
                 future.whenComplete((output, ex) -> {
-                    if (ex != null) {
-                        actualFuture.completeExceptionally(ex);
-                    } else {
-                        actualFuture.complete(output);
-                    }
+                    executor.execute(() -> {
+                        if (ex != null) {
+                            result.completeExceptionally(ex);
+                        } else {
+                            result.complete(output);
+                        }
+                    });
                 });
             }
         });
-    }
-
-    private Bundle<?, ?> createBundle(INPUT input, Executor executor, CompletableFuture<CompletableFuture<OUTPUT>> completableFuture) {
-        return new Bundle<>(this, input, executor, completableFuture);
+        return result;
     }
 }

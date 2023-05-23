@@ -11,7 +11,7 @@ public class CollapseExecutorProperties {
 
     private boolean enabled = true;
 
-    private long collectingWaitTime = 0;
+    private long collectingWaitTime = -1;
 
     public boolean isEnabled() {
         return enabled;

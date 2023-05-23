@@ -6,9 +6,9 @@ import java.util.List;
  * @author icodening
  * @date 2023.05.14
  */
-public abstract class SameOutputCollapseExecutor<INPUT, OUTPUT> extends AbstractCollapseExecutor<INPUT, OUTPUT, OUTPUT> {
+public abstract class SameOutputCollapseExecutorSync<INPUT, OUTPUT> extends CollapseExecutorSyncSupport<INPUT, OUTPUT, OUTPUT> {
 
-    public SameOutputCollapseExecutor(ListeningBundleCollector collector) {
+    public SameOutputCollapseExecutorSync(ListeningBundleCollector collector) {
         super(collector);
     }
 

@@ -21,15 +21,15 @@ public final class Bundle<INPUT, OUTPUT> {
 
     private final Executor callbackExecutor;
 
-    private final CompletableFuture<OUTPUT> completableFuture;
+    private final CompletableFuture<OUTPUT> listeningResult;
 
     private volatile boolean completed = false;
 
-    Bundle(CollapseExecutor<INPUT, OUTPUT> collapseExecutor, INPUT input, Executor callbackExecutor, CompletableFuture<OUTPUT> completableFuture) {
+    Bundle(CollapseExecutor<INPUT, OUTPUT> collapseExecutor, INPUT input, Executor callbackExecutor, CompletableFuture<OUTPUT> listeningResult) {
         this.collapseExecutor = collapseExecutor;
         this.input = input;
         this.callbackExecutor = callbackExecutor;
-        this.completableFuture = completableFuture;
+        this.listeningResult = listeningResult;
     }
 
     CollapseExecutor<INPUT, OUTPUT> getCollapseExecutor() {
@@ -63,14 +63,18 @@ public final class Bundle<INPUT, OUTPUT> {
         completed = true;
         if (throwable != null) {
             this.throwable = throwable;
-            callbackExecutor.execute(() -> completableFuture.completeExceptionally(throwable));
+            callbackExecutor.execute(() -> listeningResult.completeExceptionally(throwable));
         } else {
             this.output = output;
-            callbackExecutor.execute(() -> completableFuture.complete(output));
+            callbackExecutor.execute(() -> listeningResult.complete(output));
         }
     }
 
     Executor getCallbackExecutor() {
         return callbackExecutor;
+    }
+
+    CompletableFuture<OUTPUT> getListeningResult() {
+        return listeningResult;
     }
 }

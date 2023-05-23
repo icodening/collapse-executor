@@ -3,5 +3,9 @@ server:
   shutdown: graceful
 collapse:
   executor:
-    collecting-wait-time: 0
+    collecting-wait-time: -1
     enabled: true
+    servlet:
+      enabled: true
+      uris:
+        - /user/

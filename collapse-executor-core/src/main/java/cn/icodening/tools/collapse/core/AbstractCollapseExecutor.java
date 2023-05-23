@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 /**
@@ -36,30 +36,25 @@ public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> impl
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public OUTPUT execute(INPUT input) throws Throwable {
-        ThreadlessExecutor threadlessExecutor = new ThreadlessExecutor();
-        CompletableFuture<OUTPUT> completableFuture = new CompletableFuture<>();
-        this.collector.enqueue(createBundle(input, threadlessExecutor, completableFuture));
-        try {
-            while (!completableFuture.isDone()) {
-                threadlessExecutor.waitAndDrain();
-            }
-            return completableFuture.get();
-        } catch (ExecutionException executionException) {
-            //throw actual exception
-            throw executionException.getCause();
-        } finally {
-            threadlessExecutor.shutdown();
-        }
+        Executor callbackExecutor = getCallbackExecutor();
+        Bundle<INPUT, OUTPUT> bundle = createBundle(input, callbackExecutor, new CompletableFuture<>());
+        this.collector.enqueue((Bundle<Object, Object>) bundle);
+        return returning(bundle);
     }
+
+    protected abstract OUTPUT returning(Bundle<INPUT, OUTPUT> bundle) throws Throwable;
+
+    protected abstract Executor getCallbackExecutor();
 
     protected abstract BATCH_OUTPUT doExecute(Collection<Input<INPUT>> inputs) throws Throwable;
 
     protected abstract void bindingOutput(BATCH_OUTPUT batchOutput, List<Bundle<INPUT, OUTPUT>> bundles);
 
     @SuppressWarnings("unchecked")
-    private Bundle<Object, Object> createBundle(INPUT input, ThreadlessExecutor executor, CompletableFuture<OUTPUT> completableFuture) {
-        return (Bundle<Object, Object>) new Bundle<>(this, input, executor, completableFuture);
+    private Bundle<INPUT, OUTPUT> createBundle(INPUT input, Executor executor, CompletableFuture<OUTPUT> completableFuture) {
+        return new Bundle<>(this, input, executor, completableFuture);
     }
 
     @SuppressWarnings("unchecked")
