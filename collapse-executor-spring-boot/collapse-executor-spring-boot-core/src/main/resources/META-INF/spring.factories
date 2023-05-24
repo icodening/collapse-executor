@@ -1,4 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.icodening.tools.collapse.spring.boot.configuration.CollapseExecutorAutoConfiguration,\
-  cn.icodening.tools.collapse.spring.boot.configuration.CollapseComponentScanner,\
-  cn.icodening.tools.collapse.spring.boot.web.servlet.CollapseServletAutoConfiguration
+  cn.icodening.tools.collapse.spring.boot.configuration.CollapseComponentScanner

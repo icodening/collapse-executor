@@ -4,6 +4,7 @@ import cn.icodening.tools.collapse.core.EqualsInputGrouper;
 import cn.icodening.tools.collapse.core.LengthLimitedInputGrouper;
 import cn.icodening.tools.collapse.core.ListeningBundleCollector;
 import cn.icodening.tools.collapse.spring.boot.ConditionalOnCollapseEnabled;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -20,7 +21,7 @@ import java.util.concurrent.ExecutorService;
  * @author icodening
  * @date 2023.05.24
  */
-@Configuration
+@AutoConfiguration
 @ConditionalOnClass(Servlet.class)
 @ConditionalOnCollapseEnabled
 @ConditionalOnProperty(prefix = "collapse.executor.servlet", name = "enabled", havingValue = "true", matchIfMissing = false)
