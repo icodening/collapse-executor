@@ -35,19 +35,16 @@ public abstract class CollapseExecutorAsyncSupport<INPUT, OUTPUT, BATCH_OUTPUT> 
     protected CompletableFuture<OUTPUT> returning(Bundle<INPUT, CompletableFuture<OUTPUT>> bundle) {
         CompletableFuture<OUTPUT> result = new CompletableFuture<>();
         CompletableFuture<CompletableFuture<OUTPUT>> listeningResult = bundle.getListeningResult();
-        Executor executor = bundle.getCallbackExecutor();
         listeningResult.whenComplete((future, throwable) -> {
             if (throwable != null) {
                 result.completeExceptionally(throwable);
             } else {
                 future.whenComplete((output, ex) -> {
-                    executor.execute(() -> {
-                        if (ex != null) {
-                            result.completeExceptionally(ex);
-                        } else {
-                            result.complete(output);
-                        }
-                    });
+                    if (ex != null) {
+                        result.completeExceptionally(ex);
+                    } else {
+                        result.complete(output);
+                    }
                 });
             }
         });

@@ -67,10 +67,8 @@ public abstract class BatchCollector<E> implements Closeable {
         try {
             preparedCollect();
             Itr itr = new Itr();
-            onCollecting(itr);
-            if (itr.hasNext) {
-                throw new UnsupportedOperationException("Collecting error. Remaining unconsumed elements");
-            }
+            Collection<E> collection = onCollecting(itr);
+            onCollected(collection);
         } finally {
             processing.set(false);
             if (!queue.isEmpty()) {
@@ -83,13 +81,13 @@ public abstract class BatchCollector<E> implements Closeable {
 
     }
 
-    protected void onCollecting(Iterator<E> iterator) {
+    protected Collection<E> onCollecting(Iterator<E> iterator) {
         List<E> elements = new ArrayList<>();
         while (iterator.hasNext()) {
             E next = iterator.next();
             elements.add(next);
         }
-        onCollected(elements);
+        return elements;
     }
 
     protected abstract void onCollected(Collection<E> elements);

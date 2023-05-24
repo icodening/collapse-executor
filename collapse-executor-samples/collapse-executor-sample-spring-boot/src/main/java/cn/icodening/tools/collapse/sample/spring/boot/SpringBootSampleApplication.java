@@ -19,20 +19,18 @@ import java.util.concurrent.ExecutorService;
 @SpringBootApplication
 public class SpringBootSampleApplication {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Throwable {
         ConfigurableApplicationContext context = SpringApplication.run(SpringBootSampleApplication.class);
         ServerProperties serverProperties = context.getBean(ServerProperties.class);
         Integer port = serverProperties.getPort();
         RestTemplate restTemplate = context.getBean(RestTemplate.class);
-        ExecutorService executorService = context.getBean(ExecutorService.class);
+        ExecutorService executorService = context.getBean("executorService", ExecutorService.class);
         BatchGetExecutor batchGetExecutor = context.getBean(BatchGetExecutor.class);
         UriComponentsBuilder baseUriBuilder = UriComponentsBuilder.fromUriString("http://localhost").port(port);
 
         queryId1between50(executorService, restTemplate, baseUriBuilder);
         queryId1between50Batch(executorService, batchGetExecutor);
         queryId1between2(executorService, restTemplate, baseUriBuilder);
-
-        System.exit(0);
     }
 
     /**

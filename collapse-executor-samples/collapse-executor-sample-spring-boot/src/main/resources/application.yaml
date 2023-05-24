@@ -3,9 +3,17 @@ server:
   shutdown: graceful
 collapse:
   executor:
-    collecting-wait-time: -1
     enabled: true
+    collecting-wait-time: -1
+    wait-threshold: 10
+    thread-pool:
+      core-pool-size: 100
+      maximum-pool-size: 100
+      queue-size: 0
+      prefix: collapse-async
     servlet:
       enabled: true
+      batch-size: 64
       uris:
-        - /user/
+        - /test/collapse1
+        - /test/collapse100
