@@ -53,11 +53,6 @@ public class CollapseServletAutoConfiguration {
     }
 
     @Bean
-    public HttpServletRequestMatcher httpServletRequestMatcher(CollapseServletProperties collapseServletProperties) {
-        return new ConfigurationRequestMatcher(collapseServletProperties);
-    }
-
-    @Bean
     public ServletCollapseGroupKeyResolver configurationServletCollapseGroupKeyResolver(CollapseServletProperties collapseServletProperties) {
         return new ConfigurationServletCollapseGroupKeyResolver(collapseServletProperties);
     }
@@ -66,12 +61,6 @@ public class CollapseServletAutoConfiguration {
     @Primary
     public ServletCollapseGroupKeyResolver compositeServletCollapseGroupKeyResolver(List<ServletCollapseGroupKeyResolver> servletCollapseGroupKeyResolvers) {
         return new CompositeServletCollapseGroupKeyResolver(servletCollapseGroupKeyResolvers);
-    }
-
-    @Bean
-    @Primary
-    public HttpServletRequestMatcher compositeHttpServletRequestMatcher(List<HttpServletRequestMatcher> matchers) {
-        return new CompositeHttpServletRequestMatcher(matchers);
     }
 
     @ConditionalOnClass(name = "org.apache.catalina.startup.Tomcat")
