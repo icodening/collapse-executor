@@ -1,6 +1,9 @@
 server:
   port: 8080
   shutdown: graceful
+  tomcat:
+    threads:
+      max: 200
   undertow:
     threads:
       worker: 200
@@ -12,6 +15,14 @@ collapse:
     servlet:
       enabled: true
       batch-size: 64
-      uris:
-        - /test/collapse1
-        - /test/collapse100
+      collapse-policies:
+        test-policy:
+          collapse-query-string: true
+          collapse-request-headers:
+            - auth
+            - user-id
+      collapse-groups:
+        - collapse-policy-name: test-policy
+          uris:
+            - /test/collapse1
+            - /test/collapse100

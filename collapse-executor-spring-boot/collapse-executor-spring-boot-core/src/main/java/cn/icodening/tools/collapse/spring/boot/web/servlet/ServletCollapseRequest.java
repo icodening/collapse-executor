@@ -9,17 +9,17 @@ import java.util.Objects;
  */
 class ServletCollapseRequest {
 
-    private final String uri;
+    private final ServletCollapseGroupKey groupKey;
 
     private final AsyncContext asyncContext;
 
-    public ServletCollapseRequest(String uri, AsyncContext asyncContext) {
-        this.uri = uri;
+    public ServletCollapseRequest(ServletCollapseGroupKey groupKey, AsyncContext asyncContext) {
+        this.groupKey = groupKey;
         this.asyncContext = asyncContext;
     }
 
-    public String getUri() {
-        return uri;
+    public ServletCollapseGroupKey getGroupKey() {
+        return groupKey;
     }
 
     public AsyncContext getAsyncContext() {
@@ -31,11 +31,11 @@ class ServletCollapseRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ServletCollapseRequest that = (ServletCollapseRequest) o;
-        return uri.equals(that.uri);
+        return groupKey.equals(that.groupKey);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uri);
+        return Objects.hash(groupKey);
     }
 }

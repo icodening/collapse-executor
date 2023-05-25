@@ -40,8 +40,8 @@ public class CollapseServletAutoConfiguration {
     }
 
     @Bean
-    public CollapseHttpRequestServletFilter collapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, HttpServletRequestMatcher httpServletRequestMatcher) {
-        return new CollapseHttpRequestServletFilter(asyncServletExecutor, httpServletRequestMatcher);
+    public CollapseHttpRequestServletFilter collapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, ServletCollapseGroupKeyResolver servletCollapseGroupKeyResolver) {
+        return new CollapseHttpRequestServletFilter(asyncServletExecutor, servletCollapseGroupKeyResolver);
     }
 
     @Bean
@@ -55,6 +55,17 @@ public class CollapseServletAutoConfiguration {
     @Bean
     public HttpServletRequestMatcher httpServletRequestMatcher(CollapseServletProperties collapseServletProperties) {
         return new ConfigurationRequestMatcher(collapseServletProperties);
+    }
+
+    @Bean
+    public ServletCollapseGroupKeyResolver configurationServletCollapseGroupKeyResolver(CollapseServletProperties collapseServletProperties) {
+        return new ConfigurationServletCollapseGroupKeyResolver(collapseServletProperties);
+    }
+
+    @Bean
+    @Primary
+    public ServletCollapseGroupKeyResolver compositeServletCollapseGroupKeyResolver(List<ServletCollapseGroupKeyResolver> servletCollapseGroupKeyResolvers) {
+        return new CompositeServletCollapseGroupKeyResolver(servletCollapseGroupKeyResolvers);
     }
 
     @Bean
@@ -76,8 +87,7 @@ public class CollapseServletAutoConfiguration {
     static class CollapseUndertowServerConfiguration {
 
         @Bean
-        public SmartInitializingSingleton collapseUndertowWebServerCustomizer(ServletWebServerApplicationContext servletWebServerApplicationContext,
-                                                                              AsyncServletExecutor asyncServletExecutor) {
+        public SmartInitializingSingleton collapseUndertowWebServerCustomizer(ServletWebServerApplicationContext servletWebServerApplicationContext, AsyncServletExecutor asyncServletExecutor) {
 
 
             return () -> {

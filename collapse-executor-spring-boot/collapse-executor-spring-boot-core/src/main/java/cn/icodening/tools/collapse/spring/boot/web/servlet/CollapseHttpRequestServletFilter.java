@@ -23,25 +23,22 @@ class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
 
     private final AsyncServletExecutor asyncServletExecutor;
 
-    private final HttpServletRequestMatcher httpServletRequestMatcher;
+    private final ServletCollapseGroupKeyResolver servletCollapseGroupKeyResolver;
 
-    public CollapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, HttpServletRequestMatcher httpServletRequestMatcher) {
+    public CollapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, ServletCollapseGroupKeyResolver servletCollapseGroupKeyResolver) {
         this.asyncServletExecutor = asyncServletExecutor;
-        this.httpServletRequestMatcher = httpServletRequestMatcher;
+        this.servletCollapseGroupKeyResolver = servletCollapseGroupKeyResolver;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain chain) throws ServletException, IOException {
-        boolean match = httpServletRequestMatcher.match(httpServletRequest);
-        if (!match) {
+        ServletCollapseGroupKey groupKey = servletCollapseGroupKeyResolver.resolveGroupKey(httpServletRequest);
+        if (groupKey == null) {
             chain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
-        String requestURI = httpServletRequest.getRequestURI();
-        String queryString = httpServletRequest.getQueryString();
-        String group = queryString == null ? requestURI : requestURI + "?" + queryString;
         AsyncContext asyncContext = httpServletRequest.startAsync(httpServletRequest, new RecordableServletResponse(httpServletResponse));
-        ServletCollapseRequest servletCollapseRequest = new ServletCollapseRequest(group, asyncContext);
+        ServletCollapseRequest servletCollapseRequest = new ServletCollapseRequest(groupKey, asyncContext);
         try {
             CompletableFuture<ServletCollapseResponse> future = asyncServletExecutor.execute(servletCollapseRequest);
             future.whenComplete((collapseResponse, throwable) -> {
