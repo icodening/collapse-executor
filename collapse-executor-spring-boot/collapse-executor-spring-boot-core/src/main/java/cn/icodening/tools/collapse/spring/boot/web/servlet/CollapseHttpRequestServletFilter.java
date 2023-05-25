@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.AsyncContext;
-import javax.servlet.AsyncEvent;
-import javax.servlet.AsyncListener;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -14,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author icodening
@@ -44,15 +41,14 @@ class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
         String queryString = httpServletRequest.getQueryString();
         String group = queryString == null ? requestURI : requestURI + "?" + queryString;
         AsyncContext asyncContext = httpServletRequest.startAsync(httpServletRequest, new RecordableServletResponse(httpServletResponse));
-        AtomicBoolean completed = addStatusListener(asyncContext);
         ServletCollapseRequest servletCollapseRequest = new ServletCollapseRequest(group, asyncContext);
         try {
             CompletableFuture<ServletCollapseResponse> future = asyncServletExecutor.execute(servletCollapseRequest);
             future.whenComplete((collapseResponse, throwable) -> {
-                if (completed.get()) {
-                    return;
-                }
                 try {
+                    if (throwable != null) {
+                        throw throwable;
+                    }
                     RecordableServletOutputStream recordableServletOutputStream = collapseResponse.getRecordableServletOutputStream();
                     byte[] data = recordableServletOutputStream.getRecordBytes();
                     HttpServletResponse response = collapseResponse.getResponse();
@@ -73,31 +69,5 @@ class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
             }
             throw new RuntimeException(e);
         }
-    }
-
-    private AtomicBoolean addStatusListener(AsyncContext asyncContext) {
-        AtomicBoolean completed = new AtomicBoolean(false);
-        asyncContext.addListener(new AsyncListener() {
-            @Override
-            public void onComplete(AsyncEvent event) throws IOException {
-                completed.set(true);
-            }
-
-            @Override
-            public void onTimeout(AsyncEvent event) throws IOException {
-
-            }
-
-            @Override
-            public void onError(AsyncEvent event) throws IOException {
-                completed.set(true);
-            }
-
-            @Override
-            public void onStartAsync(AsyncEvent event) throws IOException {
-
-            }
-        });
-        return completed;
     }
 }

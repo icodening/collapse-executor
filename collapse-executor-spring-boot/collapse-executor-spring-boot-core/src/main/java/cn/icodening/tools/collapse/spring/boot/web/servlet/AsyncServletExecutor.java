@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author icodening
@@ -35,9 +36,10 @@ public class AsyncServletExecutor extends CollapseExecutorAsyncSupport<ServletCo
     }
 
     @Override
-    protected void bindingOutput(CompletableFuture<ServletCollapseResponse> responseCompletableFuture,
-                                 List<Bundle<ServletCollapseRequest, CompletableFuture<ServletCollapseResponse>>> bundles) {
-        for (Bundle<ServletCollapseRequest, CompletableFuture<ServletCollapseResponse>> bundle : bundles) {
+    protected void bindingOutput(CompletableFuture<ServletCollapseResponse> responseCompletableFuture, List<Bundle<ServletCollapseRequest, CompletableFuture<ServletCollapseResponse>>> bundles) {
+        //skip first.
+        for (int i = 1; i < bundles.size(); i++) {
+            Bundle<ServletCollapseRequest, CompletableFuture<ServletCollapseResponse>> bundle = bundles.get(i);
             bundle.bindOutput(responseCompletableFuture);
         }
     }
@@ -65,6 +67,7 @@ public class AsyncServletExecutor extends CollapseExecutorAsyncSupport<ServletCo
 
         @Override
         public void onTimeout(AsyncEvent event) throws IOException {
+            future.completeExceptionally(new TimeoutException());
         }
 
         @Override

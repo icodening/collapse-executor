@@ -1,16 +1,14 @@
 server:
   port: 8080
   shutdown: graceful
+  undertow:
+    threads:
+      worker: 200
 collapse:
   executor:
     enabled: true
     collecting-wait-time: -1
     wait-threshold: 10
-    thread-pool:
-      core-pool-size: 100
-      maximum-pool-size: 100
-      queue-size: 0
-      prefix: collapse-async
     servlet:
       enabled: true
       batch-size: 64

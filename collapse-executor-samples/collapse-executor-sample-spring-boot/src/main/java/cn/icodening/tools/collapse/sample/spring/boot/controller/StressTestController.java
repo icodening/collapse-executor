@@ -62,4 +62,11 @@ public class StressTestController {
         result.put("noop", noOpCounter.get());
         return result;
     }
+
+    @RequestMapping("/reset")
+    public String reset() {
+        collapseCounter.set(0);
+        noOpCounter.set(0);
+        return "reset success.";
+    }
 }
