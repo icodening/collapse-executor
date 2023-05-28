@@ -1,5 +1,6 @@
 package cn.icodening.tools.collapse.spring.boot.web.servlet;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
@@ -15,7 +16,7 @@ public class ServletCollapseGroupKey {
 
     private String query;
 
-    private TreeMap<String, String> headers = new TreeMap<>(String::compareTo);
+    private Map<String, String> headers = new TreeMap<>(String::compareToIgnoreCase);
 
     private byte[] body;
 
@@ -43,11 +44,11 @@ public class ServletCollapseGroupKey {
         this.query = query;
     }
 
-    public TreeMap<String, String> getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(TreeMap<String, String> headers) {
+    public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
 

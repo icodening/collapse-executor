@@ -4,7 +4,7 @@ import cn.icodening.tools.collapse.core.ListeningBundleCollector;
 import cn.icodening.tools.collapse.core.SingleThreadExecutor;
 import cn.icodening.tools.collapse.core.SuspendableListeningBundleCollector;
 import cn.icodening.tools.collapse.core.support.AsyncCallableGroupCollapseExecutor;
-import cn.icodening.tools.collapse.core.support.CallableGroupCollapseExecutor;
+import cn.icodening.tools.collapse.core.support.SyncCallableGroupCollapseExecutor;
 import cn.icodening.tools.collapse.spring.boot.ConditionalOnCollapseEnabled;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -43,9 +43,9 @@ public class CollapseExecutorAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(CallableGroupCollapseExecutor.class)
-    public CallableGroupCollapseExecutor callableGroupCollapseExecutor(ListeningBundleCollector listeningBundleCollector) {
-        return new CallableGroupCollapseExecutor(listeningBundleCollector);
+    @ConditionalOnMissingBean(SyncCallableGroupCollapseExecutor.class)
+    public SyncCallableGroupCollapseExecutor callableGroupCollapseExecutor(ListeningBundleCollector listeningBundleCollector) {
+        return new SyncCallableGroupCollapseExecutor(listeningBundleCollector);
     }
 
     @Bean

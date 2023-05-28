@@ -13,11 +13,11 @@ import java.util.concurrent.Callable;
  * @author icodening
  * @date 2023.05.14
  */
-public final class CallableGroupCollapseExecutor {
+public final class SyncCallableGroupCollapseExecutor {
 
     private final InternalCallableGroupCollapseExecutorSync<Object> executor;
 
-    public CallableGroupCollapseExecutor(ListeningBundleCollector collector) {
+    public SyncCallableGroupCollapseExecutor(ListeningBundleCollector collector) {
         Objects.requireNonNull(collector, "collector must be not null.");
         this.executor = new InternalCallableGroupCollapseExecutorSync<>(collector);
     }
