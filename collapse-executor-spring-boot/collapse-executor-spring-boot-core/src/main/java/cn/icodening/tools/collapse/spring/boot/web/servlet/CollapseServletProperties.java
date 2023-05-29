@@ -20,8 +20,6 @@ public class CollapseServletProperties {
 
     private int batchSize = 32;
 
-    private Set<String> uris = new HashSet<>();
-
     private Map<String, CollapsePolicy> collapsePolicies = new LinkedHashMap<>();
 
     private List<CollapseGroup> collapseGroups = new ArrayList<>();
@@ -40,14 +38,6 @@ public class CollapseServletProperties {
 
     public void setBatchSize(int batchSize) {
         this.batchSize = batchSize;
-    }
-
-    public Set<String> getUris() {
-        return uris;
-    }
-
-    public void setUris(Set<String> uris) {
-        this.uris = uris;
     }
 
     public Map<String, CollapsePolicy> getCollapsePolicies() {
