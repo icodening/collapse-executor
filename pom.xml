@@ -10,7 +10,7 @@
     <version>1.0.0</version>
     <modules>
         <module>collapse-executor-core</module>
-        <module>collapse-executor-spring-boot</module>
+        <module>collapse-executor-integration</module>
         <module>collapse-executor-samples</module>
     </modules>
 
