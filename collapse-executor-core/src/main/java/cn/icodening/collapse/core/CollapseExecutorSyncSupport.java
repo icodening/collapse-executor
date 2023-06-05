@@ -10,7 +10,7 @@ import java.util.concurrent.Executor;
  */
 public abstract class CollapseExecutorSyncSupport<INPUT, OUTPUT, BATCH_OUTPUT> extends AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> {
 
-    public CollapseExecutorSyncSupport(ListeningBundleCollector collector) {
+    public CollapseExecutorSyncSupport(ListenableCollector collector) {
         super(collector);
     }
 

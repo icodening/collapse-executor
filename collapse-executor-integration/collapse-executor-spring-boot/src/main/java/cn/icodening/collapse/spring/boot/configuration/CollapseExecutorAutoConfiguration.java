@@ -1,8 +1,8 @@
 package cn.icodening.collapse.spring.boot.configuration;
 
-import cn.icodening.collapse.core.ListeningBundleCollector;
+import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.SingleThreadExecutor;
-import cn.icodening.collapse.core.SuspendableListeningBundleCollector;
+import cn.icodening.collapse.core.SuspendableListenableCollector;
 import cn.icodening.collapse.core.support.AsyncCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.SyncCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
@@ -34,9 +34,9 @@ public class CollapseExecutorAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ListeningBundleCollector.class)
-    public ListeningBundleCollector suspendableListeningBundleCollector(SingleThreadExecutor singleThreadExecutor, CollapseExecutorProperties collapseExecutorProperties) {
-        SuspendableListeningBundleCollector suspendableListeningBundleCollector = new SuspendableListeningBundleCollector(singleThreadExecutor);
+    @ConditionalOnMissingBean(ListenableCollector.class)
+    public ListenableCollector suspendableListeningBundleCollector(SingleThreadExecutor singleThreadExecutor, CollapseExecutorProperties collapseExecutorProperties) {
+        SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
         suspendableListeningBundleCollector.setDuration(collapseExecutorProperties.getCollectingWaitTime());
         suspendableListeningBundleCollector.setThreshold(collapseExecutorProperties.getWaitThreshold());
         return suspendableListeningBundleCollector;
@@ -44,14 +44,14 @@ public class CollapseExecutorAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(SyncCallableGroupCollapseExecutor.class)
-    public SyncCallableGroupCollapseExecutor callableGroupCollapseExecutor(ListeningBundleCollector listeningBundleCollector) {
-        return new SyncCallableGroupCollapseExecutor(listeningBundleCollector);
+    public SyncCallableGroupCollapseExecutor callableGroupCollapseExecutor(ListenableCollector listenableCollector) {
+        return new SyncCallableGroupCollapseExecutor(listenableCollector);
     }
 
     @Bean
     @ConditionalOnMissingBean(AsyncCallableGroupCollapseExecutor.class)
-    public AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor(ListeningBundleCollector listeningBundleCollector, CollapseExecutorProperties collapseExecutorProperties) {
-        AsyncCallableGroupCollapseExecutor collapseExecutor = new AsyncCallableGroupCollapseExecutor(listeningBundleCollector);
+    public AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor(ListenableCollector listenableCollector, CollapseExecutorProperties collapseExecutorProperties) {
+        AsyncCallableGroupCollapseExecutor collapseExecutor = new AsyncCallableGroupCollapseExecutor(listenableCollector);
         collapseExecutor.setExecutor(collapseExecutorService(collapseExecutorProperties));
         return collapseExecutor;
     }

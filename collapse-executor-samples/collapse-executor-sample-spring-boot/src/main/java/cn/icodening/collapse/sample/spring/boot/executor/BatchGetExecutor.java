@@ -3,7 +3,7 @@ package cn.icodening.collapse.sample.spring.boot.executor;
 import cn.icodening.collapse.core.Bundle;
 import cn.icodening.collapse.core.CollapseExecutorSyncSupport;
 import cn.icodening.collapse.core.Input;
-import cn.icodening.collapse.core.ListeningBundleCollector;
+import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.NoOpInputGrouper;
 import cn.icodening.collapse.sample.spring.boot.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class BatchGetExecutor extends CollapseExecutorSyncSupport<Long, UserEnti
 
     private ServerProperties serverProperties;
 
-    public BatchGetExecutor(ListeningBundleCollector collector, RestTemplate restTemplate) {
+    public BatchGetExecutor(ListenableCollector collector, RestTemplate restTemplate) {
         super(collector);
         this.restTemplate = restTemplate;
         this.setInputGrouper(NoOpInputGrouper.getInstance());

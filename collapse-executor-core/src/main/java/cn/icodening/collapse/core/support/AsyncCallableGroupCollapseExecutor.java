@@ -2,7 +2,7 @@ package cn.icodening.collapse.core.support;
 
 import cn.icodening.collapse.core.EqualsInputGrouper;
 import cn.icodening.collapse.core.Input;
-import cn.icodening.collapse.core.ListeningBundleCollector;
+import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.SameOutputCollapseExecutorAsync;
 
 import java.util.Collection;
@@ -18,8 +18,8 @@ public class AsyncCallableGroupCollapseExecutor {
 
     private final InternalCallableGroupCollapseExecutorAsync<Object> asyncCallableGroupCollapseExecutor;
 
-    public AsyncCallableGroupCollapseExecutor(ListeningBundleCollector listeningBundleCollector) {
-        this.asyncCallableGroupCollapseExecutor = new InternalCallableGroupCollapseExecutorAsync<>(listeningBundleCollector);
+    public AsyncCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
+        this.asyncCallableGroupCollapseExecutor = new InternalCallableGroupCollapseExecutorAsync<>(listenableCollector);
     }
 
     public void setExecutor(Executor executor) {
@@ -34,7 +34,7 @@ public class AsyncCallableGroupCollapseExecutor {
 
     private static class InternalCallableGroupCollapseExecutorAsync<R> extends SameOutputCollapseExecutorAsync<CallableGroup<R>, R> {
 
-        private InternalCallableGroupCollapseExecutorAsync(ListeningBundleCollector collector) {
+        private InternalCallableGroupCollapseExecutorAsync(ListenableCollector collector) {
             super(collector);
             this.setInputGrouper(EqualsInputGrouper.getInstance());
         }

@@ -8,7 +8,7 @@ import java.util.List;
  */
 public abstract class SameOutputCollapseExecutorSync<INPUT, OUTPUT> extends CollapseExecutorSyncSupport<INPUT, OUTPUT, OUTPUT> {
 
-    public SameOutputCollapseExecutorSync(ListeningBundleCollector collector) {
+    public SameOutputCollapseExecutorSync(ListenableCollector collector) {
         super(collector);
     }
 

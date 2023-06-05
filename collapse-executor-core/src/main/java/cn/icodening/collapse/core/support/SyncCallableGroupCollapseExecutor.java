@@ -1,7 +1,7 @@
 package cn.icodening.collapse.core.support;
 
 import cn.icodening.collapse.core.Input;
-import cn.icodening.collapse.core.ListeningBundleCollector;
+import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.SameOutputCollapseExecutorSync;
 import cn.icodening.collapse.core.EqualsInputGrouper;
 
@@ -17,7 +17,7 @@ public final class SyncCallableGroupCollapseExecutor {
 
     private final InternalCallableGroupCollapseExecutorSync<Object> executor;
 
-    public SyncCallableGroupCollapseExecutor(ListeningBundleCollector collector) {
+    public SyncCallableGroupCollapseExecutor(ListenableCollector collector) {
         Objects.requireNonNull(collector, "collector must be not null.");
         this.executor = new InternalCallableGroupCollapseExecutorSync<>(collector);
     }
@@ -30,7 +30,7 @@ public final class SyncCallableGroupCollapseExecutor {
 
     private static class InternalCallableGroupCollapseExecutorSync<R> extends SameOutputCollapseExecutorSync<CallableGroup<R>, R> {
 
-        private InternalCallableGroupCollapseExecutorSync(ListeningBundleCollector collector) {
+        private InternalCallableGroupCollapseExecutorSync(ListenableCollector collector) {
             super(collector);
             this.setInputGrouper(EqualsInputGrouper.getInstance());
         }

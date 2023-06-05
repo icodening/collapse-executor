@@ -2,6 +2,7 @@ package cn.icodening.collapse.core;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
@@ -9,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  * @author icodening
  * @date 2023.05.16
  */
-public class SuspendableListeningBundleCollector extends ListeningBundleCollector {
+public class SuspendableListenableCollector extends ListenableCollector {
 
     private static final TimeUnit DEFAULT_UNIT = TimeUnit.MILLISECONDS;
 
@@ -19,7 +20,7 @@ public class SuspendableListeningBundleCollector extends ListeningBundleCollecto
 
     private TimeUnit timeUnit = DEFAULT_UNIT;
 
-    public SuspendableListeningBundleCollector(Executor dispatcher) {
+    public SuspendableListenableCollector(Executor dispatcher) {
         super(dispatcher);
     }
 
@@ -32,7 +33,7 @@ public class SuspendableListeningBundleCollector extends ListeningBundleCollecto
     }
 
     public void setTimeUnit(TimeUnit timeUnit) {
-        this.timeUnit = timeUnit;
+        this.timeUnit = Objects.requireNonNull(timeUnit, "timeUnit must be not null.");
     }
 
     @Override

@@ -3,7 +3,7 @@ package cn.icodening.collapse.spring.boot.web.servlet;
 import cn.icodening.collapse.core.Bundle;
 import cn.icodening.collapse.core.CollapseExecutorAsyncSupport;
 import cn.icodening.collapse.core.Input;
-import cn.icodening.collapse.core.ListeningBundleCollector;
+import cn.icodening.collapse.core.ListenableCollector;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class AsyncServletExecutor extends CollapseExecutorAsyncSupport<ServletCollapseRequest, ServletCollapseResponse, CompletableFuture<ServletCollapseResponse>> {
 
-    public AsyncServletExecutor(ListeningBundleCollector collector) {
+    public AsyncServletExecutor(ListenableCollector collector) {
         super(collector);
     }
 

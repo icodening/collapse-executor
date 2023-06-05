@@ -1,6 +1,6 @@
 package cn.icodening.collapse.spring.boot.web.client;
 
-import cn.icodening.collapse.core.ListeningBundleCollector;
+import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.support.SyncCallableGroupCollapseExecutor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,8 +21,8 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
 
     private final SyncCallableGroupCollapseExecutor syncCallableGroupCollapseExecutor;
 
-    public CollapseHttpRequestInterceptor(ListeningBundleCollector listeningBundleCollector) {
-        this.syncCallableGroupCollapseExecutor = new SyncCallableGroupCollapseExecutor(listeningBundleCollector);
+    public CollapseHttpRequestInterceptor(ListenableCollector listenableCollector) {
+        this.syncCallableGroupCollapseExecutor = new SyncCallableGroupCollapseExecutor(listenableCollector);
     }
 
     @Override

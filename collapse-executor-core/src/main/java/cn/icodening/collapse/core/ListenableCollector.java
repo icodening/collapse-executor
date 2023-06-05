@@ -7,9 +7,9 @@ import java.util.concurrent.Executor;
  * @author icodening
  * @date 2023.05.14
  */
-public class ListeningBundleCollector extends GroupListeningBatchCollector<CollapseExecutor<?, ?>, Bundle<Object, Object>> {
+public class ListenableCollector extends GroupListeningBatchCollector<CollapseExecutor<?, ?>, Bundle<Object, Object>> {
 
-    public ListeningBundleCollector(Executor dispatcher) {
+    public ListenableCollector(Executor dispatcher) {
         super(dispatcher, Bundle::getCollapseExecutor, new ConcurrentHashMap<>(256));
     }
 

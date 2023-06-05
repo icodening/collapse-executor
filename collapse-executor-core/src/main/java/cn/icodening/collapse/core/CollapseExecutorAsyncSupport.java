@@ -14,7 +14,7 @@ public abstract class CollapseExecutorAsyncSupport<INPUT, OUTPUT, BATCH_OUTPUT> 
 
     private Supplier<Executor> executorSupplier;
 
-    public CollapseExecutorAsyncSupport(ListeningBundleCollector collector) {
+    public CollapseExecutorAsyncSupport(ListenableCollector collector) {
         super(collector);
     }
 
