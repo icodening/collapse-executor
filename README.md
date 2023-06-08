@@ -21,11 +21,22 @@ http://localhost:8080/test/noop100
 测试参数
 400用户线程数，持续压测5分钟
 ````
-### `http://localhost:8080/test/collapse100 启用请求折叠测试结果`
-![with-collapse](./docs/images/with-collapse-img.png)
 
-### `http://localhost:8080/test/noop100 关闭请求折叠测试结果`
-![without-collapse](./docs/images/without-collapse-img.png)
+## 开启折叠
+```` text
+http://localhost:8080/test/collapse100 启用请求折叠测试结果
+TPS   3785/s
+RT99  115ms
+````
+![with-collapse](./docs/images/with-collapse.png)
+
+## 关闭折叠
+```` text
+http://localhost:8080/test/noop100 关闭请求折叠测试结果
+TPS   1951/s
+RT99  211ms
+````
+![without-collapse](./docs/images/without-collapse.png)
 
 # 工作流程
 ![处理流程](./docs/images/collapse-executor.png)
