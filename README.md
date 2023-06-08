@@ -14,7 +14,6 @@ Collapse-Executor 是一个高性能、低延迟的批量执行器，可以有�
 服务参数
 server.tomcat.threads.max=200
 
-
 服务地址(位于 collapse-executor-samples 中的 StressTestController, 后端均延迟[100ms]后响应，逻辑一致无差异)
 http://localhost:8080/test/collapse100
 http://localhost:8080/test/noop100
