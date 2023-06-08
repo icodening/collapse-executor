@@ -46,7 +46,7 @@ public class SpringBootSampleApplication {
             });
         }
         Thread.sleep(500);
-        System.err.println("/user/{id} execute times:" + UserController.SINGLE_GET_COUNTER.intValue());//expected results equals 50
+        System.err.println("/user/{id} execute times:" + UserController.SINGLE_GET_COUNTER.intValue());//expected result equals 50
         UserController.SINGLE_GET_COUNTER.set(0);
     }
 
@@ -64,7 +64,7 @@ public class SpringBootSampleApplication {
             });
         }
         Thread.sleep(500);
-        System.err.println("/user/batchGet execute times:" + UserController.BATCH_GET_COUNTER.intValue());//expected results equals 50
+        System.err.println("/user/batchGet execute times:" + UserController.BATCH_GET_COUNTER.intValue());//expected result less than 50
         UserController.BATCH_GET_COUNTER.set(0);
     }
 
