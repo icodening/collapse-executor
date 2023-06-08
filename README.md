@@ -22,10 +22,10 @@ http://localhost:8080/test/noop100
 400用户线程数，持续压测5分钟
 ````
 ### `http://localhost:8080/test/collapse100 启用请求折叠测试结果`
-![with-collapse](./docs/images/with-collapse.png)
+![with-collapse](./docs/images/with-collapse-img.png)
 
 ### `http://localhost:8080/test/noop100 关闭请求折叠测试结果`
-![without-collapse](./docs/images/without-collapse.png)
+![without-collapse](./docs/images/without-collapse-img.png)
 
 # 工作流程
 ![处理流程](./docs/images/collapse-executor.png)
