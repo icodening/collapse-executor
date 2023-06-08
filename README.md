@@ -28,5 +28,5 @@ http://localhost:8080/test/noop100
 ### `http://localhost:8080/test/noop100 关闭请求折叠测试结果`
 ![without-collapse](./docs/images/without-collapse.png)
 
-# 处理流程
+# 工作流程
 ![处理流程](./docs/images/collapse-executor.png)
