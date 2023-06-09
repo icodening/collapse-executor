@@ -39,32 +39,25 @@ class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
         }
         AsyncContext asyncContext = httpServletRequest.startAsync(httpServletRequest, new RecordableServletResponse(httpServletResponse));
         ServletCollapseRequest servletCollapseRequest = new ServletCollapseRequest(groupKey, asyncContext);
-        try {
-            CompletableFuture<ServletCollapseResponse> future = asyncServletExecutor.execute(servletCollapseRequest);
-            future.whenComplete((collapseResponse, throwable) -> {
-                try {
-                    if (throwable != null) {
-                        throw throwable;
-                    }
-                    RecordableServletOutputStream recordableServletOutputStream = collapseResponse.getRecordableServletOutputStream();
-                    byte[] data = recordableServletOutputStream.getRecordBytes();
-                    HttpServletResponse response = collapseResponse.getResponse();
-                    ServletOutputStream realResponseOutputStream = httpServletResponse.getOutputStream();
-                    httpServletResponse.setContentType(response.getContentType());
-                    httpServletResponse.setStatus(response.getStatus());
-                    httpServletResponse.setContentLength(data.length);
-                    realResponseOutputStream.write(data);
-                } catch (Throwable e) {
-                    LOGGER.error("Processing response failed.", e);
-                } finally {
-                    asyncContext.complete();
+        CompletableFuture<ServletCollapseResponse> future = asyncServletExecutor.execute(servletCollapseRequest);
+        future.whenComplete((collapseResponse, throwable) -> {
+            try {
+                if (throwable != null) {
+                    throw throwable;
                 }
-            });
-        } catch (Throwable e) {
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
+                RecordableServletOutputStream recordableServletOutputStream = collapseResponse.getRecordableServletOutputStream();
+                byte[] data = recordableServletOutputStream.getRecordBytes();
+                HttpServletResponse response = collapseResponse.getResponse();
+                ServletOutputStream realResponseOutputStream = httpServletResponse.getOutputStream();
+                httpServletResponse.setContentType(response.getContentType());
+                httpServletResponse.setStatus(response.getStatus());
+                httpServletResponse.setContentLength(data.length);
+                realResponseOutputStream.write(data);
+            } catch (Throwable e) {
+                LOGGER.error("Processing response failed.", e);
+            } finally {
+                asyncContext.complete();
             }
-            throw new RuntimeException(e);
-        }
+        });
     }
 }

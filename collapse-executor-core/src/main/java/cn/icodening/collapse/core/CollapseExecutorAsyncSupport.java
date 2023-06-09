@@ -32,6 +32,17 @@ public abstract class CollapseExecutorAsyncSupport<INPUT, OUTPUT, BATCH_OUTPUT> 
     }
 
     @Override
+    public CompletableFuture<OUTPUT> execute(INPUT input){
+        try {
+            return super.execute(input);
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     protected CompletableFuture<OUTPUT> returning(Bundle<INPUT, CompletableFuture<OUTPUT>> bundle) {
         CompletableFuture<OUTPUT> result = new CompletableFuture<>();
         CompletableFuture<CompletableFuture<OUTPUT>> listeningResult = bundle.getListeningResult();
