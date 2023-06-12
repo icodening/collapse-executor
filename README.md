@@ -1,6 +1,15 @@
 # 简介
 Collapse-Executor 是一个高性能、低延迟的批量执行器，可以有效支持高并发的热点请求，通过合并请求的方式减少I/O次数以提高调用性能。
 
+# 流程对比
+以下两张图解释了有无折叠执行器的调用差异。当无请求折叠时，请求与网络连接数的比例为1:1；当使用请求折叠后，请求与网络连接数的比例为N:1，即多个请求会合并为一个请求发起远程调用，由此可以做到减少I/O次数、减少后端压力，从而提升调用性能。
+### 无请求折叠  
+![collapse-executor-simple.png](./docs/images/without-collapse-executor.png)
+
+### 有请求折叠
+![without-collapse-executor.png](./docs/images/collapse-exeuctor-simple.png)
+
+
 # 工程结构
 ## collapse-executor-core 
 折叠执行器的核心抽象，包含输入拆分、输出映射、批量采集等核心逻辑抽象
