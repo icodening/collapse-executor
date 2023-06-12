@@ -4,6 +4,7 @@ import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.SingleThreadExecutor;
 import cn.icodening.collapse.core.SuspendableListenableCollector;
 import cn.icodening.collapse.core.support.AsyncCallableGroupCollapseExecutor;
+import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.SyncCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
@@ -53,6 +55,14 @@ public class CollapseExecutorAutoConfiguration {
     public AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor(ListenableCollector listenableCollector, CollapseExecutorProperties collapseExecutorProperties) {
         AsyncCallableGroupCollapseExecutor collapseExecutor = new AsyncCallableGroupCollapseExecutor(listenableCollector);
         collapseExecutor.setExecutor(collapseExecutorService(collapseExecutorProperties));
+        return collapseExecutor;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(FutureCallableGroupCollapseExecutor.class)
+    public FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
+        FutureCallableGroupCollapseExecutor collapseExecutor = new FutureCallableGroupCollapseExecutor(listenableCollector);
+        collapseExecutor.setExecutor(ForkJoinPool.commonPool());
         return collapseExecutor;
     }
 

@@ -31,10 +31,10 @@ public class AsyncCallableGroupCollapseExecutor {
         CallableGroup<R> callableGroup = new CallableGroup<>(group, callable);
         try {
             return (CompletableFuture<R>) asyncCallableGroupCollapseExecutor.execute((CallableGroup<Object>) callableGroup);
-        } catch (RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            CompletableFuture<R> result = new CompletableFuture<>();
+            result.completeExceptionally(e);
+            return result;
         }
     }
 
