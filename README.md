@@ -4,11 +4,10 @@ Collapse-Executor 是一个高性能、低延迟的批量执行器，可以有�
 # 流程对比
 以下两张图解释了有无折叠执行器的调用差异。当无请求折叠时，请求与网络连接数的比例为1:1；当使用请求折叠后，请求与网络连接数的比例为N:1，即多个请求会合并为一个请求发起远程调用，由此可以做到减少I/O次数、减少后端压力，从而提升调用性能。
 ### 无请求折叠  
-![collapse-executor-simple.png](./docs/images/without-collapse-executor.png)
+<img src="./docs/images/without-collapse-executor.png" width="100%">
 
 ### 有请求折叠
-![without-collapse-executor.png](./docs/images/collapse-exeuctor-simple.png)
-
+<img src="./docs/images/collapse-exeuctor-simple.png" width="100%">
 
 # 工程结构
 ## collapse-executor-core 
