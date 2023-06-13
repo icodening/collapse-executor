@@ -29,13 +29,7 @@ public class AsyncCallableGroupCollapseExecutor {
     @SuppressWarnings("unchecked")
     public <R> CompletableFuture<R> execute(Object group, Callable<R> callable) {
         CallableGroup<R> callableGroup = new CallableGroup<>(group, callable);
-        try {
-            return (CompletableFuture<R>) asyncCallableGroupCollapseExecutor.execute((CallableGroup<Object>) callableGroup);
-        } catch (Throwable e) {
-            CompletableFuture<R> result = new CompletableFuture<>();
-            result.completeExceptionally(e);
-            return result;
-        }
+        return (CompletableFuture<R>) asyncCallableGroupCollapseExecutor.execute((CallableGroup<Object>) callableGroup);
     }
 
     private static class InternalCallableGroupCollapseExecutorAsync<R> extends SameOutputCollapseExecutorAsync<CallableGroup<R>, R> {

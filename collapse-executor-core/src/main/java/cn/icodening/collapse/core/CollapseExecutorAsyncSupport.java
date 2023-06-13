@@ -35,10 +35,10 @@ public abstract class CollapseExecutorAsyncSupport<INPUT, OUTPUT, BATCH_OUTPUT> 
     public CompletableFuture<OUTPUT> execute(INPUT input){
         try {
             return super.execute(input);
-        } catch (RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            CompletableFuture<OUTPUT> result = new CompletableFuture<>();
+            result.completeExceptionally(e);
+            return result;
         }
     }
 
