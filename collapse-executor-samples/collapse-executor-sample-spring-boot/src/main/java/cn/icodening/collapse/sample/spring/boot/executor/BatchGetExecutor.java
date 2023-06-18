@@ -1,7 +1,7 @@
 package cn.icodening.collapse.sample.spring.boot.executor;
 
 import cn.icodening.collapse.core.Bundle;
-import cn.icodening.collapse.core.CollapseExecutorSyncSupport;
+import cn.icodening.collapse.core.CollapseExecutorBlockingSupport;
 import cn.icodening.collapse.core.Input;
 import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.NoOpInputGrouper;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * @date 2023.05.17
  */
 @Component
-public class BatchGetExecutor extends CollapseExecutorSyncSupport<Long, UserEntity, List<UserEntity>> {
+public class BatchGetExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, List<UserEntity>> {
 
     private final RestTemplate restTemplate;
 

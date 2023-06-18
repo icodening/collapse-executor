@@ -1,7 +1,7 @@
 package cn.icodening.collapse.spring.boot.web.client;
 
 import cn.icodening.collapse.core.ListenableCollector;
-import cn.icodening.collapse.core.support.SyncCallableGroupCollapseExecutor;
+import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
@@ -19,10 +19,10 @@ import java.io.IOException;
  */
 public class CollapseHttpRequestInterceptor implements ClientHttpRequestInterceptor {
 
-    private final SyncCallableGroupCollapseExecutor syncCallableGroupCollapseExecutor;
+    private final BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor;
 
     public CollapseHttpRequestInterceptor(ListenableCollector listenableCollector) {
-        this.syncCallableGroupCollapseExecutor = new SyncCallableGroupCollapseExecutor(listenableCollector);
+        this.blockingCallableGroupCollapseExecutor = new BlockingCallableGroupCollapseExecutor(listenableCollector);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
             return execution.execute(request, body);
         }
         try {
-            return this.syncCallableGroupCollapseExecutor.execute(CollapseHttpRequestInterceptor.class.getName() + ".GET" + request.getURI(), () -> repeatableReadResponse(execution.execute(request, body)));
+            return this.blockingCallableGroupCollapseExecutor.execute(CollapseHttpRequestInterceptor.class.getName() + ".GET" + request.getURI(), () -> repeatableReadResponse(execution.execute(request, body)));
         } catch (RuntimeException | IOException e) {
             throw e;
         } catch (Throwable throwable) {

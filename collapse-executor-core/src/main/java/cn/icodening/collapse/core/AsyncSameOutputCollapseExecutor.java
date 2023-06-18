@@ -7,9 +7,9 @@ import java.util.concurrent.CompletableFuture;
  * @author icodening
  * @date 2023.05.21
  */
-public abstract class SameOutputCollapseExecutorAsync<INPUT, OUTPUT> extends CollapseExecutorAsyncSupport<INPUT, OUTPUT, OUTPUT> {
+public abstract class AsyncSameOutputCollapseExecutor<INPUT, OUTPUT> extends CollapseExecutorAsyncSupport<INPUT, OUTPUT, OUTPUT> {
 
-    public SameOutputCollapseExecutorAsync(ListenableCollector collector) {
+    public AsyncSameOutputCollapseExecutor(ListenableCollector collector) {
         super(collector);
     }
 

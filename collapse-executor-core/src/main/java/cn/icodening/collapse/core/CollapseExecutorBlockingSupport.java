@@ -8,9 +8,9 @@ import java.util.concurrent.Executor;
  * @author icodening
  * @date 2023.05.23
  */
-public abstract class CollapseExecutorSyncSupport<INPUT, OUTPUT, BATCH_OUTPUT> extends AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> {
+public abstract class CollapseExecutorBlockingSupport<INPUT, OUTPUT, BATCH_OUTPUT> extends AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> {
 
-    public CollapseExecutorSyncSupport(ListenableCollector collector) {
+    public CollapseExecutorBlockingSupport(ListenableCollector collector) {
         super(collector);
     }
 

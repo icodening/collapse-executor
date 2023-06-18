@@ -18,10 +18,10 @@ import java.util.concurrent.Executor;
  */
 public class FutureCallableGroupCollapseExecutor {
 
-    private final InternalCallableGroupCollapseExecutorAsync<Object> asyncCallableGroupCollapseExecutor;
+    private final InternalFutureCallableGroupCollapseExecutor<Object> asyncCallableGroupCollapseExecutor;
 
     public FutureCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
-        this.asyncCallableGroupCollapseExecutor = new InternalCallableGroupCollapseExecutorAsync<>(listenableCollector);
+        this.asyncCallableGroupCollapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>(listenableCollector);
     }
 
     public void setExecutor(Executor executor) {
@@ -34,9 +34,9 @@ public class FutureCallableGroupCollapseExecutor {
         return (CompletableFuture<R>) asyncCallableGroupCollapseExecutor.execute((CallableGroup) callableGroup);
     }
 
-    private static class InternalCallableGroupCollapseExecutorAsync<R> extends CollapseExecutorAsyncSupport<CallableGroup<CompletableFuture<R>>, R, CompletableFuture<R>> {
+    private static class InternalFutureCallableGroupCollapseExecutor<R> extends CollapseExecutorAsyncSupport<CallableGroup<CompletableFuture<R>>, R, CompletableFuture<R>> {
 
-        private InternalCallableGroupCollapseExecutorAsync(ListenableCollector collector) {
+        private InternalFutureCallableGroupCollapseExecutor(ListenableCollector collector) {
             super(collector);
             this.setInputGrouper(EqualsInputGrouper.getInstance());
         }

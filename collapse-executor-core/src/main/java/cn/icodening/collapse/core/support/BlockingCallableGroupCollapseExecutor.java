@@ -2,7 +2,7 @@ package cn.icodening.collapse.core.support;
 
 import cn.icodening.collapse.core.Input;
 import cn.icodening.collapse.core.ListenableCollector;
-import cn.icodening.collapse.core.SameOutputCollapseExecutorSync;
+import cn.icodening.collapse.core.BlockingSameOutputCollapseExecutor;
 import cn.icodening.collapse.core.EqualsInputGrouper;
 
 import java.util.Collection;
@@ -13,13 +13,13 @@ import java.util.concurrent.Callable;
  * @author icodening
  * @date 2023.05.14
  */
-public final class SyncCallableGroupCollapseExecutor {
+public final class BlockingCallableGroupCollapseExecutor {
 
-    private final InternalCallableGroupCollapseExecutorSync<Object> executor;
+    private final InternalBlockingCallableGroupCollapseExecutorBlocking<Object> executor;
 
-    public SyncCallableGroupCollapseExecutor(ListenableCollector collector) {
+    public BlockingCallableGroupCollapseExecutor(ListenableCollector collector) {
         Objects.requireNonNull(collector, "collector must be not null.");
-        this.executor = new InternalCallableGroupCollapseExecutorSync<>(collector);
+        this.executor = new InternalBlockingCallableGroupCollapseExecutorBlocking<>(collector);
     }
 
     @SuppressWarnings("unchecked")
@@ -28,9 +28,9 @@ public final class SyncCallableGroupCollapseExecutor {
         return (R) executor.execute((CallableGroup<Object>) callableGroup);
     }
 
-    private static class InternalCallableGroupCollapseExecutorSync<R> extends SameOutputCollapseExecutorSync<CallableGroup<R>, R> {
+    private static class InternalBlockingCallableGroupCollapseExecutorBlocking<R> extends BlockingSameOutputCollapseExecutor<CallableGroup<R>, R> {
 
-        private InternalCallableGroupCollapseExecutorSync(ListenableCollector collector) {
+        private InternalBlockingCallableGroupCollapseExecutorBlocking(ListenableCollector collector) {
             super(collector);
             this.setInputGrouper(EqualsInputGrouper.getInstance());
         }
