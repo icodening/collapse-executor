@@ -48,11 +48,11 @@ class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
                 RecordableServletOutputStream recordableServletOutputStream = collapseResponse.getRecordableServletOutputStream();
                 byte[] data = recordableServletOutputStream.getRecordBytes();
                 HttpServletResponse response = collapseResponse.getResponse();
-                ServletOutputStream realResponseOutputStream = httpServletResponse.getOutputStream();
+                ServletOutputStream actualResponseOutputStream = httpServletResponse.getOutputStream();
                 httpServletResponse.setContentType(response.getContentType());
                 httpServletResponse.setStatus(response.getStatus());
                 httpServletResponse.setContentLength(data.length);
-                realResponseOutputStream.write(data);
+                actualResponseOutputStream.write(data);
             } catch (Throwable e) {
                 LOGGER.error("Processing response failed.", e);
             } finally {

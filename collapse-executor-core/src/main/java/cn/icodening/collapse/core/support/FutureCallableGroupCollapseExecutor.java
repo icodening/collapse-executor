@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * @author icodening
@@ -22,6 +23,7 @@ public class FutureCallableGroupCollapseExecutor {
 
     public FutureCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
         this.asyncCallableGroupCollapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>(listenableCollector);
+        this.asyncCallableGroupCollapseExecutor.setExecutor(ForkJoinPool.commonPool());
     }
 
     public void setExecutor(Executor executor) {
