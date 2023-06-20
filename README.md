@@ -17,6 +17,42 @@ Collapse-Executor 是一个高性能、低延迟的批量执行器，可以有�
 ## collapse-executor-samples 
 折叠执行器的使用例子
 
+# 快速开始
+`必备条件: JDK8及以上`
+## 一.自动折叠及拆分
+该方式适用于简单的幂等请求的场景，通常需要用户手动指定本次调用所属分组。
+> 以下该案例表示将当前传入的Callable按照 `GET http://foobar.com/articles` 进行分组。
+> 同一并发分组下的Callable仅执行一次，并将这一次的返回结果作为同一并发分组发起的请求结果
+### 1.同步阻塞调用
+````java
+SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
+SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
+blockingCollapseExecutor.execute("GET http://foobar.com/articles", () -> {//TODO 发起单次请求, 且返回一个响应});
+````
+### 2.异步调用
+````java
+SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
+SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+AsyncCallableGroupCollapseExecutor asyncCollapseExecutor = new AsyncCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
+asyncCollapseExecutor.setExecutor();//设置异步线程池
+CompletableFuture<R> result = asyncCollapseExecutor.execute("GET http://foobar.com/articles", () -> {//TODO 发起单次请求, 且返回一个响应});
+result.whenComplete();//TODO
+````
+### 3.非阻塞异步调用
+````java
+SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
+SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
+CompletableFuture<R> result = futureCollapseExecutor.execute("GET http://foobar.com/articles", () -> {//TODO 发起单次请求, 且返回一个CompletableFuture类型的响应});
+result.whenComplete();//TODO
+````
+
+## 二.手动折叠及拆分
+该方式适用于后端服务提供了批处理接口的场景，将同并发下其他线程的输入合并调用后端服务的批处理接口，可以减少多次不必要的单次调用，如批量查询。  
+由于这种方式可以更好的处理输入组，固该方式合并效率可以更高，由此带来的性能提升也会更高。
+> TODO
+
 # Servlet合并测试
 ```` text
 服务参数
