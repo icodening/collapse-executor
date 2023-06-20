@@ -28,7 +28,7 @@ Collapse-Executor 是一个高性能、低延迟的批量执行器，可以有�
 SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
 SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
 BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
-blockingCollapseExecutor.execute("GET http://foobar.com/articles", () -> {//TODO 发起单次请求, 且返回一个响应});
+blockingCollapseExecutor.execute("GET http://foobar.com/articles", () -> {TODO 发起单次请求, 且返回一个响应});
 ````
 ### 2.异步调用
 ````java
@@ -36,7 +36,7 @@ SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
 SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
 AsyncCallableGroupCollapseExecutor asyncCollapseExecutor = new AsyncCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
 asyncCollapseExecutor.setExecutor();//设置异步线程池
-CompletableFuture<R> result = asyncCollapseExecutor.execute("GET http://foobar.com/articles", () -> {//TODO 发起单次请求, 且返回一个响应});
+CompletableFuture<R> result = asyncCollapseExecutor.execute("GET http://foobar.com/articles", () -> {TODO 发起单次请求, 且返回一个响应});
 result.whenComplete();//TODO
 ````
 ### 3.非阻塞异步调用
@@ -45,7 +45,7 @@ result.whenComplete();//TODO
 SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
 SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
 FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
-CompletableFuture<R> result = futureCollapseExecutor.execute("GET http://foobar.com/articles", () -> {//TODO 发起单次请求, 且返回一个CompletableFuture类型的响应});
+CompletableFuture<R> result = futureCollapseExecutor.execute("GET http://foobar.com/articles", () -> {TODO 发起单次请求, 且返回一个CompletableFuture类型的响应});
 result.whenComplete();//TODO
 ````
 
