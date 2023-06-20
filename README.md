@@ -40,6 +40,7 @@ CompletableFuture<R> result = asyncCollapseExecutor.execute("GET http://foobar.c
 result.whenComplete();//TODO
 ````
 ### 3.非阻塞异步调用
+> 这种方式必须保证Callable中的处理逻辑是非阻塞的！
 ````java
 SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
 SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
