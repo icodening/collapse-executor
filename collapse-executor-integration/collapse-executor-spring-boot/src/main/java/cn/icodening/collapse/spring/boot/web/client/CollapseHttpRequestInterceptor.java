@@ -19,6 +19,8 @@ import java.io.IOException;
  */
 public class CollapseHttpRequestInterceptor implements ClientHttpRequestInterceptor {
 
+    private static final String GROUP_PREFIX = CollapseHttpRequestInterceptor.class.getName() + ".GET ";
+
     private final BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor;
 
     public CollapseHttpRequestInterceptor(ListenableCollector listenableCollector) {
@@ -27,17 +29,21 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        HttpMethod method = request.getMethod();
-        if (!HttpMethod.GET.equals(method)) {
+        if (!allowCollapse(request)) {
             return execution.execute(request, body);
         }
         try {
-            return this.blockingCallableGroupCollapseExecutor.execute(CollapseHttpRequestInterceptor.class.getName() + ".GET" + request.getURI(), () -> repeatableReadResponse(execution.execute(request, body)));
+            return this.blockingCallableGroupCollapseExecutor.execute(GROUP_PREFIX + request.getURI(), () -> repeatableReadResponse(execution.execute(request, body)));
         } catch (RuntimeException | IOException e) {
             throw e;
         } catch (Throwable throwable) {
             throw new RuntimeException(throwable);
         }
+    }
+
+    protected boolean allowCollapse(HttpRequest request) {
+        HttpMethod method = request.getMethod();
+        return HttpMethod.GET.equals(method);
     }
 
     private ClientHttpResponse repeatableReadResponse(ClientHttpResponse origin) throws IOException {
