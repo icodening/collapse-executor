@@ -46,7 +46,7 @@ public class CollapseExecutorAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(BlockingCallableGroupCollapseExecutor.class)
-    public BlockingCallableGroupCollapseExecutor callableGroupCollapseExecutor(ListenableCollector listenableCollector) {
+    public BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
         return new BlockingCallableGroupCollapseExecutor(listenableCollector);
     }
 
@@ -61,9 +61,7 @@ public class CollapseExecutorAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(FutureCallableGroupCollapseExecutor.class)
     public FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
-        FutureCallableGroupCollapseExecutor collapseExecutor = new FutureCallableGroupCollapseExecutor(listenableCollector);
-        collapseExecutor.setExecutor(ForkJoinPool.commonPool());
-        return collapseExecutor;
+        return new FutureCallableGroupCollapseExecutor(listenableCollector);
     }
 
     @Bean
