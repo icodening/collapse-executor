@@ -14,7 +14,7 @@ public class BlockingCollapseExecutorExample {
         SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
         SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
         BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
-        String responseString = blockingCollapseExecutor.execute("example group", () -> "Hello World Collapse Executor. Blocking");
-        System.out.println(responseString);
+        String outputString = blockingCollapseExecutor.execute("example group", () -> "Hello World Collapse Executor. Blocking");
+        System.out.println(outputString);
     }
 }

@@ -18,14 +18,14 @@ public class AsyncCollapseExecutorExample {
         SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
         SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
         AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor = new AsyncCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
-        asyncCallableGroupCollapseExecutor.setExecutor(new ThreadPoolExecutor(50, 50, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
+        asyncCallableGroupCollapseExecutor.setExecutor(new ThreadPoolExecutor(10, 10, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
             Thread thread = new Thread(r);
             thread.setDaemon(true);
             return thread;
         }));
-        asyncCallableGroupCollapseExecutor.execute("example group",
-                        () -> "Hello World Collapse Executor. Async")
-                .thenAccept(System.out::println).thenRun(() -> System.exit(0));
+        asyncCallableGroupCollapseExecutor.execute("example group", () -> "Hello World Collapse Executor. Async")
+                .thenAccept(System.out::println)
+                .thenRun(() -> System.exit(0));
         System.in.read();
     }
 }

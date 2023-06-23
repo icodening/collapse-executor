@@ -16,11 +16,9 @@ public class FutureCollapseExecutorExample {
         SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
         SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
         FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
-        futureCollapseExecutor.execute("example group", () -> {
-            CompletableFuture<String> result = new CompletableFuture<>();
-            result.complete("Hello World Collapse Executor. Future");
-            return result;
-        }).thenAccept(System.out::println).thenRun(() -> System.exit(0));
+        futureCollapseExecutor.execute("example group", () -> CompletableFuture.completedFuture("Hello World Collapse Executor. Future"))
+                .thenAccept(System.out::println)
+                .thenRun(() -> System.exit(0));
         System.in.read();
     }
 }
