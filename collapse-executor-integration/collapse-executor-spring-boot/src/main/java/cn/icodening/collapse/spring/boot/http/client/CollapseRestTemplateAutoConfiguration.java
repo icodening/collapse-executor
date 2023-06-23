@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.boot.web.client;
+package cn.icodening.collapse.spring.boot.http.client;
 
 import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;

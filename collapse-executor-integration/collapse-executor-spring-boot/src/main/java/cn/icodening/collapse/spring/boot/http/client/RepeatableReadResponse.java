@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.boot.web.client;
+package cn.icodening.collapse.spring.boot.http.client;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

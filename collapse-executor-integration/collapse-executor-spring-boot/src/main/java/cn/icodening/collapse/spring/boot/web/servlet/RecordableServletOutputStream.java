@@ -4,7 +4,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * @author icodening
