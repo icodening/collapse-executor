@@ -19,7 +19,7 @@ public class CollapseWebClientAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(CollapseExchangeFilterFunction.class)
-    public CollapseExchangeFilterFunction collapseHttpRequestInterceptor(ListenableCollector listenableCollector) {
+    public CollapseExchangeFilterFunction collapseExchangeFilterFunction(ListenableCollector listenableCollector) {
         return new CollapseExchangeFilterFunction(listenableCollector);
     }
 
