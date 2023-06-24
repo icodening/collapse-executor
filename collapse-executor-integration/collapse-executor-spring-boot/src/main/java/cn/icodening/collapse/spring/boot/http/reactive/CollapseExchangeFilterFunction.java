@@ -5,6 +5,7 @@ import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -19,6 +20,8 @@ import java.util.concurrent.CompletableFuture;
  * @date 2023.06.23
  */
 public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
+
+    private static final DataBufferFactory HEAP_BUFFER_FACTORY = DefaultDataBufferFactory.sharedInstance;
 
     private static final String GROUP_PREFIX = CollapseExchangeFilterFunction.class.getName() + ".GET ";
 
@@ -47,17 +50,22 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
                         .map(clientResponse ->
                                 clientResponse.mutate()
                                         .body(dataBufferFlux ->
-                                                dataBufferFlux.map(this::duplicateDataBuffer)
+                                                dataBufferFlux.map(this::toToHeapBuffer)
                                                         .cache())
                                         .build())
                         .toFuture());
     }
 
-    private DataBuffer duplicateDataBuffer(DataBuffer srcDataBuffer) {
-        DataBufferFactory bufferFactory = srcDataBuffer.factory();
-        DataBuffer destDataBuffer = bufferFactory.allocateBuffer(srcDataBuffer.readableByteCount());
-        destDataBuffer.write(srcDataBuffer);
-        DataBufferUtils.release(srcDataBuffer);
-        return destDataBuffer;
+    private DataBuffer toToHeapBuffer(DataBuffer buffer){
+        byte[] data = readDataBuffer(buffer);
+        return HEAP_BUFFER_FACTORY.wrap(data);
+    }
+
+    private byte[] readDataBuffer(DataBuffer dataBuffer) {
+        int readableByteCount = dataBuffer.readableByteCount();
+        byte[] data = new byte[dataBuffer.readableByteCount()];
+        dataBuffer.read(data, 0, readableByteCount);
+        DataBufferUtils.release(dataBuffer);
+        return data;
     }
 }
