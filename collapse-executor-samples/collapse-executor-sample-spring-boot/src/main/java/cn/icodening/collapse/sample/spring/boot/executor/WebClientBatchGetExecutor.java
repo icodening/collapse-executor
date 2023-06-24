@@ -6,14 +6,14 @@ import cn.icodening.collapse.core.Input;
 import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.NoOpInputGrouper;
 import cn.icodening.collapse.sample.spring.boot.entity.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -27,26 +27,25 @@ import java.util.stream.Collectors;
 
 /**
  * @author icodening
- * @date 2023.05.17
+ * @date 2023.06.24
  */
 @Component
-public class BatchGetExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, List<UserEntity>> {
+public class WebClientBatchGetExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, List<UserEntity>> {
 
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
 
-    private ServerProperties serverProperties;
+    private int serverPort;
 
-    public BatchGetExecutor(ListenableCollector collector, RestTemplate restTemplate) {
+    public WebClientBatchGetExecutor(ListenableCollector collector, WebClient webClient) {
         super(collector);
-        this.restTemplate = restTemplate;
+        this.webClient = webClient;
         this.setInputGrouper(NoOpInputGrouper.getInstance());
     }
 
-    @Autowired
-    public void setServerProperties(ServerProperties serverProperties) {
-        this.serverProperties = serverProperties;
+    @Value("${server.port}")
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
     }
-
     /**
      * batch request
      *
@@ -64,13 +63,15 @@ public class BatchGetExecutor extends CollapseExecutorBlockingSupport<Long, User
         URI uri = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
-                .port(serverProperties.getPort())
+                .port(serverPort)
                 .path("/user/batchGet")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
-        return restTemplate.exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<List<UserEntity>>() {
-        }).getBody();
+        ResponseEntity<List<UserEntity>> entity = this.webClient.get().uri(uri).retrieve().toEntity(new ParameterizedTypeReference<List<UserEntity>>() {
+        }).block();
+        Assert.notNull(entity, "'ResponseEntity' must be not null.");
+        return entity.getBody();
     }
 
     /**
