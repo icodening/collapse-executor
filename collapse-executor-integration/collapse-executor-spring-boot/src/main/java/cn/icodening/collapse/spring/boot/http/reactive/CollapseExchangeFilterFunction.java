@@ -50,13 +50,13 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
                         .map(clientResponse ->
                                 clientResponse.mutate()
                                         .body(dataBufferFlux ->
-                                                dataBufferFlux.map(this::toToHeapBuffer)
+                                                dataBufferFlux.map(this::toHeapBuffer)
                                                         .cache())
                                         .build())
                         .toFuture());
     }
 
-    private DataBuffer toToHeapBuffer(DataBuffer buffer){
+    private DataBuffer toHeapBuffer(DataBuffer buffer){
         byte[] data = readDataBuffer(buffer);
         return HEAP_BUFFER_FACTORY.wrap(data);
     }
