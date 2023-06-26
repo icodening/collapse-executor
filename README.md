@@ -57,8 +57,44 @@ result.whenComplete();//TODO
 ## 二.手动折叠及拆分
 该方式适用于后端服务提供了批处理接口的场景，将同并发下其他线程的输入合并调用后端服务的批处理接口，可以减少多次不必要的单次调用，如批量查询。  
 由于这种方式可以更好的处理输入组，故该方式合并效率可以更高，由此带来的性能提升也会更高。
-> TODO
 
+### 1.同步阻塞调用
+> 可参考 [CustomBlockingCollapseExecutor](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomBlockingCollapseExecutor.java)
+````java
+public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, Map<Long, UserEntity>> {
+    @Override
+    protected Map<Long, UserEntity> doExecute(Collection<Input<Long>> inputs) {
+        //此处编写批量请求逻辑
+        return null;
+    }
+
+    @Override
+    protected void bindingOutput(Map<Long, UserEntity> users, List<Bundle<Long, UserEntity>> bundles) {
+        //此处编写批量响应与原始请求关联的逻辑
+    }
+}
+````
+### 2.异步调用
+> 与同步阻塞调用类似，主要差异为需要设置一个`异步线程池`，且返回值为CompletableFuture。可参考 [CustomAsyncCollapseExecutor](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomAsyncCollapseExecutor.java)
+````java
+public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, Map<Long, UserEntity>> {
+    @Override
+    protected Map<Long, UserEntity> doExecute(Collection<Input<Long>> inputs) {
+        //此处编写批量请求逻辑
+        return null;
+    }
+
+    @Override
+    protected void bindingOutput(Map<Long, UserEntity> users, List<Bundle<Long, CompletableFuture<UserEntity>>> bundles) {
+        for (Bundle<Long, CompletableFuture<UserEntity>> bundle : bundles) {
+            Long inputId = bundle.getInput();
+            UserEntity userEntity = users.get(inputId);
+            //需要返回CompletableFuture类型
+            bundle.bindOutput(CompletableFuture.completedFuture(userEntity));
+        }
+    }
+}
+````
 # Servlet合并测试
 ```` text
 服务参数
