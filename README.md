@@ -1,5 +1,5 @@
 # 简介
-Collapse-Executor 是一个高性能、低延迟的批量执行器，可以有效支持高并发的热点请求，通过合并请求的方式减少I/O次数以提高调用性能。
+collapse executor是一个高性能、低延迟的输入折叠执行器，可以有效支持高并发的热点请求，通过折叠请求的方式减少I/O次数以提高调用性能。
 
 # 流程对比
 以下两张图解释了有无折叠执行器的调用差异。当无请求折叠时，请求与网络连接数的比例为1:1；当使用请求折叠后，请求与网络连接数的比例为N:1，即多个请求会合并为一个请求发起远程调用，由此可以做到减少I/O次数、减少后端压力，从而提升调用性能。
@@ -7,7 +7,12 @@ Collapse-Executor 是一个高性能、低延迟的批量执行器，可以有�
 <img src="./docs/images/without-collapse-executor.png" width="100%">
 
 ### 有请求折叠
-<img src="./docs/images/collapse-exeuctor-simple.png" width="100%">
+<img src="docs/images/collapse-executor-simple.png" width="100%">
+
+# 优势
+1. API简单易上手，扩展难度低
+2. 高性能0延迟，发起批量请求时无需等待时间窗口
+3. 架构简单，无需维护第三方服务
 
 # 工程结构
 ## collapse-executor-core 
@@ -20,7 +25,7 @@ Collapse-Executor 是一个高性能、低延迟的批量执行器，可以有�
 # 快速开始
 `必备条件: JDK8及以上`
 ## 一.自动折叠及拆分
-该方式适用于简单的幂等请求的场景，通常需要用户手动指定本次调用所属分组。
+该方式适用于简单的`幂等请求`的场景，通常需要用户手动指定本次调用所属的并发分组。
 > 以下该案例表示将当前传入的Callable按照 `GET http://foobar.com/articles` 进行分组。
 > 同一并发分组下的Callable仅执行一次，并将这一次的返回结果作为同一并发分组发起的请求结果
 ### 1.同步阻塞调用
