@@ -28,7 +28,11 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
     private final FutureCallableGroupCollapseExecutor collapseExecutor;
 
     public CollapseExchangeFilterFunction(ListenableCollector listenableCollector) {
-        this.collapseExecutor = new FutureCallableGroupCollapseExecutor(listenableCollector);
+        this(new FutureCallableGroupCollapseExecutor(listenableCollector));
+    }
+
+    public CollapseExchangeFilterFunction(FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor) {
+        this.collapseExecutor = futureCallableGroupCollapseExecutor;
     }
 
     @Override
