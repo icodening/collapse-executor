@@ -1,9 +1,8 @@
 package cn.icodening.collapse.core.support;
 
-import cn.icodening.collapse.core.EqualsInputGrouper;
+import cn.icodening.collapse.core.AsyncSameOutputCollapseExecutor;
 import cn.icodening.collapse.core.Input;
 import cn.icodening.collapse.core.ListenableCollector;
-import cn.icodening.collapse.core.AsyncSameOutputCollapseExecutor;
 
 import java.util.Collection;
 import java.util.concurrent.Callable;
@@ -36,7 +35,6 @@ public class AsyncCallableGroupCollapseExecutor {
 
         private InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor(ListenableCollector collector) {
             super(collector);
-            this.setInputGrouper(EqualsInputGrouper.getInstance());
         }
 
         @Override

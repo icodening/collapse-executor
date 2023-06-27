@@ -2,7 +2,6 @@ package cn.icodening.collapse.core.support;
 
 import cn.icodening.collapse.core.Bundle;
 import cn.icodening.collapse.core.CollapseExecutorAsyncSupport;
-import cn.icodening.collapse.core.EqualsInputGrouper;
 import cn.icodening.collapse.core.Input;
 import cn.icodening.collapse.core.ListenableCollector;
 
@@ -41,7 +40,6 @@ public class FutureCallableGroupCollapseExecutor {
 
         private InternalFutureCallableGroupCollapseExecutor(ListenableCollector collector) {
             super(collector);
-            this.setInputGrouper(EqualsInputGrouper.getInstance());
         }
 
         @Override

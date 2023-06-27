@@ -32,7 +32,6 @@ public final class BlockingCallableGroupCollapseExecutor {
 
         private InternalBlockingCallableGroupCollapseExecutorBlocking(ListenableCollector collector) {
             super(collector);
-            this.setInputGrouper(EqualsInputGrouper.getInstance());
         }
 
         @Override
