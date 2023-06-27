@@ -26,7 +26,7 @@ collapse executor是一个高性能、低延迟的输入折叠执行器，可以
 `必备条件: JDK8及以上`
 ## 一.自动折叠及拆分
 该方式适用于简单的`幂等请求`的场景，通常需要用户手动指定本次调用所属的并发分组。
-> 以下该案例表示将当前传入的Callable按照 `GET http://foobar.com/articles` 进行分组。
+> 以下该案例表示将当前传入的Callable按照 `example group` 进行分组。
 > 同一并发分组下的Callable仅执行一次，并将这一次的返回结果作为同一并发分组发起的请求结果
 ### 1.同步阻塞调用
 [BlockingCollapseExecutorExample.java](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/BlockingCollapseExecutorExample.java)
