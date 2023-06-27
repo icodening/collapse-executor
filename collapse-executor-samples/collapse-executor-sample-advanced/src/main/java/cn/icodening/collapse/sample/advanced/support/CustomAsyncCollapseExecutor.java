@@ -45,8 +45,7 @@ public class CustomAsyncCollapseExecutor extends CollapseExecutorAsyncSupport<Lo
         //merge inputs and batch fetch
         List<Long> ids = inputs.stream().map(Input::value).collect(Collectors.toList());
         List<UserEntity> userList = userService.query(ids);
-        System.out.println("[" + Thread.currentThread().getName() + "] async batch query ids:" + ids);
-        System.out.println("--------------------------------------------------------------------------------------------------");
+        System.out.println("[" + Thread.currentThread().getName() + "] async batch query ids:" + ids + "\n--------------------------------------------------------------------------------------------------");
         Map<Long, UserEntity> idUsers = new HashMap<>();
         for (UserEntity userEntity : userList) {
             if (userEntity == null) {

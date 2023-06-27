@@ -24,7 +24,11 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
     private final BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor;
 
     public CollapseHttpRequestInterceptor(ListenableCollector listenableCollector) {
-        this.blockingCallableGroupCollapseExecutor = new BlockingCallableGroupCollapseExecutor(listenableCollector);
+        this(new BlockingCallableGroupCollapseExecutor(listenableCollector));
+    }
+
+    public CollapseHttpRequestInterceptor(BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor) {
+        this.blockingCallableGroupCollapseExecutor = blockingCallableGroupCollapseExecutor;
     }
 
     @Override

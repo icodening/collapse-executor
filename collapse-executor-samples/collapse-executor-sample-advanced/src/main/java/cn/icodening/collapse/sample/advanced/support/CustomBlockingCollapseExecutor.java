@@ -39,8 +39,7 @@ public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupp
         //merge inputs and batch fetch
         List<Long> ids = inputs.stream().map(Input::value).collect(Collectors.toList());
         List<UserEntity> userList = userService.query(ids);
-        System.out.println("[" + Thread.currentThread().getName() + "] batch query ids:" + ids);
-        System.out.println("--------------------------------------------------------------------------------------------------");
+        System.out.println("[" + Thread.currentThread().getName() + "] batch query ids:" + ids+"\n--------------------------------------------------------------------------------------------------");
         Map<Long, UserEntity> idUsers = new HashMap<>();
         for (UserEntity userEntity : userList) {
             if (userEntity == null) {
