@@ -29,7 +29,7 @@ collapse executor是一个高性能、低延迟的输入折叠执行器，可以
 > 以下该案例表示将当前传入的Callable按照 `GET http://foobar.com/articles` 进行分组。
 > 同一并发分组下的Callable仅执行一次，并将这一次的返回结果作为同一并发分组发起的请求结果
 ### 1.同步阻塞调用
-[BlockingCollapseExecutorExample](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/BlockingCollapseExecutorExample.java)
+[BlockingCollapseExecutorExample.java](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/BlockingCollapseExecutorExample.java)
 ````java
 public class BlockingCollapseExecutorExample {
     
@@ -43,7 +43,7 @@ public class BlockingCollapseExecutorExample {
 }
 ````
 ### 2.异步调用
-[AsyncCollapseExecutorExample](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/AsyncCollapseExecutorExample.java)
+[AsyncCollapseExecutorExample.java](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/AsyncCollapseExecutorExample.java)
 ````java
 public class AsyncCollapseExecutorExample {
 
@@ -64,7 +64,7 @@ public class AsyncCollapseExecutorExample {
 }
 ````
 ### 3.非阻塞异步调用
-[FutureCollapseExecutorExample](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/FutureCollapseExecutorExample.java)
+[FutureCollapseExecutorExample.java](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/FutureCollapseExecutorExample.java)
 > 这种方式必须保证Callable中的处理逻辑是非阻塞的！！！
 ````java
 public class FutureCollapseExecutorExample {
@@ -86,7 +86,7 @@ public class FutureCollapseExecutorExample {
 由于这种方式可以更好的处理输入组，故该方式合并效率可以更高，由此带来的性能提升也会更高。
 
 ### 1.同步阻塞调用
-[CustomBlockingCollapseExecutor](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomBlockingCollapseExecutor.java)
+[CustomBlockingCollapseExecutor.java](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomBlockingCollapseExecutor.java)
 ````java
 public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, Map<Long, UserEntity>> {
     @Override
@@ -102,7 +102,7 @@ public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupp
 }
 ````
 ### 2.异步调用
-[CustomAsyncCollapseExecutor](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomAsyncCollapseExecutor.java)  
+[CustomAsyncCollapseExecutor.java](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomAsyncCollapseExecutor.java)  
 与同步阻塞调用类似，主要差异为需要设置一个`异步线程池`，用于执行批量请求逻辑。
 ````java
 public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, Map<Long, UserEntity>> {
