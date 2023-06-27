@@ -29,29 +29,56 @@ collapse executor是一个高性能、低延迟的输入折叠执行器，可以
 > 以下该案例表示将当前传入的Callable按照 `GET http://foobar.com/articles` 进行分组。
 > 同一并发分组下的Callable仅执行一次，并将这一次的返回结果作为同一并发分组发起的请求结果
 ### 1.同步阻塞调用
+[BlockingCollapseExecutorExample](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/BlockingCollapseExecutorExample.java)
 ````java
-SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
-SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
-BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
-blockingCollapseExecutor.execute("GET http://foobar.com/articles", () -> {TODO 发起单次请求, 且返回一个响应});
+public class BlockingCollapseExecutorExample {
+    
+    public static void main(String[] args) throws Throwable {
+        SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
+        SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+        BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
+        String outputString = blockingCollapseExecutor.execute("example group", () -> "Hello World Collapse Executor. Blocking");
+        System.out.println(outputString);
+    }
+}
 ````
 ### 2.异步调用
+[AsyncCollapseExecutorExample](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/AsyncCollapseExecutorExample.java)
 ````java
-SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
-SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
-AsyncCallableGroupCollapseExecutor asyncCollapseExecutor = new AsyncCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
-asyncCollapseExecutor.setExecutor();//设置异步线程池
-CompletableFuture<R> result = asyncCollapseExecutor.execute("GET http://foobar.com/articles", () -> {TODO 发起单次请求, 且返回一个响应});
-result.whenComplete();//TODO
+public class AsyncCollapseExecutorExample {
+
+    public static void main(String[] args) throws Throwable {
+        SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
+        SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+        AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor = new AsyncCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
+        asyncCallableGroupCollapseExecutor.setExecutor(new ThreadPoolExecutor(10, 10, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
+            Thread thread = new Thread(r);
+            thread.setDaemon(true);
+            return thread;
+        }));
+        asyncCallableGroupCollapseExecutor.execute("example group", () -> "Hello World Collapse Executor. Async")
+                .thenAccept(System.out::println)
+                .thenRun(() -> System.exit(0));
+        System.in.read();
+    }
+}
 ````
 ### 3.非阻塞异步调用
-> 这种方式必须保证Callable中的处理逻辑是非阻塞的！
+[FutureCollapseExecutorExample](./collapse-executor-samples/collapse-executor-sample-simple/src/main/java/cn/icodening/collapse/sample/simple/FutureCollapseExecutorExample.java)
+> 这种方式必须保证Callable中的处理逻辑是非阻塞的！！！
 ````java
-SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
-SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
-FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
-CompletableFuture<R> result = futureCollapseExecutor.execute("GET http://foobar.com/articles", () -> {TODO 发起单次请求, 且返回一个CompletableFuture类型的响应});
-result.whenComplete();//TODO
+public class FutureCollapseExecutorExample {
+
+    public static void main(String[] args) throws Throwable {
+        SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
+        SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+        FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
+        futureCollapseExecutor.execute("example group", () -> CompletableFuture.completedFuture("Hello World Collapse Executor. Future"))
+                .thenAccept(System.out::println)
+                .thenRun(() -> System.exit(0));
+        System.in.read();
+    }
+}
 ````
 
 ## 二.手动折叠及拆分
@@ -59,7 +86,7 @@ result.whenComplete();//TODO
 由于这种方式可以更好的处理输入组，故该方式合并效率可以更高，由此带来的性能提升也会更高。
 
 ### 1.同步阻塞调用
-> 可参考 [CustomBlockingCollapseExecutor](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomBlockingCollapseExecutor.java)
+[CustomBlockingCollapseExecutor](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomBlockingCollapseExecutor.java)
 ````java
 public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, Map<Long, UserEntity>> {
     @Override
@@ -75,7 +102,8 @@ public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupp
 }
 ````
 ### 2.异步调用
-> 与同步阻塞调用类似，主要差异为需要设置一个`异步线程池`，且返回值为CompletableFuture。可参考 [CustomAsyncCollapseExecutor](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomAsyncCollapseExecutor.java)
+[CustomAsyncCollapseExecutor](./collapse-executor-samples/collapse-executor-sample-advanced/src/main/java/cn/icodening/collapse/sample/advanced/support/CustomAsyncCollapseExecutor.java)  
+与同步阻塞调用类似，主要差异为需要设置一个`异步线程池`，用于执行批量请求逻辑。
 ````java
 public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, Map<Long, UserEntity>> {
     @Override
