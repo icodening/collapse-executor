@@ -21,7 +21,7 @@ import java.io.IOException;
  */
 public class CollapseHttpRequestInterceptor implements ClientHttpRequestInterceptor {
 
-    private static final String IDENTIFIER = CollapseHttpRequestInterceptor.class.getName() + ".GET ";
+    private static final String IDENTIFIER = CollapseHttpRequestInterceptor.class.getName();
 
     private final BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor;
 

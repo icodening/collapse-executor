@@ -25,7 +25,7 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
 
     private static final DataBufferFactory HEAP_BUFFER_FACTORY = DefaultDataBufferFactory.sharedInstance;
 
-    private static final String IDENTIFIER = CollapseExchangeFilterFunction.class.getName() + ".GET ";
+    private static final String IDENTIFIER = CollapseExchangeFilterFunction.class.getName();
 
     private final FutureCallableGroupCollapseExecutor collapseExecutor;
 
