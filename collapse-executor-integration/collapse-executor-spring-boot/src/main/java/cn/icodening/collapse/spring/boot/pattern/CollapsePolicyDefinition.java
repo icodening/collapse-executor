@@ -9,6 +9,8 @@ import java.util.Set;
  */
 public class CollapsePolicyDefinition {
 
+    public static final CollapsePolicyDefinition DEFAULT_POLICY = new CollapsePolicyDefinition();
+
     private Set<String> collapseRequestHeaders = new HashSet<>();
 
     private Set<String> collapseRequestQueries = new HashSet<>();

@@ -19,6 +19,10 @@ public class CollapseDefinitionProperties {
 
     private List<CollapseGroupDefinition> collapseGroups = new ArrayList<>();
 
+    public CollapseDefinitionProperties() {
+        this.collapsePolicies.put("*", CollapsePolicyDefinition.DEFAULT_POLICY);
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
