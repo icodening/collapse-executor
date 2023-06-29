@@ -2,6 +2,8 @@ package cn.icodening.collapse.spring.boot.http.client;
 
 import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
+import cn.icodening.collapse.spring.boot.pattern.CollapseGroupResolver;
+import cn.icodening.collapse.spring.boot.pattern.RequestCollapseGroup;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
@@ -19,9 +21,11 @@ import java.io.IOException;
  */
 public class CollapseHttpRequestInterceptor implements ClientHttpRequestInterceptor {
 
-    private static final String GROUP_PREFIX = CollapseHttpRequestInterceptor.class.getName() + ".GET ";
+    private static final String IDENTIFIER = CollapseHttpRequestInterceptor.class.getName() + ".GET ";
 
     private final BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor;
+
+    private CollapseGroupResolver collapseGroupResolver;
 
     public CollapseHttpRequestInterceptor(ListenableCollector listenableCollector) {
         this(new BlockingCallableGroupCollapseExecutor(listenableCollector));
@@ -31,18 +35,34 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
         this.blockingCallableGroupCollapseExecutor = blockingCallableGroupCollapseExecutor;
     }
 
+    public void setCollapseGroupResolver(CollapseGroupResolver collapseGroupResolver) {
+        this.collapseGroupResolver = collapseGroupResolver;
+    }
+
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         if (!allowCollapse(request)) {
             return execution.execute(request, body);
         }
         try {
-            return this.blockingCallableGroupCollapseExecutor.execute(GROUP_PREFIX + request.getURI(), () -> repeatableReadResponse(execution.execute(request, body)));
+            RequestCollapseGroup requestCollapseGroup = findCollapseGroup(request);
+            if (requestCollapseGroup == null) {
+                return execution.execute(request, body);
+            }
+            requestCollapseGroup.setIdentifier(IDENTIFIER);
+            return this.blockingCallableGroupCollapseExecutor.execute(requestCollapseGroup, () -> repeatableReadResponse(execution.execute(request, body)));
         } catch (RuntimeException | IOException e) {
             throw e;
         } catch (Throwable throwable) {
             throw new RuntimeException(throwable);
         }
+    }
+
+    protected RequestCollapseGroup findCollapseGroup(HttpRequest request) {
+        if (collapseGroupResolver == null) {
+            return null;
+        }
+        return collapseGroupResolver.resolve(new RestTemplateRequestAttributes(request));
     }
 
     protected boolean allowCollapse(HttpRequest request) {
