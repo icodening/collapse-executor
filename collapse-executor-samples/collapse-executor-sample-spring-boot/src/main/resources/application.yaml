@@ -5,8 +5,8 @@ server:
 collapse:
   executor:
     enabled: true
-    collecting-wait-time: -1
     wait-threshold: 10
+    collecting-wait-time: -1
 
     #[Servlet] collapse request configuration
     servlet:
@@ -23,15 +23,15 @@ collapse:
             - /test/collapse1
             - /test/collapse100
 
-    #[WebClient] collapse request configuration
-    web-client:
+    #[RestTemplate] collapse request configuration
+    rest-template:
       enabled: true
       collapse-groups:
         - uris:
             - /user/*
 
-    #[RestTemplate] collapse request configuration
-    rest-template:
+    #[WebClient] collapse request configuration
+    web-client:
       enabled: true
       collapse-groups:
         - uris:
