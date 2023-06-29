@@ -2,6 +2,8 @@ package cn.icodening.collapse.spring.boot.http.reactive;
 
 import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
+import cn.icodening.collapse.spring.boot.pattern.CollapseGroupResolver;
+import cn.icodening.collapse.spring.boot.pattern.RequestCollapseGroup;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -23,9 +25,11 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
 
     private static final DataBufferFactory HEAP_BUFFER_FACTORY = DefaultDataBufferFactory.sharedInstance;
 
-    private static final String GROUP_PREFIX = CollapseExchangeFilterFunction.class.getName() + ".GET ";
+    private static final String IDENTIFIER = CollapseExchangeFilterFunction.class.getName() + ".GET ";
 
     private final FutureCallableGroupCollapseExecutor collapseExecutor;
+
+    protected CollapseGroupResolver collapseGroupResolver;
 
     public CollapseExchangeFilterFunction(ListenableCollector listenableCollector) {
         this(new FutureCallableGroupCollapseExecutor(listenableCollector));
@@ -35,12 +39,28 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
         this.collapseExecutor = futureCallableGroupCollapseExecutor;
     }
 
+    public void setCollapseGroupResolver(CollapseGroupResolver collapseGroupResolver) {
+        this.collapseGroupResolver = collapseGroupResolver;
+    }
+
     @Override
     public Mono<ClientResponse> filter(ClientRequest request, ExchangeFunction next) {
         if (!allowCollapse(request)) {
             return next.exchange(request);
         }
-        return Mono.fromFuture(collapseExecute(request, next));
+        RequestCollapseGroup requestCollapseGroup = findCollapseGroup(request);
+        if (requestCollapseGroup == null) {
+            return next.exchange(request);
+        }
+        requestCollapseGroup.setIdentifier(IDENTIFIER);
+        return Mono.fromFuture(collapseExecute(requestCollapseGroup, request, next));
+    }
+
+    protected RequestCollapseGroup findCollapseGroup(ClientRequest request) {
+        if (collapseGroupResolver == null) {
+            return null;
+        }
+        return collapseGroupResolver.resolve(new WebClientRequestAttributes(request));
     }
 
     protected boolean allowCollapse(ClientRequest request) {
@@ -48,8 +68,8 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
         return HttpMethod.GET.equals(method);
     }
 
-    private CompletableFuture<ClientResponse> collapseExecute(ClientRequest request, ExchangeFunction next) {
-        return collapseExecutor.execute(GROUP_PREFIX + request.url(),
+    private CompletableFuture<ClientResponse> collapseExecute(RequestCollapseGroup requestCollapseGroup, ClientRequest request, ExchangeFunction next) {
+        return collapseExecutor.execute(requestCollapseGroup,
                 () -> next.exchange(request)
                         .map(clientResponse ->
                                 clientResponse.mutate()
@@ -60,7 +80,7 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
                         .toFuture());
     }
 
-    private DataBuffer toHeapBuffer(DataBuffer buffer){
+    private DataBuffer toHeapBuffer(DataBuffer buffer) {
         byte[] data = readDataBuffer(buffer);
         return HEAP_BUFFER_FACTORY.wrap(data);
     }
