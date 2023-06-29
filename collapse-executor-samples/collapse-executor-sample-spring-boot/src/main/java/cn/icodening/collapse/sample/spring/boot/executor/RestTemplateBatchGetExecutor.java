@@ -19,9 +19,9 @@ public class RestTemplateBatchGetExecutor extends AbstractBatchGetExecutor {
 
     private final RestTemplate restTemplate;
 
-    public RestTemplateBatchGetExecutor(ListenableCollector collector, RestTemplate restTemplate) {
+    public RestTemplateBatchGetExecutor(ListenableCollector collector) {
         super(collector);
-        this.restTemplate = restTemplate;
+        this.restTemplate = new RestTemplate();
     }
 
     @Override

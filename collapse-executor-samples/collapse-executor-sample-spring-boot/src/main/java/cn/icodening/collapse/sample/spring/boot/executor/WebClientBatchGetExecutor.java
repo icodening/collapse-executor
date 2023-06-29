@@ -20,9 +20,9 @@ public class WebClientBatchGetExecutor extends AbstractBatchGetExecutor {
 
     private final WebClient webClient;
 
-    public WebClientBatchGetExecutor(ListenableCollector collector, WebClient webClient) {
+    public WebClientBatchGetExecutor(ListenableCollector collector) {
         super(collector);
-        this.webClient = webClient;
+        this.webClient = WebClient.create();
     }
 
     @Override
