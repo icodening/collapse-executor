@@ -27,14 +27,12 @@ collapse:
     web-client:
       enabled: true
       collapse-groups:
-        - collapse-policy-name: "*"
-          uris:
+        - uris:
             - /user/*
 
     #[RestTemplate] collapse request configuration
     rest-template:
       enabled: true
       collapse-groups:
-        - collapse-policy-name: "*"
-          uris:
+        - uris:
             - /user/*

@@ -41,7 +41,7 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
             for (String uri : uris) {
                 if (isMatch(requestAttributes, uri)) {
                     String groupPolicyName = definition.getCollapsePolicyName();
-                    CollapsePolicyDefinition collapsePolicy = this.collapseDefinitionProperties.getCollapsePolicies().get(groupPolicyName);
+                    CollapsePolicyDefinition collapsePolicy = findCollapsePolicyDefinition(groupPolicyName);
                     if (collapsePolicy == null) {
                         LOGGER.debug("['{}' not found.]", groupPolicyName);
                         return null;
@@ -72,6 +72,13 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
             }
         }
         return null;
+    }
+
+    private CollapsePolicyDefinition findCollapsePolicyDefinition(String groupPolicyName) {
+        if (StringUtils.hasText(groupPolicyName)) {
+            return this.collapseDefinitionProperties.getCollapsePolicies().get(groupPolicyName);
+        }
+        return CollapsePolicyDefinition.DEFAULT_POLICY;
     }
 
     private boolean isMatch(RequestAttributes request, String configURI) {
