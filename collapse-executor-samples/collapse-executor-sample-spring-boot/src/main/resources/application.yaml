@@ -1,23 +1,19 @@
 server:
   port: 8080
   shutdown: graceful
-  tomcat:
-    threads:
-      max: 200
-  undertow:
-    threads:
-      worker: 200
+
 collapse:
   executor:
     enabled: true
     collecting-wait-time: -1
     wait-threshold: 10
+
+    #[Servlet] collapse request configuration
     servlet:
       enabled: true
       batch-size: 64
       collapse-policies:
         test-policy:
-          collapse-query-string: true
           collapse-request-headers:
             - auth
             - user-id
@@ -26,3 +22,19 @@ collapse:
           uris:
             - /test/collapse1
             - /test/collapse100
+
+    #[WebClient] collapse request configuration
+    web-client:
+      enabled: true
+      collapse-groups:
+        - collapse-policy-name: "*"
+          uris:
+            - /user/*
+
+    #[RestTemplate] collapse request configuration
+    rest-template:
+      enabled: true
+      collapse-groups:
+        - collapse-policy-name: "*"
+          uris:
+            - /user/*

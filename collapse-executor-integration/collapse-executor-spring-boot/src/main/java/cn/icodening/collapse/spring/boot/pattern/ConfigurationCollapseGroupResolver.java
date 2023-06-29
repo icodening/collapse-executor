@@ -43,7 +43,7 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
                     String groupPolicyName = definition.getCollapsePolicyName();
                     CollapsePolicyDefinition collapsePolicy = this.collapseDefinitionProperties.getCollapsePolicies().get(groupPolicyName);
                     if (collapsePolicy == null) {
-                        LOGGER.debug("['{}' not found, please check configuration.]", groupPolicyName);
+                        LOGGER.debug("['{}' not found.]", groupPolicyName);
                         return null;
                     }
                     RequestCollapseGroup requestCollapseGroup = new RequestCollapseGroup();
