@@ -1,5 +1,7 @@
 package cn.icodening.collapse.spring.boot.web.servlet;
 
+import cn.icodening.collapse.spring.boot.pattern.RequestCollapseGroup;
+
 import javax.servlet.AsyncContext;
 import java.util.Objects;
 
@@ -9,16 +11,16 @@ import java.util.Objects;
  */
 class ServletCollapseRequest {
 
-    private final ServletCollapseGroupKey groupKey;
+    private final RequestCollapseGroup groupKey;
 
     private final AsyncContext asyncContext;
 
-    public ServletCollapseRequest(ServletCollapseGroupKey groupKey, AsyncContext asyncContext) {
+    public ServletCollapseRequest(RequestCollapseGroup groupKey, AsyncContext asyncContext) {
         this.groupKey = groupKey;
         this.asyncContext = asyncContext;
     }
 
-    public ServletCollapseGroupKey getGroupKey() {
+    public RequestCollapseGroup getGroupKey() {
         return groupKey;
     }
 

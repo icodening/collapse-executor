@@ -1,5 +1,7 @@
 package cn.icodening.collapse.spring.boot.web.servlet;
 
+import cn.icodening.collapse.spring.boot.pattern.ConfigurationCollapseGroupResolver;
+import cn.icodening.collapse.spring.boot.pattern.RequestCollapseGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,16 +25,16 @@ class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
 
     private final AsyncServletExecutor asyncServletExecutor;
 
-    private final ServletCollapseGroupKeyResolver servletCollapseGroupKeyResolver;
+    private final ConfigurationCollapseGroupResolver servletCollapseGroupKeyResolver;
 
-    public CollapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, ServletCollapseGroupKeyResolver servletCollapseGroupKeyResolver) {
+    public CollapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, ConfigurationCollapseGroupResolver servletCollapseGroupKeyResolver) {
         this.asyncServletExecutor = asyncServletExecutor;
         this.servletCollapseGroupKeyResolver = servletCollapseGroupKeyResolver;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain chain) throws ServletException, IOException {
-        ServletCollapseGroupKey groupKey = servletCollapseGroupKeyResolver.resolveGroupKey(httpServletRequest);
+        RequestCollapseGroup groupKey = servletCollapseGroupKeyResolver.resolve(new HttpServletRequestAttributes(httpServletRequest));
         if (groupKey == null) {
             chain.doFilter(httpServletRequest, httpServletResponse);
             return;

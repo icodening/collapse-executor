@@ -4,6 +4,7 @@ import cn.icodening.collapse.core.EqualsInputGrouper;
 import cn.icodening.collapse.core.LengthLimitedInputGrouper;
 import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
+import cn.icodening.collapse.spring.boot.pattern.ConfigurationCollapseGroupResolver;
 import io.undertow.Undertow;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -16,12 +17,10 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.util.ReflectionUtils;
 
 import javax.servlet.Filter;
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -40,8 +39,9 @@ public class CollapseServletAutoConfiguration {
     }
 
     @Bean
-    public CollapseHttpRequestServletFilter collapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, ServletCollapseGroupKeyResolver servletCollapseGroupKeyResolver) {
-        return new CollapseHttpRequestServletFilter(asyncServletExecutor, servletCollapseGroupKeyResolver);
+    public CollapseHttpRequestServletFilter collapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, CollapseServletProperties collapseServletProperties) {
+        ConfigurationCollapseGroupResolver configurationCollapseGroupResolver = new ConfigurationCollapseGroupResolver(collapseServletProperties);
+        return new CollapseHttpRequestServletFilter(asyncServletExecutor, configurationCollapseGroupResolver);
     }
 
     @Bean
@@ -50,17 +50,6 @@ public class CollapseServletAutoConfiguration {
         asyncServletExecutor.setExecutor(collapseExecutorService);
         asyncServletExecutor.setInputGrouper(LengthLimitedInputGrouper.newInstance(collapseServletProperties.getBatchSize(), EqualsInputGrouper.getInstance()));
         return asyncServletExecutor;
-    }
-
-    @Bean
-    public ServletCollapseGroupKeyResolver configurationServletCollapseGroupKeyResolver(CollapseServletProperties collapseServletProperties) {
-        return new ConfigurationServletCollapseGroupKeyResolver(collapseServletProperties);
-    }
-
-    @Bean
-    @Primary
-    public ServletCollapseGroupKeyResolver compositeServletCollapseGroupKeyResolver(List<ServletCollapseGroupKeyResolver> servletCollapseGroupKeyResolvers) {
-        return new CompositeServletCollapseGroupKeyResolver(servletCollapseGroupKeyResolvers);
     }
 
     @ConditionalOnClass(name = "org.apache.catalina.startup.Tomcat")

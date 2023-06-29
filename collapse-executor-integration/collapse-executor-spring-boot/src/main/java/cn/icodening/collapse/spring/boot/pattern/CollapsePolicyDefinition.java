@@ -9,19 +9,9 @@ import java.util.Set;
  */
 public class CollapsePolicyDefinition {
 
-    private boolean collapseQueryString = true;
-
     private Set<String> collapseRequestHeaders = new HashSet<>();
 
     private Set<String> collapseRequestQueries = new HashSet<>();
-
-    public boolean isCollapseQueryString() {
-        return collapseQueryString;
-    }
-
-    public void setCollapseQueryString(boolean collapseQueryString) {
-        this.collapseQueryString = collapseQueryString;
-    }
 
     public Set<String> getCollapseRequestHeaders() {
         return collapseRequestHeaders;
