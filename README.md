@@ -30,19 +30,6 @@ collapse executor是一个高性能、低延迟的输入折叠执行器，可以
 
 > 核心逻辑完全不依赖任何第三方库/服务，完全基于JDK库进行实现。
 
-# 工程结构
-
-## collapse-executor-core
-
-折叠执行器的核心抽象，包含输入拆分、输出映射、批量采集等核心逻辑抽象
-
-## collapse-executor-integration
-
-折叠执行器与主流框架的集成模块，如RestTemplate、Servlet Filter等
-
-## collapse-executor-samples
-
-折叠执行器的使用例子
 
 # 快速开始
 
