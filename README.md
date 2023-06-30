@@ -166,9 +166,9 @@ collapse:
     enabled: true # 折叠执行器的总开关，配置为false后，后面的所有配置(servlet、rest-template、web-client)将失效
     wait-threshold: 10 #批量收集的最小阈值
     collecting-wait-time: 0 #声明批量收集未达到阈值时的行为。
-      #collecting-wait-time < 0时：立即执行
-      #collecting-wait-time = 0时：让出当前收集线程时间片等待下次调度后立即执行
-      #collecting-wait-time > 0时：等待指定的时间后再执行，单位为毫秒(ms)
+      #collecting-wait-time < 0时：不做任何等待，立即发起调用
+      #collecting-wait-time = 0时：让出当前收集线程时间片等待下次调度后再发起调用
+      #collecting-wait-time > 0时：等待指定的时间后再发起调用，单位为毫秒(ms)
     rest-template:
       enabled: true #true表示打开RestTemplate的合并拦截器
       collapse-policies:
