@@ -270,7 +270,7 @@ RestTemplate调用地址http://localhost:8080/test/noop0
 ### 开启折叠
 ```` text
 启用请求折叠测试结果
-TPS   15282
+TPS   15282/s
 RT99  59ms
 ````
 ![with-collapse](./docs/images/rest-template-collapse.png)
@@ -278,7 +278,7 @@ RT99  59ms
 ### 关闭折叠
 ```` text
 启用请求折叠测试结果
-TPS   8455
+TPS   8455/s
 RT99  180ms
 ````
 ![without-collapse](./docs/images/rest-template-without-collapse.png)
@@ -293,7 +293,7 @@ WebClient调用地址http://localhost:8080/test/noop0
 ### 开启折叠
 ```` text
 启用请求折叠测试结果
-TPS   14276
+TPS   14276/s
 RT99  35ms
 ````
 ![with-collapse](./docs/images/webclient-collapse.png)
@@ -301,7 +301,7 @@ RT99  35ms
 ### 关闭折叠
 ```` text
 启用请求折叠测试结果
-TPS   9971
+TPS   9971/s
 RT99  111ms
 ````
 ![without-collapse](./docs/images/webclient-without-collapse.png)
