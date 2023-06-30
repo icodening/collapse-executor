@@ -1,3 +1,4 @@
+[toc]
 # 简介
 
 collapse executor是一个高性能、低延迟的输入折叠执行器，可以有效支持高并发的热点请求，通过折叠请求的方式减少I/O次数以提高调用性能。
@@ -158,7 +159,7 @@ collapse executor已经对Spring Boot进行了适配，利用Spring Boot自动�
 、[WebClient](./collapse-executor-integration/collapse-executor-spring-boot/src/main/java/cn/icodening/collapse/spring/boot/http/reactive/CollapseExchangeFilterFunction.java)
 、[Servlet](./collapse-executor-integration/collapse-executor-spring-boot/src/main/java/cn/icodening/collapse/spring/boot/web/servlet/CollapseHttpRequestServletFilter.java)。
 ## 1. application.yaml配置
-详情可参考`collapse-executor-sample-spring-boot`中的[application.yaml](./collapse-executor-samples/collapse-executor-sample-spring-boot/src/main/resources/application.yaml)
+以下是一个折叠执行器的yaml配置例子及解释，详情可参考`collapse-executor-sample-spring-boot`中的[application.yaml](./collapse-executor-samples/collapse-executor-sample-spring-boot/src/main/resources/application.yaml)
 ````yaml
 collapse:
   executor:
