@@ -29,6 +29,7 @@ collapse:
       collapse-groups:
         - uris:
             - /user/*
+            - /test/noop*
 
     #[WebClient] collapse request configuration
     web-client:
@@ -36,3 +37,4 @@ collapse:
       collapse-groups:
         - uris:
             - /user/*
+            - /test/noop*

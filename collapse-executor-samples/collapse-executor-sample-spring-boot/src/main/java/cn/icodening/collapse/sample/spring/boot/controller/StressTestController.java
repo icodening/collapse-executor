@@ -1,7 +1,7 @@
 package cn.icodening.collapse.sample.spring.boot.controller;
 
-import cn.icodening.collapse.sample.spring.boot.service.UserService;
 import cn.icodening.collapse.sample.spring.boot.entity.UserEntity;
+import cn.icodening.collapse.sample.spring.boot.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,16 +27,15 @@ public class StressTestController {
         this.userService = userService;
     }
 
-    @RequestMapping("/collapse1")
-    public UserEntity collapse1() throws InterruptedException {
+    @RequestMapping("/collapse0")
+    public UserEntity collapse0() {
         collapseCounter.incrementAndGet();
-        Thread.sleep(1);
         return userService.getUser(1L);
     }
 
-    @RequestMapping("/noop1")
-    public UserEntity noop1() throws InterruptedException {
-        noOpCounter.incrementAndGet();
+    @RequestMapping("/collapse1")
+    public UserEntity collapse1() throws InterruptedException {
+        collapseCounter.incrementAndGet();
         Thread.sleep(1);
         return userService.getUser(1L);
     }
@@ -45,6 +44,19 @@ public class StressTestController {
     public UserEntity collapse100() throws InterruptedException {
         collapseCounter.incrementAndGet();
         Thread.sleep(100);
+        return userService.getUser(1L);
+    }
+
+    @RequestMapping("/noop0")
+    public UserEntity noop0() {
+        noOpCounter.incrementAndGet();
+        return userService.getUser(1L);
+    }
+
+    @RequestMapping("/noop1")
+    public UserEntity noop1() throws InterruptedException {
+        noOpCounter.incrementAndGet();
+        Thread.sleep(1);
         return userService.getUser(1L);
     }
 
