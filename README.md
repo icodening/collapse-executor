@@ -158,50 +158,46 @@ collapse executor已经对Spring Boot进行了适配，利用Spring Boot自动�
 [RestTemplate](./collapse-executor-integration/collapse-executor-spring-boot/src/main/java/cn/icodening/collapse/spring/boot/http/client/CollapseHttpRequestInterceptor.java)
 、[WebClient](./collapse-executor-integration/collapse-executor-spring-boot/src/main/java/cn/icodening/collapse/spring/boot/http/reactive/CollapseExchangeFilterFunction.java)
 、[Servlet](./collapse-executor-integration/collapse-executor-spring-boot/src/main/java/cn/icodening/collapse/spring/boot/web/servlet/CollapseHttpRequestServletFilter.java)。
-## 1. application.yaml配置
+## 1. application.yaml配置解释
 以下是一个折叠执行器的yaml配置例子及解释，详情可参考`collapse-executor-sample-spring-boot`中的[application.yaml](./collapse-executor-samples/collapse-executor-sample-spring-boot/src/main/resources/application.yaml)
 ````yaml
 collapse:
   executor:
     enabled: true # 折叠执行器的总开关，配置为false后，后面的所有配置(servlet、rest-template、web-client)将失效
     wait-threshold: 10 #批量收集的最小阈值
-    collecting-wait-time: -1 #声明批量收集未达到阈值时的行为。
+    collecting-wait-time: 0 #声明批量收集未达到阈值时的行为。
       #collecting-wait-time < 0时：立即执行
       #collecting-wait-time = 0时：让出当前收集线程时间片等待下次调度后立即执行
       #collecting-wait-time > 0时：等待指定的时间后再执行，单位为毫秒(ms)
-
-    #[Servlet] collapse request configuration
-    servlet:
-      enabled: true #true表示打开servlet请求接入的折叠
-      batch-size: 64 #用于配置一个批次中最大的请求数量。例：当前并发接入100个相同的请求，则会按照[64、36]两个批次分别执行2次业务逻辑
-      collapse-policies: #声明策略，可声明多个
-        test-policy:
-          collapse-request-headers: #声明需要作为折叠条件的header
-            - auth
+    rest-template:
+      enabled: true #true表示打开RestTemplate的合并拦截器
+      collapse-policies:
+        #声明合并策略，可以配置多个
+        sample-policy1: #策略名字
+          collapse-request-headers: #声明需要合并的请求头名字
+            - authorization
+          collapse-request-queries: #声明需要合并的查询参数名字
+            - sample
+        sample-policy2:
+          collapse-request-headers:
             - user-id
-      collapse-groups: #声明折叠组
-        - collapse-policy-name: test-policy #与前面声明的策略名相同
+          collapse-request-queries:
+            - sample
+      collapse-groups:
+        # collapse-policy-name可以省略，省略后使用默认策略仅合并path相同的请求，而忽略其他任何参数
+        # 例如：此时并发发起 /user/2、/user/2、/article/2、/article/2    [4]个请求，由于前两个请求满足 /user/*，则会将前两个合并为 [1] 个请求发起调用；
+        #  而第三第四个/article/2请求没有匹配到配置中的声明的折叠组，则依然会按照 [2] 个请求分别发起调用
+        - uris:
+            - /user/*
+            - /test/noop*
+        #------------------------------------------------------------------
+        
+        # 例如：此时并发发起 /samples/1(header:authorization=test), /samples/1(header:authorization=test), /samples/1(header:authorization=demo)   [3]个请求，
+        #  由于前两个请求携带的[authorization]请求头值相同，则会将前两个合并为 [1] 个请求发起调用；
+        #  而第三个请求则会单独发起调用，与前两个不是同一组!
+        - collapse-policy-name: sample-policy1 #需要与前面声明的策略名对应
           uris:
-            - /test/collapse1
-            - /test/collapse100
-    #以上servlet配置表示：当多个并发请求/test/collapse1时，并且header中auth、user-id相同的请求作为同一批次执行业务逻辑。
-
-    #[RestTemplate] collapse request configuration
-    rest-template: 
-      enabled: true #true表示打开RestTemplate调用折叠(只会折叠幂等请求GET)
-      collapse-groups:
-        #声明折叠组，此折叠组没有指定策略名表示会当调用的路径为 GET /user/*' 即折叠。
-        # 例如：此时并发发起 /user/2、/user/2、/article/2、/article/2 四个请求，由于前两个请求满足 /user/*，则会将前两个合并为1个请求调用；
-        # 而/article/2请求没有匹配到配置中的声明的折叠组，则依然会按照2个请求分别调用
-        - uris:
-            - /user/*
-
-    #[WebClient] collapse request configuration
-    web-client:
-      enabled: true
-      collapse-groups:
-        - uris:
-            - /user/*
+            - /samples/*
 ````
 ## 2. 启动[SpringBootSampleApplication](./collapse-executor-samples/collapse-executor-sample-spring-boot/src/main/java/cn/icodening/collapse/sample/spring/boot/SpringBootSampleApplication.java)查看结果
 业务逻辑位于

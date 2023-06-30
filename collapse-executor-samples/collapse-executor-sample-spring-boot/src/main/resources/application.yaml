@@ -9,7 +9,7 @@ collapse:
   executor:
     enabled: true
     wait-threshold: 10
-    collecting-wait-time: -1
+    collecting-wait-time: 0
 
     #[Servlet] collapse request configuration
     servlet:
@@ -29,10 +29,20 @@ collapse:
     #[RestTemplate] collapse request configuration
     rest-template:
       enabled: true
+      collapse-policies:
+        sample-policy:
+          collapse-request-headers:
+            - authorization
+          collapse-request-queries:
+            - sample
       collapse-groups:
         - uris:
             - /user/*
             - /test/noop*
+        - collapse-policy-name: sample-policy
+          uris:
+            - /samples/*
+
 
     #[WebClient] collapse request configuration
     web-client:
