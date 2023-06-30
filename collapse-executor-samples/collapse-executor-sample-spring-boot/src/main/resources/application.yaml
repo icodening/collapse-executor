@@ -1,6 +1,9 @@
 server:
   port: 8080
   shutdown: graceful
+  tomcat:
+    threads:
+      max: 400
 
 collapse:
   executor:

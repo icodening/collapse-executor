@@ -228,7 +228,9 @@ public abstract class AbstractBlockingCallSample {
     }
 }
 ````
-# Servlet性能对比
+# 性能对比
+## 一、Servlet
+> 结论：相比于未使用折叠，TPS提升高达`94%`
 ```` text
 服务参数
 server.tomcat.threads.max=200
@@ -241,7 +243,7 @@ http://localhost:8080/test/noop100
 400用户线程数，持续压测5分钟
 ````
 
-## 开启折叠
+### 开启折叠
 
 ```` text
 http://localhost:8080/test/collapse100 启用请求折叠测试结果
@@ -260,6 +262,54 @@ RT99  211ms
 ````
 
 ![without-collapse](./docs/images/without-collapse.png)
+
+## 二、RestTemplate
+> 结论：相比于未使用折叠，TPS提升高达`80%`
+```` text
+RestTemplate默认配置，差异仅为是否包含折叠执行拦截器(CollapseHttpRequestInterceptor)
+RestTemplate调用地址http://localhost:8080/test/noop0
+200用户线程数，持续压测1分钟
+````
+### 开启折叠
+```` text
+启用请求折叠测试结果
+TPS   15282
+RT99  59ms
+````
+![with-collapse](./docs/images/rest-template-collapse.png)
+
+### 关闭折叠
+```` text
+启用请求折叠测试结果
+TPS   8455
+RT99  180ms
+````
+![without-collapse](./docs/images/rest-template-without-collapse.png)
+
+## 三、WebClient
+> 结论：相比于未使用折叠，TPS提升高达`43%`
+```` text
+WebClient默认配置，差异仅为是否包含折叠执行拦截器(CollapseExchangeFilterFunction)
+WebClient调用地址http://localhost:8080/test/noop0
+200用户线程数，持续压测1分钟
+````
+### 开启折叠
+```` text
+启用请求折叠测试结果
+TPS   14276
+RT99  35ms
+````
+![with-collapse](./docs/images/webclient-collapse.png)
+
+### 关闭折叠
+```` text
+启用请求折叠测试结果
+TPS   9971
+RT99  111ms
+````
+![without-collapse](./docs/images/webclient-without-collapse.png)
+
+
 
 # 工作流程
 
