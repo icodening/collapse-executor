@@ -62,7 +62,15 @@ public class CustomAsyncCollapseExecutor extends CollapseExecutorAsyncSupport<Lo
         for (Bundle<Long, CompletableFuture<UserEntity>> bundle : bundles) {
             Long inputId = bundle.getInput();
             UserEntity userEntity = users.get(inputId);
-            bundle.bindOutput(CompletableFuture.completedFuture(userEntity));
+            if (userEntity == null) {
+                bundle.bindOutput(null);
+                continue;
+            }
+            //copy a response
+            UserEntity duplicate = new UserEntity();
+            duplicate.setId(userEntity.getId());
+            duplicate.setUsername(userEntity.getUsername());
+            bundle.bindOutput(CompletableFuture.completedFuture(duplicate));
         }
     }
 }

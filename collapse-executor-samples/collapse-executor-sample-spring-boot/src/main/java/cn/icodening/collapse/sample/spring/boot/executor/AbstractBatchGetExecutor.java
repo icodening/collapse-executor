@@ -81,7 +81,16 @@ public abstract class AbstractBatchGetExecutor extends CollapseExecutorBlockingS
         for (Bundle<Long, UserEntity> bundle : bundles) {
             Long id = bundle.getInput();
             UserEntity userEntity = entityMap.get(id);
-            bundle.bindOutput(userEntity);
+            if (userEntity == null) {
+                bundle.bindOutput(null);
+                continue;
+            }
+            //copy a response
+            UserEntity duplicate = new UserEntity();
+            duplicate.setId(userEntity.getId());
+            duplicate.setUsername(userEntity.getUsername());
+            duplicate.setPassword(userEntity.getPassword());
+            bundle.bindOutput(duplicate);
         }
     }
 }
