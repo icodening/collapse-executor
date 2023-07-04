@@ -1,9 +1,8 @@
 package cn.icodening.collapse.core.support;
 
-import cn.icodening.collapse.core.Input;
-import cn.icodening.collapse.core.ListenableCollector;
 import cn.icodening.collapse.core.BlockingSameOutputCollapseExecutor;
-import cn.icodening.collapse.core.EqualsInputGrouper;
+import cn.icodening.collapse.core.Input;
+import cn.icodening.collapse.core.ListeningCollector;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -17,7 +16,7 @@ public final class BlockingCallableGroupCollapseExecutor {
 
     private final InternalBlockingCallableGroupCollapseExecutorBlocking<Object> executor;
 
-    public BlockingCallableGroupCollapseExecutor(ListenableCollector collector) {
+    public BlockingCallableGroupCollapseExecutor(ListeningCollector collector) {
         Objects.requireNonNull(collector, "collector must be not null.");
         this.executor = new InternalBlockingCallableGroupCollapseExecutorBlocking<>(collector);
     }
@@ -30,7 +29,7 @@ public final class BlockingCallableGroupCollapseExecutor {
 
     private static class InternalBlockingCallableGroupCollapseExecutorBlocking<R> extends BlockingSameOutputCollapseExecutor<CallableGroup<R>, R> {
 
-        private InternalBlockingCallableGroupCollapseExecutorBlocking(ListenableCollector collector) {
+        private InternalBlockingCallableGroupCollapseExecutorBlocking(ListeningCollector collector) {
             super(collector);
         }
 

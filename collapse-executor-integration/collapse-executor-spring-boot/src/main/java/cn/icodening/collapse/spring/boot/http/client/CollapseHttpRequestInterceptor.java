@@ -1,6 +1,6 @@
 package cn.icodening.collapse.spring.boot.http.client;
 
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.pattern.CollapseGroupResolver;
 import cn.icodening.collapse.spring.boot.pattern.RequestCollapseGroup;
@@ -27,8 +27,8 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
 
     private CollapseGroupResolver collapseGroupResolver;
 
-    public CollapseHttpRequestInterceptor(ListenableCollector listenableCollector) {
-        this(new BlockingCallableGroupCollapseExecutor(listenableCollector));
+    public CollapseHttpRequestInterceptor(ListeningCollector listeningCollector) {
+        this(new BlockingCallableGroupCollapseExecutor(listeningCollector));
     }
 
     public CollapseHttpRequestInterceptor(BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor) {

@@ -4,7 +4,7 @@ import cn.icodening.collapse.core.Bundle;
 import cn.icodening.collapse.core.CollapseExecutorAsyncSupport;
 import cn.icodening.collapse.core.Input;
 import cn.icodening.collapse.core.LengthLimitedInputGrouper;
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.NoOpInputGrouper;
 
 import java.util.Collection;
@@ -26,7 +26,7 @@ public class CustomAsyncCollapseExecutor extends CollapseExecutorAsyncSupport<Lo
      */
     private final UserService userService;
 
-    public CustomAsyncCollapseExecutor(ListenableCollector collector, UserService userService) {
+    public CustomAsyncCollapseExecutor(ListeningCollector collector, UserService userService) {
         super(collector);
         this.userService = userService;
         this.setBatchSize(Integer.MAX_VALUE);

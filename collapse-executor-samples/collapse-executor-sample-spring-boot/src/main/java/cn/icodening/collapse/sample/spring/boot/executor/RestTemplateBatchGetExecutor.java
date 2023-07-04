@@ -1,6 +1,6 @@
 package cn.icodening.collapse.sample.spring.boot.executor;
 
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.sample.spring.boot.entity.UserEntity;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -19,7 +19,7 @@ public class RestTemplateBatchGetExecutor extends AbstractBatchGetExecutor {
 
     private final RestTemplate restTemplate;
 
-    public RestTemplateBatchGetExecutor(ListenableCollector collector) {
+    public RestTemplateBatchGetExecutor(ListeningCollector collector) {
         super(collector);
         this.restTemplate = new RestTemplate();
     }

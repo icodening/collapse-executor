@@ -2,7 +2,7 @@ package cn.icodening.collapse.core.support;
 
 import cn.icodening.collapse.core.AsyncSameOutputCollapseExecutor;
 import cn.icodening.collapse.core.Input;
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 
 import java.util.Collection;
 import java.util.concurrent.Callable;
@@ -17,8 +17,8 @@ public class AsyncCallableGroupCollapseExecutor {
 
     private final InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<Object> asyncCallableGroupCollapseExecutor;
 
-    public AsyncCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
-        this.asyncCallableGroupCollapseExecutor = new InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<>(listenableCollector);
+    public AsyncCallableGroupCollapseExecutor(ListeningCollector listeningCollector) {
+        this.asyncCallableGroupCollapseExecutor = new InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<>(listeningCollector);
     }
 
     public void setExecutor(Executor executor) {
@@ -33,7 +33,7 @@ public class AsyncCallableGroupCollapseExecutor {
 
     private static class InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<R> extends AsyncSameOutputCollapseExecutor<CallableGroup<R>, R> {
 
-        private InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor(ListenableCollector collector) {
+        private InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor(ListeningCollector collector) {
             super(collector);
         }
 

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -16,28 +16,33 @@ import java.util.stream.Collectors;
  */
 public abstract class GroupListeningBatchCollector<K, E> extends BatchCollector<E> {
 
-    private final Map<K, Consumer<Collection<E>>> listeners;
+    private final Map<K, CollectorListener<E>> listeners;
 
     private final Function<E, K> classifier;
 
+    public GroupListeningBatchCollector(Function<E, K> classifier) {
+        this(new SingleThreadExecutor(), classifier, new ConcurrentHashMap<>());
+    }
+
+    public GroupListeningBatchCollector(Executor dispatcher,
+                                        Function<E, K> classifier) {
+        this(dispatcher, classifier, new ConcurrentHashMap<>());
+    }
+
     public GroupListeningBatchCollector(Executor dispatcher,
                                         Function<E, K> classifier,
-                                        Map<K, Consumer<Collection<E>>> repository) {
+                                        Map<K, CollectorListener<E>> repository) {
         super(dispatcher);
         this.classifier = Objects.requireNonNull(classifier, "classifier must be not null.");
         this.listeners = Objects.requireNonNull(repository, "repository must be not null.");
     }
 
-    public void addListener(K key, Consumer<Collection<E>> consumer) {
-        this.listeners.put(key, consumer);
+    public void addListener(K key, CollectorListener<E> listener) {
+        this.listeners.put(key, listener);
     }
 
     public void removeListener(K key) {
         this.listeners.remove(key);
-    }
-
-    Map<K, Consumer<Collection<E>>> getListeners() {
-        return listeners;
     }
 
     @Override
@@ -50,8 +55,8 @@ public abstract class GroupListeningBatchCollector<K, E> extends BatchCollector<
         for (Map.Entry<K, Collection<E>> entry : groups.entrySet()) {
             K key = entry.getKey();
             Collection<E> collection = entry.getValue();
-            Consumer<Collection<E>> listener = this.listeners.get(key);
-            listener.accept(collection);
+            CollectorListener<E> listener = this.listeners.get(key);
+            listener.onCollected(collection);
         }
     }
 }

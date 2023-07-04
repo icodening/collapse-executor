@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> implements CollapseExecutor<INPUT, OUTPUT> {
 
-    private final ListenableCollector collector;
+    private final ListeningCollector collector;
 
     private InputGrouper<INPUT> inputGrouper = EqualsInputGrouper.getInstance();
 
-    public AbstractCollapseExecutor(ListenableCollector collector) {
+    public AbstractCollapseExecutor(ListeningCollector collector) {
         this.collector = Objects.requireNonNull(collector, "collector must be not null.");
         this.collector.addListener(this, this::collapseExecute);
     }
@@ -31,7 +31,7 @@ public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> impl
         return inputGrouper;
     }
 
-    protected ListenableCollector getCollector() {
+    protected ListeningCollector getCollector() {
         return collector;
     }
 

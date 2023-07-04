@@ -3,7 +3,7 @@ package cn.icodening.collapse.core.support;
 import cn.icodening.collapse.core.Bundle;
 import cn.icodening.collapse.core.CollapseExecutorAsyncSupport;
 import cn.icodening.collapse.core.Input;
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,8 +21,8 @@ public class FutureCallableGroupCollapseExecutor {
 
     private final InternalFutureCallableGroupCollapseExecutor<Object> asyncCallableGroupCollapseExecutor;
 
-    public FutureCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
-        this.asyncCallableGroupCollapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>(listenableCollector);
+    public FutureCallableGroupCollapseExecutor(ListeningCollector listeningCollector) {
+        this.asyncCallableGroupCollapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>(listeningCollector);
         setExecutor(DIRECT_EXECUTOR);
     }
 
@@ -38,7 +38,7 @@ public class FutureCallableGroupCollapseExecutor {
 
     private static class InternalFutureCallableGroupCollapseExecutor<R> extends CollapseExecutorAsyncSupport<CallableGroup<CompletableFuture<R>>, R, CompletableFuture<R>> {
 
-        private InternalFutureCallableGroupCollapseExecutor(ListenableCollector collector) {
+        private InternalFutureCallableGroupCollapseExecutor(ListeningCollector collector) {
             super(collector);
         }
 

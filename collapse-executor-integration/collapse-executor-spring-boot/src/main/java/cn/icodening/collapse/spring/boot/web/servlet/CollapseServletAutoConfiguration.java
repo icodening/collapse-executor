@@ -2,7 +2,7 @@ package cn.icodening.collapse.spring.boot.web.servlet;
 
 import cn.icodening.collapse.core.EqualsInputGrouper;
 import cn.icodening.collapse.core.LengthLimitedInputGrouper;
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
 import cn.icodening.collapse.spring.boot.pattern.ConfigurationCollapseGroupResolver;
 import io.undertow.Undertow;
@@ -45,8 +45,8 @@ public class CollapseServletAutoConfiguration {
     }
 
     @Bean
-    public AsyncServletExecutor asyncServletExecutor(ListenableCollector listenableCollector, ExecutorService collapseExecutorService, CollapseServletProperties collapseServletProperties) {
-        AsyncServletExecutor asyncServletExecutor = new AsyncServletExecutor(listenableCollector);
+    public AsyncServletExecutor asyncServletExecutor(ListeningCollector listeningCollector, ExecutorService collapseExecutorService, CollapseServletProperties collapseServletProperties) {
+        AsyncServletExecutor asyncServletExecutor = new AsyncServletExecutor(listeningCollector);
         asyncServletExecutor.setExecutor(collapseExecutorService);
         asyncServletExecutor.setInputGrouper(LengthLimitedInputGrouper.newInstance(collapseServletProperties.getBatchSize(), EqualsInputGrouper.getInstance()));
         return asyncServletExecutor;

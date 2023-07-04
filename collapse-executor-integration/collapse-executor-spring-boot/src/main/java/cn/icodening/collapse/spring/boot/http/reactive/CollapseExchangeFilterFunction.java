@@ -1,6 +1,6 @@
 package cn.icodening.collapse.spring.boot.http.reactive;
 
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.pattern.CollapseGroupResolver;
 import cn.icodening.collapse.spring.boot.pattern.RequestCollapseGroup;
@@ -31,8 +31,8 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
 
     protected CollapseGroupResolver collapseGroupResolver;
 
-    public CollapseExchangeFilterFunction(ListenableCollector listenableCollector) {
-        this(new FutureCallableGroupCollapseExecutor(listenableCollector));
+    public CollapseExchangeFilterFunction(ListeningCollector listeningCollector) {
+        this(new FutureCallableGroupCollapseExecutor(listeningCollector));
     }
 
     public CollapseExchangeFilterFunction(FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor) {

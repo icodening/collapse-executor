@@ -3,7 +3,7 @@ package cn.icodening.collapse.sample.spring.boot.executor;
 import cn.icodening.collapse.core.Bundle;
 import cn.icodening.collapse.core.CollapseExecutorBlockingSupport;
 import cn.icodening.collapse.core.Input;
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.NoOpInputGrouper;
 import cn.icodening.collapse.sample.spring.boot.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,7 @@ public abstract class AbstractBatchGetExecutor extends CollapseExecutorBlockingS
         this.serverPort = serverPort;
     }
 
-    public AbstractBatchGetExecutor(ListenableCollector collector) {
+    public AbstractBatchGetExecutor(ListeningCollector collector) {
         super(collector);
         this.setInputGrouper(NoOpInputGrouper.getInstance());
     }

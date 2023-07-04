@@ -1,7 +1,6 @@
 package cn.icodening.collapse.sample.advanced;
 
-import cn.icodening.collapse.core.SingleThreadExecutor;
-import cn.icodening.collapse.core.SuspendableListenableCollector;
+import cn.icodening.collapse.core.SuspendableCollector;
 import cn.icodening.collapse.sample.advanced.support.CustomBlockingCollapseExecutor;
 import cn.icodening.collapse.sample.advanced.support.UserEntity;
 import cn.icodening.collapse.sample.advanced.support.UserService;
@@ -23,7 +22,7 @@ public class CollapseExecutorAdvancedExample {
     });
 
     public static void main(String[] args) throws InterruptedException {
-        SuspendableListenableCollector listenableCollector = new SuspendableListenableCollector(new SingleThreadExecutor());
+        SuspendableCollector listenableCollector = new SuspendableCollector();
         CustomBlockingCollapseExecutor customBlockingCollapseExecutor = new CustomBlockingCollapseExecutor(listenableCollector, new UserService());
         customBlockingCollapseExecutor.setBatchSize(5);
         //query id [1,13]

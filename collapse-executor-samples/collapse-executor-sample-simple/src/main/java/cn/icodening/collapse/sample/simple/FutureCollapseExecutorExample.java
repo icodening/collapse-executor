@@ -1,7 +1,6 @@
 package cn.icodening.collapse.sample.simple;
 
-import cn.icodening.collapse.core.SingleThreadExecutor;
-import cn.icodening.collapse.core.SuspendableListenableCollector;
+import cn.icodening.collapse.core.SuspendableCollector;
 import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 
 import java.util.concurrent.CompletableFuture;
@@ -13,8 +12,7 @@ import java.util.concurrent.CompletableFuture;
 public class FutureCollapseExecutorExample {
 
     public static void main(String[] args) throws Throwable {
-        SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
-        SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+        SuspendableCollector suspendableListeningBundleCollector = new SuspendableCollector();
         FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
         futureCollapseExecutor.execute("example group", () -> CompletableFuture.completedFuture("Hello World Collapse Executor. Future"))
                 .thenAccept(System.out::println)

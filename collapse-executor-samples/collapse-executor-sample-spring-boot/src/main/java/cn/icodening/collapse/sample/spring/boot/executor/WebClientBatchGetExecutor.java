@@ -1,6 +1,6 @@
 package cn.icodening.collapse.sample.spring.boot.executor;
 
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.sample.spring.boot.entity.UserEntity;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class WebClientBatchGetExecutor extends AbstractBatchGetExecutor {
 
     private final WebClient webClient;
 
-    public WebClientBatchGetExecutor(ListenableCollector collector) {
+    public WebClientBatchGetExecutor(ListeningCollector collector) {
         super(collector);
         this.webClient = WebClient.create();
     }

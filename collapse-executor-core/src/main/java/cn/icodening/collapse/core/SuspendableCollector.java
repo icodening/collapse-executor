@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  * @author icodening
  * @date 2023.05.16
  */
-public class SuspendableListenableCollector extends ListenableCollector {
+public class SuspendableCollector extends ListeningCollector {
 
     private static final TimeUnit DEFAULT_UNIT = TimeUnit.MILLISECONDS;
 
@@ -20,7 +20,11 @@ public class SuspendableListenableCollector extends ListenableCollector {
 
     private TimeUnit timeUnit = DEFAULT_UNIT;
 
-    public SuspendableListenableCollector(Executor dispatcher) {
+    public SuspendableCollector() {
+
+    }
+
+    public SuspendableCollector(Executor dispatcher) {
         super(dispatcher);
     }
 

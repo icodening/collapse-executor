@@ -8,7 +8,7 @@ import java.util.List;
  */
 public abstract class BlockingSameOutputCollapseExecutor<INPUT, OUTPUT> extends CollapseExecutorBlockingSupport<INPUT, OUTPUT, OUTPUT> {
 
-    public BlockingSameOutputCollapseExecutor(ListenableCollector collector) {
+    public BlockingSameOutputCollapseExecutor(ListeningCollector collector) {
         super(collector);
     }
 

@@ -1,7 +1,6 @@
 package cn.icodening.collapse.sample.simple;
 
-import cn.icodening.collapse.core.SingleThreadExecutor;
-import cn.icodening.collapse.core.SuspendableListenableCollector;
+import cn.icodening.collapse.core.SuspendableCollector;
 import cn.icodening.collapse.core.support.AsyncCallableGroupCollapseExecutor;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -15,8 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class AsyncCollapseExecutorExample {
 
     public static void main(String[] args) throws Throwable {
-        SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
-        SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+        SuspendableCollector suspendableListeningBundleCollector = new SuspendableCollector();
         AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor = new AsyncCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
         asyncCallableGroupCollapseExecutor.setExecutor(new ThreadPoolExecutor(10, 10, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
             Thread thread = new Thread(r);

@@ -1,11 +1,11 @@
 package cn.icodening.collapse.spring.boot.configuration;
 
-import cn.icodening.collapse.core.ListenableCollector;
+import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.SingleThreadExecutor;
-import cn.icodening.collapse.core.SuspendableListenableCollector;
+import cn.icodening.collapse.core.SuspendableCollector;
 import cn.icodening.collapse.core.support.AsyncCallableGroupCollapseExecutor;
-import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
+import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
@@ -36,9 +35,9 @@ public class CollapseExecutorAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ListenableCollector.class)
-    public ListenableCollector suspendableListeningBundleCollector(SingleThreadExecutor singleThreadExecutor, CollapseExecutorProperties collapseExecutorProperties) {
-        SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+    @ConditionalOnMissingBean(ListeningCollector.class)
+    public ListeningCollector suspendableListeningBundleCollector(SingleThreadExecutor singleThreadExecutor, CollapseExecutorProperties collapseExecutorProperties) {
+        SuspendableCollector suspendableListeningBundleCollector = new SuspendableCollector(singleThreadExecutor);
         suspendableListeningBundleCollector.setDuration(collapseExecutorProperties.getCollectingWaitTime());
         suspendableListeningBundleCollector.setThreshold(collapseExecutorProperties.getWaitThreshold());
         return suspendableListeningBundleCollector;
@@ -46,22 +45,22 @@ public class CollapseExecutorAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(BlockingCallableGroupCollapseExecutor.class)
-    public BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
-        return new BlockingCallableGroupCollapseExecutor(listenableCollector);
+    public BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor(ListeningCollector listeningCollector) {
+        return new BlockingCallableGroupCollapseExecutor(listeningCollector);
     }
 
     @Bean
     @ConditionalOnMissingBean(AsyncCallableGroupCollapseExecutor.class)
-    public AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor(ListenableCollector listenableCollector, CollapseExecutorProperties collapseExecutorProperties) {
-        AsyncCallableGroupCollapseExecutor collapseExecutor = new AsyncCallableGroupCollapseExecutor(listenableCollector);
+    public AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor(ListeningCollector listeningCollector, CollapseExecutorProperties collapseExecutorProperties) {
+        AsyncCallableGroupCollapseExecutor collapseExecutor = new AsyncCallableGroupCollapseExecutor(listeningCollector);
         collapseExecutor.setExecutor(collapseExecutorService(collapseExecutorProperties));
         return collapseExecutor;
     }
 
     @Bean
     @ConditionalOnMissingBean(FutureCallableGroupCollapseExecutor.class)
-    public FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor(ListenableCollector listenableCollector) {
-        return new FutureCallableGroupCollapseExecutor(listenableCollector);
+    public FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor(ListeningCollector listeningCollector) {
+        return new FutureCallableGroupCollapseExecutor(listeningCollector);
     }
 
     @Bean

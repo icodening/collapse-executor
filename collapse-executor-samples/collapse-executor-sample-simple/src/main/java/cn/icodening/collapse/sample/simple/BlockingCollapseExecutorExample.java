@@ -1,7 +1,6 @@
 package cn.icodening.collapse.sample.simple;
 
-import cn.icodening.collapse.core.SingleThreadExecutor;
-import cn.icodening.collapse.core.SuspendableListenableCollector;
+import cn.icodening.collapse.core.SuspendableCollector;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 
 /**
@@ -11,8 +10,7 @@ import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 public class BlockingCollapseExecutorExample {
 
     public static void main(String[] args) throws Throwable {
-        SingleThreadExecutor singleThreadExecutor = new SingleThreadExecutor();
-        SuspendableListenableCollector suspendableListeningBundleCollector = new SuspendableListenableCollector(singleThreadExecutor);
+        SuspendableCollector suspendableListeningBundleCollector = new SuspendableCollector();
         BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
         String outputString = blockingCollapseExecutor.execute("example group", () -> "Hello World Collapse Executor. Blocking");
         System.out.println(outputString);
