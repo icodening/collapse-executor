@@ -7,10 +7,10 @@ import cn.icodening.collapse.core.support.AsyncCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2023.05.16
  */
 @AutoConfiguration
-@Configuration
 @ConditionalOnCollapseEnabled
 public class CollapseExecutorAutoConfiguration {
 
@@ -53,9 +52,9 @@ public class CollapseExecutorAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(AsyncCallableGroupCollapseExecutor.class)
-    public AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor(ListeningCollector listeningCollector, CollapseExecutorProperties collapseExecutorProperties) {
+    public AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor(ListeningCollector listeningCollector, @Qualifier("collapseExecutorService") ExecutorService executorService) {
         AsyncCallableGroupCollapseExecutor collapseExecutor = new AsyncCallableGroupCollapseExecutor(listeningCollector);
-        collapseExecutor.setExecutor(collapseExecutorService(collapseExecutorProperties));
+        collapseExecutor.setExecutor(executorService);
         return collapseExecutor;
     }
 
@@ -65,7 +64,7 @@ public class CollapseExecutorAutoConfiguration {
         return new FutureCallableGroupCollapseExecutor(listeningCollector);
     }
 
-    @Bean(autowireCandidate = false)
+    @Bean
     @ConditionalOnMissingBean(name = "collapseExecutorService")
     public ExecutorService collapseExecutorService(CollapseExecutorProperties collapseExecutorProperties) {
         CollapseExecutorProperties.ThreadPool threadPool = collapseExecutorProperties.getThreadPool();
