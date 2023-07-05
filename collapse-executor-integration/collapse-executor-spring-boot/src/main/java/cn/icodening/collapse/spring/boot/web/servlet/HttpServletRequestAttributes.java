@@ -16,7 +16,7 @@ import java.util.Enumeration;
  */
 public class HttpServletRequestAttributes implements RequestAttributes {
 
-    private final HttpMethod httpMethod;
+    private final String httpMethod;
 
     private final URI uri;
 
@@ -24,13 +24,13 @@ public class HttpServletRequestAttributes implements RequestAttributes {
 
     public HttpServletRequestAttributes(final HttpServletRequest httpServletRequest) {
         Assert.notNull(httpServletRequest, "httpServletRequest must be not null.");
-        this.httpMethod = HttpMethod.valueOf(httpServletRequest.getMethod());
+        this.httpMethod = HttpMethod.valueOf(httpServletRequest.getMethod()).name();
         this.uri = UriComponentsBuilder.fromHttpUrl(httpServletRequest.getRequestURL().toString()).query(httpServletRequest.getQueryString()).build().toUri();
         this.httpHeaders = resolveHttpHeaders(httpServletRequest);
     }
 
     @Override
-    public HttpMethod getMethod() {
+    public String getMethod() {
         return httpMethod;
     }
 

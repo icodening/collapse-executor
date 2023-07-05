@@ -1,7 +1,6 @@
 package cn.icodening.collapse.spring.boot.pattern;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 
 import java.net.URI;
 
@@ -11,7 +10,7 @@ import java.net.URI;
  */
 public interface RequestAttributes {
 
-    HttpMethod getMethod();
+    String getMethod();
 
     URI getURI();
 

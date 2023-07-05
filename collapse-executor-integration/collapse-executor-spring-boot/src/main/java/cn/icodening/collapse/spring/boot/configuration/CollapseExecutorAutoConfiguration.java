@@ -10,6 +10,7 @@ import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -25,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2023.05.16
  */
 @AutoConfiguration
+@Configuration
 @ConditionalOnCollapseEnabled
 public class CollapseExecutorAutoConfiguration {
 
@@ -36,11 +38,11 @@ public class CollapseExecutorAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ListeningCollector.class)
-    public ListeningCollector suspendableListeningBundleCollector(SingleThreadExecutor singleThreadExecutor, CollapseExecutorProperties collapseExecutorProperties) {
-        SuspendableCollector suspendableListeningBundleCollector = new SuspendableCollector(singleThreadExecutor);
-        suspendableListeningBundleCollector.setDuration(collapseExecutorProperties.getCollectingWaitTime());
-        suspendableListeningBundleCollector.setThreshold(collapseExecutorProperties.getWaitThreshold());
-        return suspendableListeningBundleCollector;
+    public ListeningCollector suspendableCollector(SingleThreadExecutor singleThreadExecutor, CollapseExecutorProperties collapseExecutorProperties) {
+        SuspendableCollector suspendableCollector = new SuspendableCollector(singleThreadExecutor);
+        suspendableCollector.setDuration(collapseExecutorProperties.getCollectingWaitTime());
+        suspendableCollector.setThreshold(collapseExecutorProperties.getWaitThreshold());
+        return suspendableCollector;
     }
 
     @Bean
@@ -63,7 +65,7 @@ public class CollapseExecutorAutoConfiguration {
         return new FutureCallableGroupCollapseExecutor(listeningCollector);
     }
 
-    @Bean
+    @Bean(autowireCandidate = false)
     @ConditionalOnMissingBean(name = "collapseExecutorService")
     public ExecutorService collapseExecutorService(CollapseExecutorProperties collapseExecutorProperties) {
         CollapseExecutorProperties.ThreadPool threadPool = collapseExecutorProperties.getThreadPool();

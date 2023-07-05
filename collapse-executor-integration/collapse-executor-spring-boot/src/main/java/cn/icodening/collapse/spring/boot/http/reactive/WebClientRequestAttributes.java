@@ -2,7 +2,6 @@ package cn.icodening.collapse.spring.boot.http.reactive;
 
 import cn.icodening.collapse.spring.boot.pattern.RequestAttributes;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.util.Assert;
 import org.springframework.web.reactive.function.client.ClientRequest;
 
@@ -22,8 +21,8 @@ public class WebClientRequestAttributes implements RequestAttributes {
     }
 
     @Override
-    public HttpMethod getMethod() {
-        return clientRequest.method();
+    public String getMethod() {
+        return clientRequest.method().name();
     }
 
     @Override

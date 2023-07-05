@@ -12,8 +12,8 @@ import java.util.concurrent.CompletableFuture;
 public class FutureCollapseExecutorExample {
 
     public static void main(String[] args) throws Throwable {
-        SuspendableCollector suspendableListeningBundleCollector = new SuspendableCollector();
-        FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
+        SuspendableCollector suspendableCollector = new SuspendableCollector();
+        FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor(suspendableCollector);
         futureCollapseExecutor.execute("example group", () -> CompletableFuture.completedFuture("Hello World Collapse Executor. Future"))
                 .thenAccept(System.out::println)
                 .thenRun(() -> System.exit(0));

@@ -10,8 +10,8 @@ import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 public class BlockingCollapseExecutorExample {
 
     public static void main(String[] args) throws Throwable {
-        SuspendableCollector suspendableListeningBundleCollector = new SuspendableCollector();
-        BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
+        SuspendableCollector suspendableCollector = new SuspendableCollector();
+        BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor(suspendableCollector);
         String outputString = blockingCollapseExecutor.execute("example group", () -> "Hello World Collapse Executor. Blocking");
         System.out.println(outputString);
     }

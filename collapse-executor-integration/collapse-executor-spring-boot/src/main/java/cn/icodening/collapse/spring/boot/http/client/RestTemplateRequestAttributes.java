@@ -2,7 +2,6 @@ package cn.icodening.collapse.spring.boot.http.client;
 
 import cn.icodening.collapse.spring.boot.pattern.RequestAttributes;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
 import org.springframework.util.Assert;
 
@@ -22,8 +21,11 @@ public class RestTemplateRequestAttributes implements RequestAttributes {
     }
 
     @Override
-    public HttpMethod getMethod() {
-        return request.getMethod();
+    public String getMethod() {
+        if (request.getMethod() == null) {
+            return null;
+        }
+        return request.getMethod().name();
     }
 
     @Override

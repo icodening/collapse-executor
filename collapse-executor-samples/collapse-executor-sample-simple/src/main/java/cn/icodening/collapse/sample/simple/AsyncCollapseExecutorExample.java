@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 public class AsyncCollapseExecutorExample {
 
     public static void main(String[] args) throws Throwable {
-        SuspendableCollector suspendableListeningBundleCollector = new SuspendableCollector();
-        AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor = new AsyncCallableGroupCollapseExecutor(suspendableListeningBundleCollector);
+        SuspendableCollector suspendableCollector = new SuspendableCollector();
+        AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor = new AsyncCallableGroupCollapseExecutor(suspendableCollector);
         asyncCallableGroupCollapseExecutor.setExecutor(new ThreadPoolExecutor(10, 10, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
             Thread thread = new Thread(r);
             thread.setDaemon(true);
