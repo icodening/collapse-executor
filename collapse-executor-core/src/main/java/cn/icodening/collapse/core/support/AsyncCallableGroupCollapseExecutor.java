@@ -3,9 +3,9 @@ package cn.icodening.collapse.core.support;
 import cn.icodening.collapse.core.AsyncSameOutputCollapseExecutor;
 import cn.icodening.collapse.core.Input;
 import cn.icodening.collapse.core.ListeningCollector;
+import cn.icodening.collapse.core.util.ThrowableCallable;
 
 import java.util.Collection;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -30,7 +30,7 @@ public class AsyncCallableGroupCollapseExecutor {
     }
 
     @SuppressWarnings("unchecked")
-    public <R> CompletableFuture<R> execute(Object group, Callable<R> callable) {
+    public <R> CompletableFuture<R> execute(Object group, ThrowableCallable<R> callable) {
         CallableGroup<R> callableGroup = new CallableGroup<>(group, callable);
         return (CompletableFuture<R>) collapseExecutor.execute((CallableGroup<Object>) callableGroup);
     }

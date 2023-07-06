@@ -4,10 +4,10 @@ import cn.icodening.collapse.core.Bundle;
 import cn.icodening.collapse.core.CollapseExecutorAsyncSupport;
 import cn.icodening.collapse.core.Input;
 import cn.icodening.collapse.core.ListeningCollector;
+import cn.icodening.collapse.core.util.ThrowableCallable;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -35,7 +35,7 @@ public class FutureCallableGroupCollapseExecutor {
     }
 
     @SuppressWarnings("all")
-    public <R> CompletableFuture<R> execute(Object group, Callable<CompletableFuture<R>> callable) {
+    public <R> CompletableFuture<R> execute(Object group, ThrowableCallable<CompletableFuture<R>> callable) {
         CallableGroup<CompletableFuture<R>> callableGroup = new CallableGroup<>(group, callable);
         return (CompletableFuture<R>) collapseExecutor.execute((CallableGroup) callableGroup);
     }

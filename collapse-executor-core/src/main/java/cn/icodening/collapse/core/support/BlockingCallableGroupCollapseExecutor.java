@@ -3,10 +3,10 @@ package cn.icodening.collapse.core.support;
 import cn.icodening.collapse.core.BlockingSameOutputCollapseExecutor;
 import cn.icodening.collapse.core.Input;
 import cn.icodening.collapse.core.ListeningCollector;
+import cn.icodening.collapse.core.util.ThrowableCallable;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 
 /**
  * @author icodening
@@ -26,7 +26,7 @@ public final class BlockingCallableGroupCollapseExecutor {
     }
 
     @SuppressWarnings("unchecked")
-    public <R> R execute(Object group, Callable<R> callable) throws Throwable {
+    public <R> R execute(Object group, ThrowableCallable<R> callable) throws Throwable {
         CallableGroup<R> callableGroup = new CallableGroup<>(group, callable);
         return (R) collapseExecutor.execute((CallableGroup<Object>) callableGroup);
     }

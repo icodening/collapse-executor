@@ -1,7 +1,8 @@
 package cn.icodening.collapse.core.support;
 
+import cn.icodening.collapse.core.util.ThrowableCallable;
+
 import java.util.Objects;
-import java.util.concurrent.Callable;
 
 /**
  * @author icodening
@@ -11,9 +12,9 @@ class CallableGroup<R> {
 
     private final Object group;
 
-    private final Callable<R> callable;
+    private final ThrowableCallable<R> callable;
 
-    CallableGroup(Object group, Callable<R> callable) {
+    CallableGroup(Object group, ThrowableCallable<R> callable) {
         this.group = group;
         this.callable = callable;
     }
@@ -22,7 +23,7 @@ class CallableGroup<R> {
         return group;
     }
 
-    public Callable<R> getCallable() {
+    public ThrowableCallable<R> getCallable() {
         return callable;
     }
 
