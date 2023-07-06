@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>collapse-executor-spring-boot</module>
+        <module>collapse-executor-aop</module>
     </modules>
 
     <properties>
