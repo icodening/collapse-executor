@@ -1,12 +1,11 @@
 package cn.icodening.collapse.core;
 
 import java.util.Objects;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.LockSupport;
 
 /**
  * @author icodening
@@ -14,16 +13,16 @@ import java.util.concurrent.locks.LockSupport;
  */
 public class SingleThreadExecutor implements Executor {
 
-    private static final AtomicInteger COUNT = new AtomicInteger(0);
+    private static final ThreadFactory THREAD_FACTORY = new InternalThreadFactory();
 
-    private final InternalThread thread;
+    public static final SingleThreadExecutor SHARE = new SingleThreadExecutor();
 
-    private final AtomicBoolean started = new AtomicBoolean(false);
+    private final ExecutorService delegate;
 
     private volatile boolean closed = false;
 
     public SingleThreadExecutor() {
-        this.thread = new InternalThread();
+        this.delegate = Executors.newSingleThreadExecutor(THREAD_FACTORY);
     }
 
     @Override
@@ -32,64 +31,27 @@ public class SingleThreadExecutor implements Executor {
         if (closed) {
             throw new UnsupportedOperationException("SingleThreadExecutor has been shutdown.");
         }
-        if (started.compareAndSet(false, true)) {
-            this.thread.start();
-        }
-        this.thread.getQueue().add(command);
-        wakeup();
-    }
-
-    private void wakeup() {
-        if (this.thread.getProcessing().compareAndSet(false, true)) {
-            LockSupport.unpark(thread);
-        }
+        this.delegate.execute(command);
     }
 
     public void shutdown() {
+        if (closed){
+            return;
+        }
         this.closed = true;
+        this.delegate.shutdown();
     }
 
+    private static class InternalThreadFactory implements ThreadFactory {
 
-    private class InternalThread extends Thread {
-
-        private final Queue<Runnable> queue = new ConcurrentLinkedQueue<>();
-
-        private final AtomicBoolean processing = new AtomicBoolean(false);
-
-        private InternalThread() {
-            super("SingleEventLoop-" + COUNT.incrementAndGet());
-            this.setDaemon(true);
-        }
-
-        private Queue<Runnable> getQueue() {
-            return queue;
-        }
-
-        private AtomicBoolean getProcessing() {
-            return processing;
-        }
+        private static final AtomicInteger COUNT = new AtomicInteger(0);
 
         @Override
-        public void run() {
-            while (true) {
-                if (Thread.currentThread().isInterrupted()) {
-                    return;
-                }
-                if (queue.isEmpty()) {
-                    LockSupport.park();
-                }
-                try {
-                    Runnable r;
-                    while ((r = queue.poll()) != null) {
-                        r.run();
-                    }
-                } finally {
-                    processing.set(false);
-                    if (!queue.isEmpty()) {
-                        SingleThreadExecutor.this.wakeup();
-                    }
-                }
-            }
+        public Thread newThread(Runnable r) {
+            Thread thread = new Thread(r);
+            thread.setName("SingleEventLoop-" + COUNT.incrementAndGet());
+            thread.setDaemon(true);
+            return thread;
         }
     }
 }

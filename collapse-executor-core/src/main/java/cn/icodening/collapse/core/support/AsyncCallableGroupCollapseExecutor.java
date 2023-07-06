@@ -15,26 +15,31 @@ import java.util.concurrent.Executor;
  */
 public class AsyncCallableGroupCollapseExecutor {
 
-    private final InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<Object> asyncCallableGroupCollapseExecutor;
+    private final InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<Object> collapseExecutor;
 
     public AsyncCallableGroupCollapseExecutor(ListeningCollector listeningCollector) {
-        this.asyncCallableGroupCollapseExecutor = new InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<>(listeningCollector);
+        this.collapseExecutor = new InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<>(listeningCollector);
     }
 
     public void setExecutor(Executor executor) {
-        this.asyncCallableGroupCollapseExecutor.setExecutor(executor);
+        this.collapseExecutor.setExecutor(executor);
+    }
+
+    public void setName(String name) {
+        this.collapseExecutor.setName(name);
     }
 
     @SuppressWarnings("unchecked")
     public <R> CompletableFuture<R> execute(Object group, Callable<R> callable) {
         CallableGroup<R> callableGroup = new CallableGroup<>(group, callable);
-        return (CompletableFuture<R>) asyncCallableGroupCollapseExecutor.execute((CallableGroup<Object>) callableGroup);
+        return (CompletableFuture<R>) collapseExecutor.execute((CallableGroup<Object>) callableGroup);
     }
 
     private static class InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<R> extends AsyncSameOutputCollapseExecutor<CallableGroup<R>, R> {
 
         private InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor(ListeningCollector collector) {
             super(collector);
+            this.setName(AsyncCallableGroupCollapseExecutor.class.getSimpleName());
         }
 
         @Override

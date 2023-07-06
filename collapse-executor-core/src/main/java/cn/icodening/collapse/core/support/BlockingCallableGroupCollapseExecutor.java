@@ -14,23 +14,28 @@ import java.util.concurrent.Callable;
  */
 public final class BlockingCallableGroupCollapseExecutor {
 
-    private final InternalBlockingCallableGroupCollapseExecutorBlocking<Object> executor;
+    private final InternalBlockingCallableGroupCollapseExecutor<Object> collapseExecutor;
 
     public BlockingCallableGroupCollapseExecutor(ListeningCollector collector) {
         Objects.requireNonNull(collector, "collector must be not null.");
-        this.executor = new InternalBlockingCallableGroupCollapseExecutorBlocking<>(collector);
+        this.collapseExecutor = new InternalBlockingCallableGroupCollapseExecutor<>(collector);
+    }
+
+    public void setName(String name) {
+        this.collapseExecutor.setName(name);
     }
 
     @SuppressWarnings("unchecked")
     public <R> R execute(Object group, Callable<R> callable) throws Throwable {
         CallableGroup<R> callableGroup = new CallableGroup<>(group, callable);
-        return (R) executor.execute((CallableGroup<Object>) callableGroup);
+        return (R) collapseExecutor.execute((CallableGroup<Object>) callableGroup);
     }
 
-    private static class InternalBlockingCallableGroupCollapseExecutorBlocking<R> extends BlockingSameOutputCollapseExecutor<CallableGroup<R>, R> {
+    private static class InternalBlockingCallableGroupCollapseExecutor<R> extends BlockingSameOutputCollapseExecutor<CallableGroup<R>, R> {
 
-        private InternalBlockingCallableGroupCollapseExecutorBlocking(ListeningCollector collector) {
+        private InternalBlockingCallableGroupCollapseExecutor(ListeningCollector collector) {
             super(collector);
+            this.setName(BlockingCallableGroupCollapseExecutor.class.getSimpleName());
         }
 
         @Override

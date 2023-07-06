@@ -21,7 +21,7 @@ public abstract class GroupListeningBatchCollector<K, E> extends BatchCollector<
     private final Function<E, K> classifier;
 
     public GroupListeningBatchCollector(Function<E, K> classifier) {
-        this(new SingleThreadExecutor(), classifier, new ConcurrentHashMap<>());
+        this(SingleThreadExecutor.SHARE, classifier, new ConcurrentHashMap<>());
     }
 
     public GroupListeningBatchCollector(Executor dispatcher,

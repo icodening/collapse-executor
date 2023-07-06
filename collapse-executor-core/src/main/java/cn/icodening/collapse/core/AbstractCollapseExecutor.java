@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
  * @author icodening
  * @date 2023.05.14
  */
-public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> implements CollapseExecutor<INPUT, OUTPUT> {
+public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> implements CollapseExecutor<INPUT, OUTPUT>, NamedCollapseExecutor {
 
     private final ListeningCollector collector;
+
+    private String name = this.getClass().getSimpleName();
 
     private InputGrouper<INPUT> inputGrouper = EqualsInputGrouper.getInstance();
 
@@ -33,6 +35,15 @@ public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> impl
 
     protected ListeningCollector getCollector() {
         return collector;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

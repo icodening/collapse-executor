@@ -19,27 +19,32 @@ public class FutureCallableGroupCollapseExecutor {
 
     private static final Executor DIRECT_EXECUTOR = Runnable::run;
 
-    private final InternalFutureCallableGroupCollapseExecutor<Object> asyncCallableGroupCollapseExecutor;
+    private final InternalFutureCallableGroupCollapseExecutor<Object> collapseExecutor;
 
     public FutureCallableGroupCollapseExecutor(ListeningCollector listeningCollector) {
-        this.asyncCallableGroupCollapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>(listeningCollector);
+        this.collapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>(listeningCollector);
         setExecutor(DIRECT_EXECUTOR);
     }
 
     public void setExecutor(Executor executor) {
-        this.asyncCallableGroupCollapseExecutor.setExecutor(executor);
+        this.collapseExecutor.setExecutor(executor);
+    }
+
+    public void setName(String name) {
+        this.collapseExecutor.setName(name);
     }
 
     @SuppressWarnings("all")
     public <R> CompletableFuture<R> execute(Object group, Callable<CompletableFuture<R>> callable) {
         CallableGroup<CompletableFuture<R>> callableGroup = new CallableGroup<>(group, callable);
-        return (CompletableFuture<R>) asyncCallableGroupCollapseExecutor.execute((CallableGroup) callableGroup);
+        return (CompletableFuture<R>) collapseExecutor.execute((CallableGroup) callableGroup);
     }
 
     private static class InternalFutureCallableGroupCollapseExecutor<R> extends CollapseExecutorAsyncSupport<CallableGroup<CompletableFuture<R>>, R, CompletableFuture<R>> {
 
         private InternalFutureCallableGroupCollapseExecutor(ListeningCollector collector) {
             super(collector);
+            this.setName(FutureCallableGroupCollapseExecutor.class.getSimpleName());
         }
 
         @Override

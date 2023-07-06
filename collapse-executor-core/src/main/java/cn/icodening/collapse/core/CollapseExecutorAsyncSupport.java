@@ -32,7 +32,7 @@ public abstract class CollapseExecutorAsyncSupport<INPUT, OUTPUT, BATCH_OUTPUT> 
     }
 
     @Override
-    public CompletableFuture<OUTPUT> execute(INPUT input){
+    public CompletableFuture<OUTPUT> execute(INPUT input) {
         try {
             return super.execute(input);
         } catch (Throwable e) {
