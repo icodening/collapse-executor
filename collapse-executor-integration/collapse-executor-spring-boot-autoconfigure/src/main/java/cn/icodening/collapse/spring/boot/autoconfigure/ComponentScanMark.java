@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.boot;
+package cn.icodening.collapse.spring.boot.autoconfigure;
 
 /**
  * Mark the package that needs to be scanned

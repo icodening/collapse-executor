@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.boot.http.client;
+package cn.icodening.collapse.spring.boot.autoconfigure.web.client;
 
 import cn.icodening.collapse.spring.boot.pattern.CollapseDefinitionProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;

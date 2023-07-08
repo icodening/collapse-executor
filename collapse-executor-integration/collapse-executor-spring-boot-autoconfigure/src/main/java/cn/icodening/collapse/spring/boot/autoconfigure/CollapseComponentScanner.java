@@ -1,6 +1,5 @@
-package cn.icodening.collapse.spring.boot.configuration;
+package cn.icodening.collapse.spring.boot.autoconfigure;
 
-import cn.icodening.collapse.spring.boot.ComponentScanMark;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 

@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.boot.configuration;
+package cn.icodening.collapse.spring.boot.autoconfigure;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

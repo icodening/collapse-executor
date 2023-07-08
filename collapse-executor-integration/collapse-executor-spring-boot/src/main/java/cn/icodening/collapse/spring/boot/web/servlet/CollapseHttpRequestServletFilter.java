@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
  * @author icodening
  * @date 2023.05.20
  */
-class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
+public class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CollapseHttpRequestServletFilter.class);
 

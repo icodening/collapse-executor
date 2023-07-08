@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.boot;
+package cn.icodening.collapse.spring.boot.autoconfigure;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 

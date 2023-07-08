@@ -1,9 +1,9 @@
-package cn.icodening.collapse.spring.boot.aop;
+package cn.icodening.collapse.spring.boot.autoconfigure.aop;
 
 import cn.icodening.collapse.aop.CollapseMethodInterceptor;
 import cn.icodening.collapse.aop.CollapsibleAnnotationAspect;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
-import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
+import cn.icodening.collapse.spring.boot.autoconfigure.ConditionalOnCollapseEnabled;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.icodening</groupId>
-            <artifactId>collapse-executor-spring-boot</artifactId>
+            <artifactId>collapse-executor-spring-boot-autoconfigure</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

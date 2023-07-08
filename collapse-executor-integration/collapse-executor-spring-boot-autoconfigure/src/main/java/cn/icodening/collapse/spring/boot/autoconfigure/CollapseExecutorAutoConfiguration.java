@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.boot.configuration;
+package cn.icodening.collapse.spring.boot.autoconfigure;
 
 import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.SingleThreadExecutor;
@@ -6,7 +6,6 @@ import cn.icodening.collapse.core.SuspendableCollector;
 import cn.icodening.collapse.core.support.AsyncCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
-import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

@@ -1,8 +1,9 @@
-package cn.icodening.collapse.spring.boot.http.client;
+package cn.icodening.collapse.spring.boot.autoconfigure.web.client;
 
 import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
-import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
+import cn.icodening.collapse.spring.boot.autoconfigure.ConditionalOnCollapseEnabled;
+import cn.icodening.collapse.spring.boot.http.client.CollapseHttpRequestInterceptor;
 import cn.icodening.collapse.spring.boot.pattern.ConfigurationCollapseGroupResolver;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

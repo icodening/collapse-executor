@@ -1,10 +1,11 @@
-package cn.icodening.collapse.spring.boot.web.servlet;
+package cn.icodening.collapse.spring.boot.autoconfigure.web.server;
 
 import cn.icodening.collapse.core.EqualsInputGrouper;
 import cn.icodening.collapse.core.LengthLimitedInputGrouper;
 import cn.icodening.collapse.core.ListeningCollector;
-import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
 import cn.icodening.collapse.spring.boot.pattern.ConfigurationCollapseGroupResolver;
+import cn.icodening.collapse.spring.boot.web.servlet.AsyncServletExecutor;
+import cn.icodening.collapse.spring.boot.web.servlet.CollapseHttpRequestServletFilter;
 import io.undertow.Undertow;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -29,7 +30,6 @@ import java.util.concurrent.ExecutorService;
  */
 @AutoConfiguration
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@ConditionalOnCollapseEnabled
 @ConditionalOnProperty(prefix = "collapse.executor.servlet", name = "enabled", havingValue = "true", matchIfMissing = false)
 public class CollapseServletAutoConfiguration {
 
