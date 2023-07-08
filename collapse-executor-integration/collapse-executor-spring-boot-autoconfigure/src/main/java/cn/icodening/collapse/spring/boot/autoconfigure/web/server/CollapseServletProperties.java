@@ -10,4 +10,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "collapse.executor.servlet")
 public class CollapseServletProperties extends CollapseDefinitionProperties {
 
+    private int batchSize = 32;
+
+    public int getBatchSize() {
+        return batchSize;
+    }
+
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
+    }
 }

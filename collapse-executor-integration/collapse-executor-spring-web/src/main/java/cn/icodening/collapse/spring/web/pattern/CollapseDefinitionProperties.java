@@ -13,8 +13,6 @@ public class CollapseDefinitionProperties {
 
     private boolean enabled = false;
 
-    private int batchSize = 32;
-
     private Map<String, CollapsePolicyDefinition> collapsePolicies = new LinkedHashMap<>();
 
     private List<CollapseGroupDefinition> collapseGroups = new ArrayList<>();
@@ -29,14 +27,6 @@ public class CollapseDefinitionProperties {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public int getBatchSize() {
-        return batchSize;
-    }
-
-    public void setBatchSize(int batchSize) {
-        this.batchSize = batchSize;
     }
 
     public Map<String, CollapsePolicyDefinition> getCollapsePolicies() {
