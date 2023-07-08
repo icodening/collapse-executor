@@ -138,7 +138,7 @@ public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupp
 与同步阻塞调用类似，主要差异为需要设置一个`异步线程池`，用于执行批量请求逻辑。
 
 ````java
-public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupport<Long, UserEntity, Map<Long, UserEntity>> {
+public class CustomBlockingCollapseExecutor extends CollapseExecutorAsyncSupport<Long, UserEntity, Map<Long, UserEntity>> {
     @Override
     protected Map<Long, UserEntity> doExecute(Collection<Input<Long>> inputs) {
         //此处编写批量请求逻辑
