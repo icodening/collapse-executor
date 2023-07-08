@@ -160,9 +160,9 @@ public class CustomBlockingCollapseExecutor extends CollapseExecutorBlockingSupp
 ## 三. Spring Boot集成
 collapse executor已经对Spring Boot进行了适配，利用Spring Boot自动装配能力简化了在Spring环境下的使用体验，通过简单的配置即可使用。  
 在Spring Boot中，collapse executor对主要的几个组件进行了适配，分别是
-[RestTemplate](./collapse-executor-integration/collapse-executor-spring-boot/src/main/java/cn/icodening/collapse/spring/boot/http/client/CollapseHttpRequestInterceptor.java)
-、[WebClient](./collapse-executor-integration/collapse-executor-spring-boot/src/main/java/cn/icodening/collapse/spring/boot/http/reactive/CollapseExchangeFilterFunction.java)
-、[Servlet](./collapse-executor-integration/collapse-executor-spring-boot/src/main/java/cn/icodening/collapse/spring/boot/web/servlet/CollapseHttpRequestServletFilter.java)。
+[RestTemplate](./collapse-executor-integration/collapse-executor-spring-web/src/main/java/cn/icodening/collapse/spring/web/client/CollapseHttpRequestInterceptor.java)
+、[WebClient](./collapse-executor-integration/collapse-executor-spring-web/src/main/java/cn/icodening/collapse/spring/web/client/reactive/CollapseExchangeFilterFunction.java)
+、[Servlet](./collapse-executor-integration/collapse-executor-spring-web/src/main/java/cn/icodening/collapse/spring/web/server/CollapseHttpRequestServletFilter.java)。
 ## 1. application.yaml配置解释
 以下是一个折叠执行器的yaml配置例子及解释，详情可参考`collapse-executor-sample-spring-boot`中的[application.yaml](./collapse-executor-samples/collapse-executor-sample-spring-boot/src/main/resources/application.yaml)
 ````yaml
