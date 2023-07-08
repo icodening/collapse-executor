@@ -1,6 +1,5 @@
 package cn.icodening.collapse.spring.boot.http.client;
 
-import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.pattern.CollapseGroupResolver;
 import cn.icodening.collapse.spring.boot.pattern.RequestCollapseGroup;
@@ -11,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
@@ -23,12 +24,13 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
 
     private static final String IDENTIFIER = CollapseHttpRequestInterceptor.class.getName();
 
-    private final BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor;
+    private BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor;
 
+    @Nullable
     private CollapseGroupResolver collapseGroupResolver;
 
-    public CollapseHttpRequestInterceptor(ListeningCollector listeningCollector) {
-        this(new BlockingCallableGroupCollapseExecutor(listeningCollector));
+    public CollapseHttpRequestInterceptor() {
+
     }
 
     public CollapseHttpRequestInterceptor(BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor) {
@@ -37,6 +39,10 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
 
     public void setCollapseGroupResolver(CollapseGroupResolver collapseGroupResolver) {
         this.collapseGroupResolver = collapseGroupResolver;
+    }
+
+    public void setBlockingCallableGroupCollapseExecutor(BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor) {
+        this.blockingCallableGroupCollapseExecutor = blockingCallableGroupCollapseExecutor;
     }
 
     @Override
@@ -50,7 +56,9 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
                 return execution.execute(request, body);
             }
             requestCollapseGroup.setIdentifier(IDENTIFIER);
-            return this.blockingCallableGroupCollapseExecutor.execute(requestCollapseGroup, () -> repeatableReadResponse(execution.execute(request, body)));
+            BlockingCallableGroupCollapseExecutor collapseExecutor = this.blockingCallableGroupCollapseExecutor;
+            Assert.notNull(collapseExecutor, "blockingCallableGroupCollapseExecutor must be not null.");
+            return collapseExecutor.execute(requestCollapseGroup, () -> repeatableReadResponse(execution.execute(request, body)));
         } catch (RuntimeException | IOException e) {
             throw e;
         } catch (Throwable throwable) {

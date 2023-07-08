@@ -1,6 +1,5 @@
 package cn.icodening.collapse.spring.boot.http.reactive;
 
-import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.pattern.CollapseGroupResolver;
 import cn.icodening.collapse.spring.boot.pattern.RequestCollapseGroup;
@@ -9,6 +8,8 @@ import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
@@ -27,20 +28,25 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
 
     private static final String IDENTIFIER = CollapseExchangeFilterFunction.class.getName();
 
-    private final FutureCallableGroupCollapseExecutor collapseExecutor;
+    private FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor;
 
+    @Nullable
     protected CollapseGroupResolver collapseGroupResolver;
 
-    public CollapseExchangeFilterFunction(ListeningCollector listeningCollector) {
-        this(new FutureCallableGroupCollapseExecutor(listeningCollector));
+    public CollapseExchangeFilterFunction() {
+
     }
 
     public CollapseExchangeFilterFunction(FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor) {
-        this.collapseExecutor = futureCallableGroupCollapseExecutor;
+        this.futureCallableGroupCollapseExecutor = futureCallableGroupCollapseExecutor;
     }
 
     public void setCollapseGroupResolver(CollapseGroupResolver collapseGroupResolver) {
         this.collapseGroupResolver = collapseGroupResolver;
+    }
+
+    public void setFutureCallableGroupCollapseExecutor(FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor) {
+        this.futureCallableGroupCollapseExecutor = futureCallableGroupCollapseExecutor;
     }
 
     @Override
@@ -69,7 +75,9 @@ public class CollapseExchangeFilterFunction implements ExchangeFilterFunction {
     }
 
     private CompletableFuture<ClientResponse> collapseExecute(RequestCollapseGroup requestCollapseGroup, ClientRequest request, ExchangeFunction next) {
-        return collapseExecutor.execute(requestCollapseGroup,
+        FutureCallableGroupCollapseExecutor futureCallableGroupCollapseExecutor = this.futureCallableGroupCollapseExecutor;
+        Assert.notNull(futureCallableGroupCollapseExecutor, "futureCallableGroupCollapseExecutor must be not null.");
+        return futureCallableGroupCollapseExecutor.execute(requestCollapseGroup,
                 () -> next.exchange(request)
                         .map(clientResponse ->
                                 clientResponse.mutate()

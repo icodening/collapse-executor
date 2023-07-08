@@ -40,8 +40,10 @@ public class CollapseServletAutoConfiguration {
 
     @Bean
     public CollapseHttpRequestServletFilter collapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, CollapseServletProperties collapseServletProperties) {
-        ConfigurationCollapseGroupResolver configurationCollapseGroupResolver = new ConfigurationCollapseGroupResolver(collapseServletProperties);
-        return new CollapseHttpRequestServletFilter(asyncServletExecutor, configurationCollapseGroupResolver);
+        CollapseHttpRequestServletFilter collapseHttpRequestServletFilter = new CollapseHttpRequestServletFilter();
+        collapseHttpRequestServletFilter.setAsyncServletExecutor(asyncServletExecutor);
+        collapseHttpRequestServletFilter.setCollapseGroupResolver(new ConfigurationCollapseGroupResolver(collapseServletProperties));
+        return collapseHttpRequestServletFilter;
     }
 
     @Bean

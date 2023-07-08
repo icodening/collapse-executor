@@ -1,6 +1,7 @@
 package cn.icodening.collapse.spring.boot.http.client;
 
 import cn.icodening.collapse.core.ListeningCollector;
+import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.ConditionalOnCollapseEnabled;
 import cn.icodening.collapse.spring.boot.pattern.ConfigurationCollapseGroupResolver;
 import org.springframework.beans.factory.SmartInitializingSingleton;
@@ -28,8 +29,9 @@ public class CollapseRestTemplateAutoConfiguration {
     @ConditionalOnMissingBean(CollapseHttpRequestInterceptor.class)
     public CollapseHttpRequestInterceptor collapseHttpRequestInterceptor(ListeningCollector listeningCollector,
                                                                          CollapseRestTemplateProperties collapseRestTemplateProperties) {
-        CollapseHttpRequestInterceptor collapseHttpRequestInterceptor = new CollapseHttpRequestInterceptor(listeningCollector);
+        CollapseHttpRequestInterceptor collapseHttpRequestInterceptor = new CollapseHttpRequestInterceptor();
         collapseHttpRequestInterceptor.setCollapseGroupResolver(new ConfigurationCollapseGroupResolver(collapseRestTemplateProperties));
+        collapseHttpRequestInterceptor.setBlockingCallableGroupCollapseExecutor(new BlockingCallableGroupCollapseExecutor(listeningCollector));
         return collapseHttpRequestInterceptor;
     }
 

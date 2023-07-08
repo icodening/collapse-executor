@@ -1,6 +1,6 @@
 package cn.icodening.collapse.spring.boot.web.servlet;
 
-import cn.icodening.collapse.spring.boot.pattern.ConfigurationCollapseGroupResolver;
+import cn.icodening.collapse.spring.boot.pattern.CollapseGroupResolver;
 import cn.icodening.collapse.spring.boot.pattern.RequestCollapseGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,24 +23,38 @@ class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CollapseHttpRequestServletFilter.class);
 
-    private final AsyncServletExecutor asyncServletExecutor;
+    private AsyncServletExecutor asyncServletExecutor;
 
-    private final ConfigurationCollapseGroupResolver servletCollapseGroupKeyResolver;
+    private CollapseGroupResolver collapseGroupResolver;
 
-    public CollapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, ConfigurationCollapseGroupResolver servletCollapseGroupKeyResolver) {
+    public CollapseHttpRequestServletFilter() {
+    }
+
+    public CollapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor) {
         this.asyncServletExecutor = asyncServletExecutor;
-        this.servletCollapseGroupKeyResolver = servletCollapseGroupKeyResolver;
+    }
+
+    public void setAsyncServletExecutor(AsyncServletExecutor asyncServletExecutor) {
+        this.asyncServletExecutor = asyncServletExecutor;
+    }
+
+    public void setCollapseGroupResolver(CollapseGroupResolver collapseGroupResolver) {
+        this.collapseGroupResolver = collapseGroupResolver;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain chain) throws ServletException, IOException {
-        RequestCollapseGroup groupKey = servletCollapseGroupKeyResolver.resolve(new HttpServletRequestAttributes(httpServletRequest));
-        if (groupKey == null) {
+        if (!allowCollapse(httpServletRequest)) {
+            chain.doFilter(httpServletRequest, httpServletResponse);
+            return;
+        }
+        RequestCollapseGroup requestCollapseGroup = findCollapseGroup(httpServletRequest);
+        if (requestCollapseGroup == null) {
             chain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
         AsyncContext asyncContext = httpServletRequest.startAsync(httpServletRequest, new RecordableServletResponse(httpServletResponse));
-        ServletCollapseRequest servletCollapseRequest = new ServletCollapseRequest(groupKey, asyncContext);
+        ServletCollapseRequest servletCollapseRequest = new ServletCollapseRequest(requestCollapseGroup, asyncContext);
         CompletableFuture<ServletCollapseResponse> future = asyncServletExecutor.execute(servletCollapseRequest);
         future.whenComplete((collapseResponse, throwable) -> {
             try {
@@ -61,5 +75,16 @@ class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
                 asyncContext.complete();
             }
         });
+    }
+
+    protected boolean allowCollapse(HttpServletRequest httpServletRequest) {
+        return "GET".equals(httpServletRequest.getMethod());
+    }
+
+    protected RequestCollapseGroup findCollapseGroup(HttpServletRequest request) {
+        if (collapseGroupResolver == null) {
+            return null;
+        }
+        return collapseGroupResolver.resolve(new HttpServletRequestAttributes(request));
     }
 }
