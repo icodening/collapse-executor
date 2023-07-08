@@ -1,6 +1,6 @@
 package cn.icodening.collapse.spring.boot.autoconfigure.web.server;
 
-import cn.icodening.collapse.spring.boot.pattern.CollapseDefinitionProperties;
+import cn.icodening.collapse.spring.web.pattern.CollapseDefinitionProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**

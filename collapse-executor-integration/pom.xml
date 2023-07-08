@@ -12,7 +12,7 @@
     <artifactId>collapse-executor-integration</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>collapse-executor-spring-boot</module>
+        <module>collapse-executor-spring-web</module>
         <module>collapse-executor-aop</module>
         <module>collapse-executor-spring-boot-autoconfigure</module>
     </modules>

@@ -1,6 +1,6 @@
 package cn.icodening.collapse.sample.spring.boot.config;
 
-import cn.icodening.collapse.spring.boot.http.reactive.CollapseExchangeFilterFunction;
+import cn.icodening.collapse.spring.web.client.reactive.CollapseExchangeFilterFunction;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
