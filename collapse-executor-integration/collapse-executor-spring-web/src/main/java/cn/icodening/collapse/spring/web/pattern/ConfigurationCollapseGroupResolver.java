@@ -3,8 +3,6 @@ package cn.icodening.collapse.spring.web.pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.server.PathContainer;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.util.pattern.PathPatternParser;
 
 import java.net.URI;
@@ -48,14 +46,14 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
                     }
                     RequestCollapseGroup requestCollapseGroup = new RequestCollapseGroup();
                     //1. method
-                    requestCollapseGroup.setMethod(requestAttributes.getMethod().toString());
+                    requestCollapseGroup.setMethod(requestAttributes.getMethod());
                     URI requestURI = requestAttributes.getURI();
                     //2. path
                     requestCollapseGroup.setPath(requestURI.getPath());
                     //3. header
                     for (String headerName : collapsePolicy.getCollapseRequestHeaders()) {
                         List<String> header = requestAttributes.getHeaders().get(headerName);
-                        if (!CollectionUtils.isEmpty(header)) {
+                        if (!(header == null || header.isEmpty())) {
                             requestCollapseGroup.getHeaders().put(headerName, header);
                         }
                     }
@@ -63,7 +61,7 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
                     Map<String, List<String>> queryMap = queryStringToMap(requestURI.getQuery());
                     for (String collapseRequestQuery : collapsePolicy.getCollapseRequestQueries()) {
                         List<String> value = queryMap.get(collapseRequestQuery);
-                        if (!CollectionUtils.isEmpty(value)) {
+                        if (!(value == null || value.isEmpty())) {
                             requestCollapseGroup.getQueries().put(collapseRequestQuery, value);
                         }
                     }
@@ -75,10 +73,10 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
     }
 
     private CollapsePolicyDefinition findCollapsePolicyDefinition(String groupPolicyName) {
-        if (StringUtils.hasText(groupPolicyName)) {
-            return this.collapseDefinitionProperties.getCollapsePolicies().get(groupPolicyName);
+        if (groupPolicyName == null || "".equals(groupPolicyName.trim())) {
+            return CollapsePolicyDefinition.DEFAULT_POLICY;
         }
-        return CollapsePolicyDefinition.DEFAULT_POLICY;
+        return this.collapseDefinitionProperties.getCollapsePolicies().get(groupPolicyName);
     }
 
     private boolean isMatch(RequestAttributes request, String configURI) {
@@ -88,7 +86,7 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
     }
 
     private Map<String, List<String>> queryStringToMap(String queryString) {
-        if (!StringUtils.hasText(queryString)) {
+        if (queryString == null || "".equals(queryString)) {
             return Collections.emptyMap();
         }
         String[] queryKVs = queryString.split("&");
