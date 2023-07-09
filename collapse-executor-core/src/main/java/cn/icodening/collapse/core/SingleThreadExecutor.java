@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -29,13 +30,13 @@ public class SingleThreadExecutor implements Executor {
     public void execute(Runnable command) {
         Objects.requireNonNull(command, "command must be not null.");
         if (closed) {
-            throw new UnsupportedOperationException("SingleThreadExecutor has been shutdown.");
+            throw new RejectedExecutionException("SingleThreadExecutor has been shutdown.");
         }
         this.delegate.execute(command);
     }
 
     public void shutdown() {
-        if (closed){
+        if (closed) {
             return;
         }
         this.closed = true;

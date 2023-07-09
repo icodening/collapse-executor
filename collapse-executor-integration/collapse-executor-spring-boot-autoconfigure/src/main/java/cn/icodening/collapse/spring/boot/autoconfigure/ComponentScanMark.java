@@ -6,5 +6,5 @@ package cn.icodening.collapse.spring.boot.autoconfigure;
  * @author icodening
  * @date 2023.06.06
  */
-public interface ComponentScanMark {
+interface ComponentScanMark {
 }

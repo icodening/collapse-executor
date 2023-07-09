@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -43,7 +44,12 @@ public abstract class BatchCollector<E> implements Closeable {
 
     private void schedule() {
         if (processing.compareAndSet(false, true)) {
-            dispatcher.execute(this::doDispatch);
+            try {
+                dispatcher.execute(this::doDispatch);
+            } catch (RejectedExecutionException | NullPointerException e) {
+                processing.compareAndSet(true, false);
+                throw e;
+            }
         }
     }
 
