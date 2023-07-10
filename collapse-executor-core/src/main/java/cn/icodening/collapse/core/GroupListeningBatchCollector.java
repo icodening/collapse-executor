@@ -16,25 +16,19 @@ import java.util.stream.Collectors;
  */
 public abstract class GroupListeningBatchCollector<K, E> extends BatchCollector<E> {
 
-    private final Map<K, CollectorListener<E>> listeners;
+    private final Map<K, CollectorListener<E>> listeners = new ConcurrentHashMap<>(256);
 
     private final Function<E, K> classifier;
 
     public GroupListeningBatchCollector(Function<E, K> classifier) {
-        this(SingleThreadExecutor.SHARE, classifier, new ConcurrentHashMap<>());
+        super();
+        this.classifier = Objects.requireNonNull(classifier, "classifier must be not null.");
     }
 
     public GroupListeningBatchCollector(Executor dispatcher,
                                         Function<E, K> classifier) {
-        this(dispatcher, classifier, new ConcurrentHashMap<>());
-    }
-
-    public GroupListeningBatchCollector(Executor dispatcher,
-                                        Function<E, K> classifier,
-                                        Map<K, CollectorListener<E>> repository) {
         super(dispatcher);
         this.classifier = Objects.requireNonNull(classifier, "classifier must be not null.");
-        this.listeners = Objects.requireNonNull(repository, "repository must be not null.");
     }
 
     public void addListener(K key, CollectorListener<E> listener) {

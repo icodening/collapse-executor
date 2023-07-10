@@ -1,7 +1,6 @@
 package cn.icodening.collapse.spring.boot.autoconfigure;
 
 import cn.icodening.collapse.core.ListeningCollector;
-import cn.icodening.collapse.core.SingleThreadExecutor;
 import cn.icodening.collapse.core.SuspendableCollector;
 import cn.icodening.collapse.core.support.AsyncCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
@@ -29,15 +28,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CollapseExecutorAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(SingleThreadExecutor.class)
-    public SingleThreadExecutor singleThreadExecutor() {
-        return new SingleThreadExecutor();
-    }
-
-    @Bean
     @ConditionalOnMissingBean(ListeningCollector.class)
-    public ListeningCollector suspendableCollector(SingleThreadExecutor singleThreadExecutor, CollapseExecutorProperties collapseExecutorProperties) {
-        SuspendableCollector suspendableCollector = new SuspendableCollector(singleThreadExecutor);
+    public ListeningCollector suspendableCollector(CollapseExecutorProperties collapseExecutorProperties) {
+        SuspendableCollector suspendableCollector = new SuspendableCollector();
         suspendableCollector.setDuration(collapseExecutorProperties.getCollectingWaitTime());
         suspendableCollector.setThreshold(collapseExecutorProperties.getWaitThreshold());
         return suspendableCollector;

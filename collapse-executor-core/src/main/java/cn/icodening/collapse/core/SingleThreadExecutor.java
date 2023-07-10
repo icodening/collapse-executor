@@ -16,8 +16,6 @@ public class SingleThreadExecutor implements Executor {
 
     private static final ThreadFactory THREAD_FACTORY = new InternalThreadFactory();
 
-    public static final SingleThreadExecutor SHARE = new SingleThreadExecutor();
-
     private final ExecutorService delegate;
 
     private volatile boolean closed = false;

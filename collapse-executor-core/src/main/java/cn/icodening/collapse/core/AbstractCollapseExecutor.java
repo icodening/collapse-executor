@@ -14,19 +14,32 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> implements CollapseExecutor<INPUT, OUTPUT>, NamedCollapseExecutor {
 
-    private final ListeningCollector collector;
+    private ListeningCollector collector;
 
     private String name = this.getClass().getSimpleName();
 
     private InputGrouper<INPUT> inputGrouper = EqualsInputGrouper.getInstance();
 
+    public AbstractCollapseExecutor() {
+        this(new SuspendableCollector());
+    }
+
     public AbstractCollapseExecutor(ListeningCollector collector) {
         this.collector = Objects.requireNonNull(collector, "collector must be not null.");
+        this.setCollector(collector);
+    }
+
+    public void setCollector(ListeningCollector collector) {
+        ListeningCollector old = this.collector;
+        if (old != null) {
+            old.removeListener(this);
+        }
+        this.collector = collector;
         this.collector.addListener(this, this::collapseExecute);
     }
 
     public void setInputGrouper(InputGrouper<INPUT> inputGrouper) {
-        this.inputGrouper = inputGrouper;
+        this.inputGrouper = Objects.requireNonNull(inputGrouper, "inputGrouper must be not null.");
     }
 
     public InputGrouper<INPUT> getInputGrouper() {
@@ -51,7 +64,8 @@ public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> impl
     public OUTPUT execute(INPUT input) throws Throwable {
         Executor callbackExecutor = getCallbackExecutor();
         Bundle<INPUT, OUTPUT> bundle = createBundle(input, callbackExecutor, new CompletableFuture<>());
-        this.collector.enqueue((Bundle<Object, Object>) bundle);
+        ListeningCollector collector = Objects.requireNonNull(this.collector, "collector must be not null.");
+        collector.enqueue((Bundle<Object, Object>) bundle);
         return returning(bundle);
     }
 

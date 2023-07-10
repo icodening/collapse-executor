@@ -27,6 +27,10 @@ public abstract class BatchCollector<E> implements Closeable {
 
     private volatile boolean close = false;
 
+    public BatchCollector() {
+        this(new SingleThreadExecutor(), new ConcurrentLinkedQueue<>());
+    }
+
     public BatchCollector(Executor dispatcher) {
         this(dispatcher, new ConcurrentLinkedQueue<>());
     }
