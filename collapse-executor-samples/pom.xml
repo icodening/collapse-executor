@@ -15,6 +15,7 @@
         <module>collapse-executor-sample-spring-boot</module>
         <module>collapse-executor-sample-simple</module>
         <module>collapse-executor-sample-advanced</module>
+        <module>collapse-executor-sample-sequence</module>
     </modules>
 
     <properties>
