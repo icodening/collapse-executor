@@ -55,8 +55,7 @@ collapse executor 是一个高性能、低延迟的批量执行器，可有效�
 public class BlockingCollapseExecutorExample {
 
     public static void main(String[] args) throws Throwable {
-        SuspendableCollector suspendableCollector = new SuspendableCollector();
-        BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor(suspendableCollector);
+        BlockingCallableGroupCollapseExecutor blockingCollapseExecutor = new BlockingCallableGroupCollapseExecutor();
         String outputString = blockingCollapseExecutor.execute("example group", () -> "Hello World Collapse Executor. Blocking");
         System.out.println(outputString);
     }
@@ -71,8 +70,7 @@ public class BlockingCollapseExecutorExample {
 public class AsyncCollapseExecutorExample {
 
     public static void main(String[] args) throws Throwable {
-        SuspendableCollector suspendableCollector = new SuspendableCollector();
-        AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor = new AsyncCallableGroupCollapseExecutor(suspendableCollector);
+        AsyncCallableGroupCollapseExecutor asyncCallableGroupCollapseExecutor = new AsyncCallableGroupCollapseExecutor();
         asyncCallableGroupCollapseExecutor.setExecutor(new ThreadPoolExecutor(10, 10, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
             Thread thread = new Thread(r);
             thread.setDaemon(true);
@@ -95,8 +93,7 @@ public class AsyncCollapseExecutorExample {
 public class FutureCollapseExecutorExample {
 
     public static void main(String[] args) throws Throwable {
-        SuspendableCollector suspendableCollector = new SuspendableCollector();
-        FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor(suspendableCollector);
+        FutureCallableGroupCollapseExecutor futureCollapseExecutor = new FutureCallableGroupCollapseExecutor();
         futureCollapseExecutor.execute("example group", () -> CompletableFuture.completedFuture("Hello World Collapse Executor. Future"))
                 .thenAccept(System.out::println)
                 .thenRun(() -> System.exit(0));
