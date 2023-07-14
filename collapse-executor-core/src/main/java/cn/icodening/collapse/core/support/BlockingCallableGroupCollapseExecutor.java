@@ -6,7 +6,6 @@ import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.util.ThrowableCallable;
 
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * @author icodening
@@ -16,9 +15,14 @@ public final class BlockingCallableGroupCollapseExecutor {
 
     private final InternalBlockingCallableGroupCollapseExecutor<Object> collapseExecutor;
 
+    public BlockingCallableGroupCollapseExecutor() {
+        this.collapseExecutor = new InternalBlockingCallableGroupCollapseExecutor<>();
+        this.collapseExecutor.setName(BlockingCallableGroupCollapseExecutor.class.getSimpleName());
+    }
+
     public BlockingCallableGroupCollapseExecutor(ListeningCollector collector) {
-        Objects.requireNonNull(collector, "collector must be not null.");
         this.collapseExecutor = new InternalBlockingCallableGroupCollapseExecutor<>(collector);
+        this.collapseExecutor.setName(BlockingCallableGroupCollapseExecutor.class.getSimpleName());
     }
 
     public void setName(String name) {
@@ -33,9 +37,12 @@ public final class BlockingCallableGroupCollapseExecutor {
 
     private static class InternalBlockingCallableGroupCollapseExecutor<R> extends BlockingSameOutputCollapseExecutor<CallableGroup<R>, R> {
 
+        public InternalBlockingCallableGroupCollapseExecutor() {
+            super();
+        }
+
         private InternalBlockingCallableGroupCollapseExecutor(ListeningCollector collector) {
             super(collector);
-            this.setName(BlockingCallableGroupCollapseExecutor.class.getSimpleName());
         }
 
         @Override

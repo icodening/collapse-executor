@@ -21,8 +21,15 @@ public class FutureCallableGroupCollapseExecutor {
 
     private final InternalFutureCallableGroupCollapseExecutor<Object> collapseExecutor;
 
-    public FutureCallableGroupCollapseExecutor(ListeningCollector listeningCollector) {
-        this.collapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>(listeningCollector);
+    public FutureCallableGroupCollapseExecutor() {
+        this.collapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>();
+        this.collapseExecutor.setName(FutureCallableGroupCollapseExecutor.class.getSimpleName());
+        setExecutor(DIRECT_EXECUTOR);
+    }
+
+    public FutureCallableGroupCollapseExecutor(ListeningCollector collector) {
+        this.collapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>(collector);
+        this.collapseExecutor.setName(FutureCallableGroupCollapseExecutor.class.getSimpleName());
         setExecutor(DIRECT_EXECUTOR);
     }
 
@@ -42,9 +49,12 @@ public class FutureCallableGroupCollapseExecutor {
 
     private static class InternalFutureCallableGroupCollapseExecutor<R> extends CollapseExecutorAsyncSupport<CallableGroup<CompletableFuture<R>>, R, CompletableFuture<R>> {
 
+        public InternalFutureCallableGroupCollapseExecutor() {
+            super();
+        }
+
         private InternalFutureCallableGroupCollapseExecutor(ListeningCollector collector) {
             super(collector);
-            this.setName(FutureCallableGroupCollapseExecutor.class.getSimpleName());
         }
 
         @Override

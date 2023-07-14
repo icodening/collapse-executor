@@ -17,8 +17,14 @@ public class AsyncCallableGroupCollapseExecutor {
 
     private final InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<Object> collapseExecutor;
 
-    public AsyncCallableGroupCollapseExecutor(ListeningCollector listeningCollector) {
-        this.collapseExecutor = new InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<>(listeningCollector);
+    public AsyncCallableGroupCollapseExecutor() {
+        this.collapseExecutor = new InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<>();
+        this.collapseExecutor.setName(AsyncCallableGroupCollapseExecutor.class.getSimpleName());
+    }
+
+    public AsyncCallableGroupCollapseExecutor(ListeningCollector collector) {
+        this.collapseExecutor = new InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<>(collector);
+        this.collapseExecutor.setName(AsyncCallableGroupCollapseExecutor.class.getSimpleName());
     }
 
     public void setExecutor(Executor executor) {
@@ -37,9 +43,12 @@ public class AsyncCallableGroupCollapseExecutor {
 
     private static class InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<R> extends AsyncSameOutputCollapseExecutor<CallableGroup<R>, R> {
 
+        public InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor() {
+            super();
+        }
+
         private InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor(ListeningCollector collector) {
             super(collector);
-            this.setName(AsyncCallableGroupCollapseExecutor.class.getSimpleName());
         }
 
         @Override
