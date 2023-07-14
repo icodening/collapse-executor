@@ -10,6 +10,10 @@ import java.util.concurrent.Executor;
  */
 public abstract class CollapseExecutorBlockingSupport<INPUT, OUTPUT, BATCH_OUTPUT> extends AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> {
 
+    public CollapseExecutorBlockingSupport() {
+        super();
+    }
+
     public CollapseExecutorBlockingSupport(ListeningCollector collector) {
         super(collector);
     }
