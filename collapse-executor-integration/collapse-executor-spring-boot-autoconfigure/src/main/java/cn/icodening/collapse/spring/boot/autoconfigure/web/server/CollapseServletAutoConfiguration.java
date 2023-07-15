@@ -9,15 +9,18 @@ import cn.icodening.collapse.web.server.CollapseHttpRequestServletFilter;
 import io.undertow.Undertow;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.embedded.undertow.UndertowWebServer;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 import javax.servlet.Filter;
@@ -90,6 +93,20 @@ public class CollapseServletAutoConfiguration {
                         field.setAccessible(false);
                     }
                 });
+            };
+        }
+    }
+
+    @ConditionalOnClass(name = {"org.eclipse.jetty.util.thread.ThreadPool", "org.eclipse.jetty.server.Server"})
+    static class CollapseJettyServerConfiguration {
+
+        @Bean
+        @ConditionalOnBean(JettyServletWebServerFactory.class)
+        public SmartInitializingSingleton collapseJettyWebServerCustomizer(JettyServletWebServerFactory jettyServletWebServerFactory, AsyncServletExecutor asyncServletExecutor) {
+            return () -> {
+                org.eclipse.jetty.util.thread.ThreadPool threadPool = jettyServletWebServerFactory.getThreadPool();
+                Assert.notNull(threadPool, "threadPool must be not null.");
+                asyncServletExecutor.setExecutorSupplier(() -> threadPool);
             };
         }
     }
