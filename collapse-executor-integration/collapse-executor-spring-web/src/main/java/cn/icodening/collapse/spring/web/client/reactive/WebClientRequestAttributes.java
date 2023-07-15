@@ -1,6 +1,6 @@
 package cn.icodening.collapse.spring.web.client.reactive;
 
-import cn.icodening.collapse.spring.web.pattern.RequestAttributes;
+import cn.icodening.collapse.web.pattern.RequestAttributes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.Assert;
 import org.springframework.web.reactive.function.client.ClientRequest;

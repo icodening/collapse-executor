@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.web.pattern;
+package cn.icodening.collapse.web.pattern;
 
 import java.util.HashSet;
 import java.util.Set;

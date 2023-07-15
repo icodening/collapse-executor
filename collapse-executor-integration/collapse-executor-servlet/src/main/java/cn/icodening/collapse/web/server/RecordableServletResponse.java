@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.web.server;
+package cn.icodening.collapse.web.server;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;

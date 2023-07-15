@@ -9,26 +9,21 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>collapse-executor-aop</artifactId>
-
-    <properties>
-        <aopalliance.version>1.0</aopalliance.version>
-    </properties>
+    <artifactId>collapse-executor-servlet</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>cn.icodening</groupId>
-            <artifactId>collapse-executor-core</artifactId>
+            <artifactId>collapse-executor-pattern</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>aopalliance</groupId>
-            <artifactId>aopalliance</artifactId>
-            <version>${aopalliance.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
+
 </project>

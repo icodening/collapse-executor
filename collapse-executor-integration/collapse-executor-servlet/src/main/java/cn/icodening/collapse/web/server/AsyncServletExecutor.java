@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.web.server;
+package cn.icodening.collapse.web.server;
 
 import cn.icodening.collapse.core.Bundle;
 import cn.icodening.collapse.core.CollapseExecutorAsyncSupport;

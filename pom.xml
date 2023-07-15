@@ -20,12 +20,6 @@
         <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-
-        </dependencies>
-    </dependencyManagement>
-
     <build>
         <plugins>
             <plugin>

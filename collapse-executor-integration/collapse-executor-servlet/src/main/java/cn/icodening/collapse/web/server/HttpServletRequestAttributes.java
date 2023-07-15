@@ -1,6 +1,6 @@
-package cn.icodening.collapse.spring.web.server;
+package cn.icodening.collapse.web.server;
 
-import cn.icodening.collapse.spring.web.pattern.RequestAttributes;
+import cn.icodening.collapse.web.pattern.RequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;

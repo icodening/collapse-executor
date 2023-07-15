@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.web.pattern;
+package cn.icodening.collapse.web.pattern;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -14,13 +14,13 @@ import java.util.logging.Logger;
  * @author icodening
  * @date 2023.06.29
  */
-public abstract class ConfigurationCollapseGroupResolver implements CollapseGroupResolver {
+public abstract class AbstractConfigurationCollapseGroupResolver implements CollapseGroupResolver {
 
-    private static final Logger LOGGER = Logger.getLogger(ConfigurationCollapseGroupResolver.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AbstractConfigurationCollapseGroupResolver.class.getName());
 
     private final CollapseDefinitionProperties collapseDefinitionProperties;
 
-    public ConfigurationCollapseGroupResolver(CollapseDefinitionProperties collapseDefinitionProperties) {
+    public AbstractConfigurationCollapseGroupResolver(CollapseDefinitionProperties collapseDefinitionProperties) {
         this.collapseDefinitionProperties = Objects.requireNonNull(collapseDefinitionProperties, "collapseDefinitionProperties must be not null.");
     }
 

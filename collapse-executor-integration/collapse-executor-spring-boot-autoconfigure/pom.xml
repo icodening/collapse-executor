@@ -11,12 +11,6 @@
 
     <artifactId>collapse-executor-spring-boot-autoconfigure</artifactId>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>cn.icodening</groupId>
@@ -26,6 +20,11 @@
         <dependency>
             <groupId>cn.icodening</groupId>
             <artifactId>collapse-executor-spring-web</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.icodening</groupId>
+            <artifactId>collapse-executor-servlet</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -1,6 +1,6 @@
-package cn.icodening.collapse.spring.web.server;
+package cn.icodening.collapse.web.server;
 
-import cn.icodening.collapse.spring.web.pattern.RequestCollapseGroup;
+import cn.icodening.collapse.web.pattern.RequestCollapseGroup;
 
 import javax.servlet.AsyncContext;
 import java.util.Objects;

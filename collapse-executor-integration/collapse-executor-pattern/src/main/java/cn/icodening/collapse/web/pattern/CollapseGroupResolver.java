@@ -1,4 +1,4 @@
-package cn.icodening.collapse.spring.web.pattern;
+package cn.icodening.collapse.web.pattern;
 
 /**
  * @author icodening

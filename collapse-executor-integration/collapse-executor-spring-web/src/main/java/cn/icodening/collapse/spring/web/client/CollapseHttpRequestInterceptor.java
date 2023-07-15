@@ -1,8 +1,8 @@
 package cn.icodening.collapse.spring.web.client;
 
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
-import cn.icodening.collapse.spring.web.pattern.CollapseGroupResolver;
-import cn.icodening.collapse.spring.web.pattern.RequestCollapseGroup;
+import cn.icodening.collapse.web.pattern.CollapseGroupResolver;
+import cn.icodening.collapse.web.pattern.RequestCollapseGroup;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
