@@ -3,7 +3,7 @@ package cn.icodening.collapse.spring.boot.autoconfigure.web.server;
 import cn.icodening.collapse.core.EqualsInputGrouper;
 import cn.icodening.collapse.core.LengthLimitedInputGrouper;
 import cn.icodening.collapse.core.ListeningCollector;
-import cn.icodening.collapse.spring.web.pattern.ConfigurationCollapseGroupResolver;
+import cn.icodening.collapse.spring.web.pattern.PathPatternCollapseGroupResolver;
 import cn.icodening.collapse.spring.web.server.AsyncServletExecutor;
 import cn.icodening.collapse.spring.web.server.CollapseHttpRequestServletFilter;
 import io.undertow.Undertow;
@@ -42,7 +42,7 @@ public class CollapseServletAutoConfiguration {
     public CollapseHttpRequestServletFilter collapseHttpRequestServletFilter(AsyncServletExecutor asyncServletExecutor, CollapseServletProperties collapseServletProperties) {
         CollapseHttpRequestServletFilter collapseHttpRequestServletFilter = new CollapseHttpRequestServletFilter();
         collapseHttpRequestServletFilter.setAsyncServletExecutor(asyncServletExecutor);
-        collapseHttpRequestServletFilter.setCollapseGroupResolver(new ConfigurationCollapseGroupResolver(collapseServletProperties));
+        collapseHttpRequestServletFilter.setCollapseGroupResolver(new PathPatternCollapseGroupResolver(collapseServletProperties));
         return collapseHttpRequestServletFilter;
     }
 

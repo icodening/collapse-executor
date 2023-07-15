@@ -4,7 +4,7 @@ import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.autoconfigure.ConditionalOnCollapseEnabled;
 import cn.icodening.collapse.spring.web.client.reactive.CollapseExchangeFilterFunction;
-import cn.icodening.collapse.spring.web.pattern.ConfigurationCollapseGroupResolver;
+import cn.icodening.collapse.spring.web.pattern.PathPatternCollapseGroupResolver;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,7 +25,7 @@ public class CollapseWebClientAutoConfiguration {
     public CollapseExchangeFilterFunction collapseExchangeFilterFunction(ListeningCollector listeningCollector,
                                                                          CollapseWebClientProperties collapseWebClientProperties) {
         CollapseExchangeFilterFunction collapseExchangeFilterFunction = new CollapseExchangeFilterFunction();
-        collapseExchangeFilterFunction.setCollapseGroupResolver(new ConfigurationCollapseGroupResolver(collapseWebClientProperties));
+        collapseExchangeFilterFunction.setCollapseGroupResolver(new PathPatternCollapseGroupResolver(collapseWebClientProperties));
         collapseExchangeFilterFunction.setFutureCallableGroupCollapseExecutor(new FutureCallableGroupCollapseExecutor(listeningCollector));
         return collapseExchangeFilterFunction;
     }

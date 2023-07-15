@@ -2,8 +2,6 @@ package cn.icodening.collapse.spring.web.server;
 
 import cn.icodening.collapse.spring.web.pattern.CollapseGroupResolver;
 import cn.icodening.collapse.spring.web.pattern.RequestCollapseGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.AsyncContext;
@@ -14,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * @author icodening
@@ -21,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CollapseHttpRequestServletFilter.class);
+    private static final Logger LOGGER = Logger.getLogger(CollapseHttpRequestServletFilter.class.getName());
 
     private AsyncServletExecutor asyncServletExecutor;
 
@@ -70,7 +71,9 @@ public class CollapseHttpRequestServletFilter extends OncePerRequestFilter {
                 httpServletResponse.setContentLength(data.length);
                 actualResponseOutputStream.write(data);
             } catch (Throwable e) {
-                LOGGER.error("Processing response failed.", e);
+                LogRecord logRecord = new LogRecord(Level.SEVERE, "Processing response failed.");
+                logRecord.setThrown(e);
+                LOGGER.log(logRecord);
             } finally {
                 asyncContext.complete();
             }

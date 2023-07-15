@@ -1,14 +1,15 @@
 package cn.icodening.collapse.spring.web.server;
 
 import cn.icodening.collapse.spring.web.pattern.RequestAttributes;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.util.Assert;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
 
 /**
  * @author icodening
@@ -20,13 +21,21 @@ public class HttpServletRequestAttributes implements RequestAttributes {
 
     private final URI uri;
 
-    private final HttpHeaders httpHeaders;
+    private final Map<String, List<String>> httpHeaders;
 
     public HttpServletRequestAttributes(final HttpServletRequest httpServletRequest) {
-        Assert.notNull(httpServletRequest, "httpServletRequest must be not null.");
-        this.httpMethod = HttpMethod.valueOf(httpServletRequest.getMethod()).name();
-        this.uri = UriComponentsBuilder.fromHttpUrl(httpServletRequest.getRequestURL().toString()).query(httpServletRequest.getQueryString()).build().toUri();
+        Objects.requireNonNull(httpServletRequest, "httpServletRequest must be not null.");
+        this.httpMethod = httpServletRequest.getMethod();
+        this.uri = createURI(httpServletRequest);
         this.httpHeaders = resolveHttpHeaders(httpServletRequest);
+    }
+
+    private URI createURI(HttpServletRequest httpServletRequest) {
+        String url = httpServletRequest.getRequestURL().toString();
+        String queryString = httpServletRequest.getQueryString();
+        String query = queryString == null ? "" : "?" + queryString;
+        String fullURI = url + query;
+        return URI.create(fullURI);
     }
 
     @Override
@@ -40,19 +49,19 @@ public class HttpServletRequestAttributes implements RequestAttributes {
     }
 
     @Override
-    public HttpHeaders getHeaders() {
+    public Map<String, List<String>> getHeaders() {
         return httpHeaders;
     }
 
-    private static HttpHeaders resolveHttpHeaders(HttpServletRequest httpServletRequest) {
-        HttpHeaders headers = new HttpHeaders();
+    private static Map<String, List<String>> resolveHttpHeaders(HttpServletRequest httpServletRequest) {
+        Map<String, List<String>> headers = new TreeMap<>(String::compareToIgnoreCase);
         Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             Enumeration<String> headerValues = httpServletRequest.getHeaders(headerName);
             while (headerValues.hasMoreElements()) {
                 String headerValue = headerValues.nextElement();
-                headers.add(headerName, headerValue);
+                headers.computeIfAbsent(headerName, (key) -> new ArrayList<>()).add(headerValue);
             }
         }
         return headers;

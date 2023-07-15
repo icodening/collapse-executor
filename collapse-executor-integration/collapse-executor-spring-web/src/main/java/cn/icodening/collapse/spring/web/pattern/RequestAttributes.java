@@ -1,8 +1,8 @@
 package cn.icodening.collapse.spring.web.pattern;
 
-import org.springframework.http.HttpHeaders;
-
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author icodening
@@ -10,10 +10,26 @@ import java.net.URI;
  */
 public interface RequestAttributes {
 
+    /**
+     * get request method type.
+     * eg. GET POST PUT ....
+     *
+     * @return request method
+     */
     String getMethod();
 
+    /**
+     * get request uri
+     *
+     * @return uri
+     */
     URI getURI();
 
-    HttpHeaders getHeaders();
+    /**
+     * get request header, it's a case insensitive map.
+     *
+     * @return request header.
+     */
+    Map<String, List<String>> getHeaders();
 
 }

@@ -4,7 +4,7 @@ import cn.icodening.collapse.core.ListeningCollector;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.autoconfigure.ConditionalOnCollapseEnabled;
 import cn.icodening.collapse.spring.web.client.CollapseHttpRequestInterceptor;
-import cn.icodening.collapse.spring.web.pattern.ConfigurationCollapseGroupResolver;
+import cn.icodening.collapse.spring.web.pattern.PathPatternCollapseGroupResolver;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -31,7 +31,7 @@ public class CollapseRestTemplateAutoConfiguration {
     public CollapseHttpRequestInterceptor collapseHttpRequestInterceptor(ListeningCollector listeningCollector,
                                                                          CollapseRestTemplateProperties collapseRestTemplateProperties) {
         CollapseHttpRequestInterceptor collapseHttpRequestInterceptor = new CollapseHttpRequestInterceptor();
-        collapseHttpRequestInterceptor.setCollapseGroupResolver(new ConfigurationCollapseGroupResolver(collapseRestTemplateProperties));
+        collapseHttpRequestInterceptor.setCollapseGroupResolver(new PathPatternCollapseGroupResolver(collapseRestTemplateProperties));
         collapseHttpRequestInterceptor.setBlockingCallableGroupCollapseExecutor(new BlockingCallableGroupCollapseExecutor(listeningCollector));
         return collapseHttpRequestInterceptor;
     }

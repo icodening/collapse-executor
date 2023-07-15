@@ -1,10 +1,5 @@
 package cn.icodening.collapse.spring.web.pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.server.PathContainer;
-import org.springframework.web.util.pattern.PathPatternParser;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,18 +8,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * @author icodening
  * @date 2023.06.29
  */
-public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver {
+public abstract class ConfigurationCollapseGroupResolver implements CollapseGroupResolver {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationCollapseGroupResolver.class);
+    private static final Logger LOGGER = Logger.getLogger(ConfigurationCollapseGroupResolver.class.getName());
 
     private final CollapseDefinitionProperties collapseDefinitionProperties;
-
-    private static final PathPatternParser PATTERN_PARSER = PathPatternParser.defaultInstance;
 
     public ConfigurationCollapseGroupResolver(CollapseDefinitionProperties collapseDefinitionProperties) {
         this.collapseDefinitionProperties = Objects.requireNonNull(collapseDefinitionProperties, "collapseDefinitionProperties must be not null.");
@@ -38,11 +32,11 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
         for (CollapseGroupDefinition definition : this.collapseDefinitionProperties.getCollapseGroups()) {
             Set<String> uris = definition.getUris();
             for (String uri : uris) {
-                if (isMatch(requestAttributes, uri)) {
+                if (matches(requestAttributes, uri)) {
                     String groupPolicyName = definition.getCollapsePolicyName();
                     CollapsePolicyDefinition collapsePolicy = findCollapsePolicyDefinition(groupPolicyName);
                     if (collapsePolicy == null) {
-                        LOGGER.debug("['{}' not found.]", groupPolicyName);
+                        LOGGER.fine(String.format("['%s' not found.]", groupPolicyName));
                         return null;
                     }
                     RequestCollapseGroup requestCollapseGroup = new RequestCollapseGroup();
@@ -80,12 +74,6 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
         return this.collapseDefinitionProperties.getCollapsePolicies().get(groupPolicyName);
     }
 
-    private boolean isMatch(RequestAttributes request, String configURI) {
-        String path = request.getURI().getPath();
-        return PATTERN_PARSER.parse(configURI)
-                .matches(PathContainer.parsePath(path));
-    }
-
     private Map<String, List<String>> queryStringToMap(String queryString) {
         if (queryString == null || "".equals(queryString)) {
             return Collections.emptyMap();
@@ -103,5 +91,7 @@ public class ConfigurationCollapseGroupResolver implements CollapseGroupResolver
         }
         return queryMap;
     }
+
+    protected abstract boolean matches(RequestAttributes request, String pattern);
 
 }
