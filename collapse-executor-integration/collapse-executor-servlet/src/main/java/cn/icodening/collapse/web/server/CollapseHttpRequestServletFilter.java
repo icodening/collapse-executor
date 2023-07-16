@@ -52,15 +52,15 @@ public class CollapseHttpRequestServletFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        if (skipDispatch(request)) {
+            chain.doFilter(request, response);
+            return;
+        }
         doFilterInternal((HttpServletRequest) request, (HttpServletResponse) response, chain);
     }
 
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain chain) throws ServletException, IOException {
         if (!allowCollapse(httpServletRequest)) {
-            chain.doFilter(httpServletRequest, httpServletResponse);
-            return;
-        }
-        if (skipDispatch(httpServletRequest)) {
             chain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
@@ -106,7 +106,7 @@ public class CollapseHttpRequestServletFilter implements Filter {
         return collapseGroupResolver.resolve(new HttpServletRequestAttributes(request));
     }
 
-    private boolean skipDispatch(HttpServletRequest request) {
+    private boolean skipDispatch(ServletRequest request) {
         return DispatcherType.ASYNC.equals(request.getDispatcherType());
     }
 }

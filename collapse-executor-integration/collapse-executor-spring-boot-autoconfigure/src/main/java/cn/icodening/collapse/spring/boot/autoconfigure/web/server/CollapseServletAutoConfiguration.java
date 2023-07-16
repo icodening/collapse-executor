@@ -7,6 +7,7 @@ import cn.icodening.collapse.spring.web.pattern.PathPatternCollapseGroupResolver
 import cn.icodening.collapse.web.server.AsyncServletExecutor;
 import cn.icodening.collapse.web.server.CollapseHttpRequestServletFilter;
 import io.undertow.Undertow;
+import org.eclipse.jetty.util.thread.ThreadPool;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -71,8 +72,6 @@ public class CollapseServletAutoConfiguration {
 
         @Bean
         public SmartInitializingSingleton collapseUndertowWebServerCustomizer(ServletWebServerApplicationContext servletWebServerApplicationContext, AsyncServletExecutor asyncServletExecutor) {
-
-
             return () -> {
                 Field field = ReflectionUtils.findField(UndertowWebServer.class, "undertow");
                 if (field == null) {
@@ -104,7 +103,7 @@ public class CollapseServletAutoConfiguration {
         @ConditionalOnBean(JettyServletWebServerFactory.class)
         public SmartInitializingSingleton collapseJettyWebServerCustomizer(JettyServletWebServerFactory jettyServletWebServerFactory, AsyncServletExecutor asyncServletExecutor) {
             return () -> {
-                org.eclipse.jetty.util.thread.ThreadPool threadPool = jettyServletWebServerFactory.getThreadPool();
+                ThreadPool threadPool = jettyServletWebServerFactory.getThreadPool();
                 Assert.notNull(threadPool, "threadPool must be not null.");
                 asyncServletExecutor.setExecutorSupplier(() -> threadPool);
             };

@@ -21,8 +21,7 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

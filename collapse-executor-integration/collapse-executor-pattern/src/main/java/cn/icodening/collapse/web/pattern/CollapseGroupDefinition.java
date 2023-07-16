@@ -1,6 +1,6 @@
 package cn.icodening.collapse.web.pattern;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -11,7 +11,7 @@ public class CollapseGroupDefinition {
 
     private String collapsePolicyName;
 
-    private Set<String> uris = new HashSet<>();
+    private Set<String> patterns = new LinkedHashSet<>();
 
     public String getCollapsePolicyName() {
         return collapsePolicyName;
@@ -21,11 +21,11 @@ public class CollapseGroupDefinition {
         this.collapsePolicyName = collapsePolicyName;
     }
 
-    public Set<String> getUris() {
-        return uris;
+    public Set<String> getPatterns() {
+        return patterns;
     }
 
-    public void setUris(Set<String> uris) {
-        this.uris = uris;
+    public void setPatterns(Set<String> patterns) {
+        this.patterns = patterns;
     }
 }

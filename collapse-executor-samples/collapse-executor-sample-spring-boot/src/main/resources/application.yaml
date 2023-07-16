@@ -22,7 +22,7 @@ collapse:
             - user-id
       collapse-groups:
         - collapse-policy-name: test-policy
-          uris:
+          patterns:
             - /test/collapse1
             - /test/collapse100
 
@@ -36,11 +36,11 @@ collapse:
           collapse-request-queries:
             - sample
       collapse-groups:
-        - uris:
+        - patterns:
             - /user/*
             - /test/noop*
         - collapse-policy-name: sample-policy
-          uris:
+          patterns:
             - /samples/*
 
 
@@ -48,6 +48,6 @@ collapse:
     web-client:
       enabled: true
       collapse-groups:
-        - uris:
+        - patterns:
             - /user/*
             - /test/noop*
