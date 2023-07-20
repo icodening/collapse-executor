@@ -9,6 +9,7 @@ import cn.icodening.collapse.web.server.CollapseHttpRequestServletFilter;
 import io.undertow.Undertow;
 import org.eclipse.jetty.util.thread.ThreadPool;
 import org.springframework.beans.factory.SmartInitializingSingleton;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -51,9 +52,9 @@ public class CollapseServletAutoConfiguration {
     }
 
     @Bean
-    public AsyncServletExecutor asyncServletExecutor(ListeningCollector listeningCollector, ExecutorService collapseExecutorService, CollapseServletProperties collapseServletProperties) {
+    public AsyncServletExecutor asyncServletExecutor(ListeningCollector listeningCollector, @Qualifier("collapseExecutorService") ExecutorService fallbackExecutor, CollapseServletProperties collapseServletProperties) {
         AsyncServletExecutor asyncServletExecutor = new AsyncServletExecutor(listeningCollector);
-        asyncServletExecutor.setExecutor(collapseExecutorService);
+        asyncServletExecutor.setExecutor(fallbackExecutor);
         asyncServletExecutor.setInputGrouper(LengthLimitedInputGrouper.newInstance(collapseServletProperties.getBatchSize(), EqualsInputGrouper.getInstance()));
         return asyncServletExecutor;
     }
@@ -85,9 +86,6 @@ public class CollapseServletAutoConfiguration {
                         //not null at runtime
                         assert undertow != null;
                         return undertow.getWorker();
-                    } catch (Throwable throwable) {
-                        //no op
-                        throw new RuntimeException(throwable);
                     } finally {
                         field.setAccessible(false);
                     }

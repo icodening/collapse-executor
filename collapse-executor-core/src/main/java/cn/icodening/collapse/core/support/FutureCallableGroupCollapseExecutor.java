@@ -23,13 +23,13 @@ public class FutureCallableGroupCollapseExecutor {
 
     public FutureCallableGroupCollapseExecutor() {
         this.collapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>();
-        this.collapseExecutor.setName(FutureCallableGroupCollapseExecutor.class.getSimpleName());
+        this.collapseExecutor.setName(this.getClass().getSimpleName());
         setExecutor(DIRECT_EXECUTOR);
     }
 
     public FutureCallableGroupCollapseExecutor(ListeningCollector collector) {
         this.collapseExecutor = new InternalFutureCallableGroupCollapseExecutor<>(collector);
-        this.collapseExecutor.setName(FutureCallableGroupCollapseExecutor.class.getSimpleName());
+        this.collapseExecutor.setName(this.getClass().getSimpleName());
         setExecutor(DIRECT_EXECUTOR);
     }
 

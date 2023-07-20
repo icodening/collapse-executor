@@ -15,6 +15,10 @@ public class PathPatternCollapseGroupResolver extends AbstractConfigurationColla
 
     private static final PathPatternParser PATTERN_PARSER = PathPatternParser.defaultInstance;
 
+    public PathPatternCollapseGroupResolver() {
+        super();
+    }
+
     public PathPatternCollapseGroupResolver(CollapseDefinitionProperties collapseDefinitionProperties) {
         super(collapseDefinitionProperties);
     }

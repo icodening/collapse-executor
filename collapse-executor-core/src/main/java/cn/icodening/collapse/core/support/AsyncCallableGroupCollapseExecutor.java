@@ -19,12 +19,12 @@ public class AsyncCallableGroupCollapseExecutor {
 
     public AsyncCallableGroupCollapseExecutor() {
         this.collapseExecutor = new InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<>();
-        this.collapseExecutor.setName(AsyncCallableGroupCollapseExecutor.class.getSimpleName());
+        this.collapseExecutor.setName(this.getClass().getSimpleName());
     }
 
     public AsyncCallableGroupCollapseExecutor(ListeningCollector collector) {
         this.collapseExecutor = new InternalSameOutputCollapseExecutorAsyncCallableGroupCollapseExecutor<>(collector);
-        this.collapseExecutor.setName(AsyncCallableGroupCollapseExecutor.class.getSimpleName());
+        this.collapseExecutor.setName(this.getClass().getSimpleName());
     }
 
     public void setExecutor(Executor executor) {

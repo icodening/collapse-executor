@@ -11,18 +11,18 @@ import java.util.Collection;
  * @author icodening
  * @date 2023.05.14
  */
-public final class BlockingCallableGroupCollapseExecutor {
+public class BlockingCallableGroupCollapseExecutor {
 
     private final InternalBlockingCallableGroupCollapseExecutor<Object> collapseExecutor;
 
     public BlockingCallableGroupCollapseExecutor() {
         this.collapseExecutor = new InternalBlockingCallableGroupCollapseExecutor<>();
-        this.collapseExecutor.setName(BlockingCallableGroupCollapseExecutor.class.getSimpleName());
+        this.collapseExecutor.setName(this.getClass().getSimpleName());
     }
 
     public BlockingCallableGroupCollapseExecutor(ListeningCollector collector) {
         this.collapseExecutor = new InternalBlockingCallableGroupCollapseExecutor<>(collector);
-        this.collapseExecutor.setName(BlockingCallableGroupCollapseExecutor.class.getSimpleName());
+        this.collapseExecutor.setName(this.getClass().getSimpleName());
     }
 
     public void setName(String name) {

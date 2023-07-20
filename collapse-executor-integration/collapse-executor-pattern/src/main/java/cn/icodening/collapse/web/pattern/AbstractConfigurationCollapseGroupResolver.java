@@ -18,10 +18,18 @@ public abstract class AbstractConfigurationCollapseGroupResolver implements Coll
 
     private static final Logger LOGGER = Logger.getLogger(AbstractConfigurationCollapseGroupResolver.class.getName());
 
-    private final CollapseDefinitionProperties collapseDefinitionProperties;
+    private CollapseDefinitionProperties collapseDefinitionProperties;
+
+    public AbstractConfigurationCollapseGroupResolver() {
+
+    }
 
     public AbstractConfigurationCollapseGroupResolver(CollapseDefinitionProperties collapseDefinitionProperties) {
         this.collapseDefinitionProperties = Objects.requireNonNull(collapseDefinitionProperties, "collapseDefinitionProperties must be not null.");
+    }
+
+    public void setCollapseDefinitionProperties(CollapseDefinitionProperties collapseDefinitionProperties) {
+        this.collapseDefinitionProperties = collapseDefinitionProperties;
     }
 
     public CollapseDefinitionProperties getCollapseDefinitionProperties() {
@@ -30,10 +38,11 @@ public abstract class AbstractConfigurationCollapseGroupResolver implements Coll
 
     @Override
     public RequestCollapseGroup resolve(RequestAttributes requestAttributes) {
+        CollapseDefinitionProperties collapseDefinitionProperties = Objects.requireNonNull(this.collapseDefinitionProperties, "collapseDefinitionProperties must be not null.");
         if (!collapseDefinitionProperties.isEnabled()) {
             return null;
         }
-        for (CollapseGroupDefinition definition : this.collapseDefinitionProperties.getCollapseGroups()) {
+        for (CollapseGroupDefinition definition : collapseDefinitionProperties.getCollapseGroups()) {
             Set<String> uris = definition.getPatterns();
             for (String uri : uris) {
                 if (matches(requestAttributes, uri)) {

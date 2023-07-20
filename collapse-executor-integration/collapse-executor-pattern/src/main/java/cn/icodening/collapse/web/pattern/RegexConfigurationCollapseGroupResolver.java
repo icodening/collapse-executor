@@ -9,6 +9,9 @@ import java.util.regex.Pattern;
  */
 public class RegexConfigurationCollapseGroupResolver extends AbstractConfigurationCollapseGroupResolver {
 
+    public RegexConfigurationCollapseGroupResolver() {
+    }
+
     public RegexConfigurationCollapseGroupResolver(CollapseDefinitionProperties collapseDefinitionProperties) {
         super(collapseDefinitionProperties);
     }
