@@ -198,7 +198,33 @@ collapse:
           uris:
             - /samples/*
 ````
-## 2. 启动[SpringBootSampleApplication](./collapse-executor-samples/collapse-executor-sample-spring-boot/src/main/java/cn/icodening/collapse/sample/spring/boot/SpringBootSampleApplication.java)查看结果
+## 2.配置拦截器
+````java
+@Configuration
+public class SampleConfiguration {
+    /**
+     * 基于RestTemplate的使用方式
+     */
+    @Bean
+    public RestTemplate restTemplate(CollapseHttpRequestInterceptor collapseHttpRequestInterceptor) {
+        //注入CollapseHttpRequestInterceptor拦截器实例，并添加到RestTemplate实例上
+        return new RestTemplateBuilder()
+                .interceptors(collapseHttpRequestInterceptor)
+                .build();
+    }
+
+    /**
+     * 基于WebClient的使用方式
+     */
+    @Bean
+    public WebClient webClient(CollapseExchangeFilterFunction exchangeFilterFunction) {
+        //注入CollapseExchangeFilterFunction过滤器实例，并添加到WebClient实例上
+        return WebClient.builder().filter(exchangeFilterFunction).build();
+    }
+}
+````
+
+## 3. 启动[SpringBootSampleApplication](./collapse-executor-samples/collapse-executor-sample-spring-boot/src/main/java/cn/icodening/collapse/sample/spring/boot/SpringBootSampleApplication.java)查看结果
 业务逻辑位于
 [AbstractBlockingCallSample](./collapse-executor-samples/collapse-executor-sample-spring-boot/src/main/java/cn/icodening/collapse/sample/spring/boot/service/AbstractBlockingCallSample.java)
 ````java
