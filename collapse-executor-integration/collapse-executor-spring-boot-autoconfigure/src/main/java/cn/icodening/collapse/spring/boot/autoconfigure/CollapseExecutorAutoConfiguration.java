@@ -6,9 +6,9 @@ import cn.icodening.collapse.core.support.AsyncCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author icodening
  * @date 2023.05.16
  */
-@AutoConfiguration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnCollapseEnabled
 public class CollapseExecutorAutoConfiguration {
 

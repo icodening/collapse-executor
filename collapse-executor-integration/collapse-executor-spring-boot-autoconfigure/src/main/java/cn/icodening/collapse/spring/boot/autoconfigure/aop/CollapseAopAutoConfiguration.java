@@ -6,16 +6,16 @@ import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import cn.icodening.collapse.spring.boot.autoconfigure.ConditionalOnCollapseEnabled;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aspectj.lang.JoinPoint;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author icodening
  * @date 2023.07.07
  */
-@AutoConfiguration
 @ConditionalOnCollapseEnabled
+@Configuration(proxyBeanMethods = false)
 public class CollapseAopAutoConfiguration {
 
     @ConditionalOnClass({JoinPoint.class, CollapsibleAnnotationAspect.class})

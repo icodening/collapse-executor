@@ -14,9 +14,13 @@ import java.io.InputStream;
 class RepeatableReadResponse implements ClientHttpResponse {
 
     private final int rawStatusCode;
+
     private final HttpStatus statusCode;
+
     private final String statusText;
+
     private final HttpHeaders headers;
+
     private final byte[] body;
 
     RepeatableReadResponse(int rawStatusCode, HttpStatus statusCode, String statusText, HttpHeaders headers, byte[] body) {
