@@ -29,6 +29,7 @@ collapse:
     #[RestTemplate] collapse request configuration
     rest-template:
       enabled: true
+      apply-bean-names: restTemplate
       collapse-policies:
         sample-policy:
           collapse-request-headers:

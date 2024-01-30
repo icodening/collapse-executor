@@ -1,6 +1,5 @@
 package cn.icodening.collapse.sample.spring.boot.config;
 
-import cn.icodening.collapse.spring.web.client.CollapseHttpRequestInterceptor;
 import cn.icodening.collapse.spring.web.client.reactive.CollapseExchangeFilterFunction;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -21,9 +20,8 @@ import java.util.concurrent.TimeUnit;
 public class SampleConfiguration {
 
     @Bean
-    public RestTemplate restTemplate(CollapseHttpRequestInterceptor collapseHttpRequestInterceptor) {
+    public RestTemplate restTemplate() {
         return new RestTemplateBuilder()
-                .interceptors(collapseHttpRequestInterceptor)
                 .build();
     }
 
