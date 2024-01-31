@@ -81,14 +81,14 @@ public abstract class AbstractConfigurationCollapseGroupResolver implements Coll
     }
 
     private CollapsePolicyDefinition findCollapsePolicyDefinition(String groupPolicyName) {
-        if (groupPolicyName == null || "".equals(groupPolicyName.trim())) {
+        if (groupPolicyName == null || groupPolicyName.trim().isEmpty()) {
             return CollapsePolicyDefinition.DEFAULT_POLICY;
         }
         return this.collapseDefinitionProperties.getCollapsePolicies().get(groupPolicyName);
     }
 
     private Map<String, List<String>> queryStringToMap(String queryString) {
-        if (queryString == null || "".equals(queryString)) {
+        if (queryString == null || queryString.isEmpty()) {
             return Collections.emptyMap();
         }
         String[] queryKVs = queryString.split("&");

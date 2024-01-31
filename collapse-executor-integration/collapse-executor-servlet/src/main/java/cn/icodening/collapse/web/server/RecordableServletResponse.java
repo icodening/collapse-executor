@@ -1,6 +1,5 @@
 package cn.icodening.collapse.web.server;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
@@ -22,7 +21,7 @@ class RecordableServletResponse extends HttpServletResponseWrapper {
     }
 
     @Override
-    public ServletOutputStream getOutputStream() throws IOException {
+    public RecordableServletOutputStream getOutputStream() throws IOException {
         return recordableServletOutputStream;
     }
 

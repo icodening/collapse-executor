@@ -12,7 +12,7 @@ public interface RequestAttributes {
 
     /**
      * get request method type.
-     * eg. GET POST PUT ....
+     * e.g. GET POST PUT ....
      *
      * @return request method
      */

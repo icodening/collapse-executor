@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
@@ -27,7 +28,7 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
     private BlockingCallableGroupCollapseExecutor blockingCallableGroupCollapseExecutor;
 
     @Nullable
-    private CollapseGroupResolver collapseGroupResolver;
+    protected CollapseGroupResolver collapseGroupResolver;
 
     public CollapseHttpRequestInterceptor() {
 
@@ -37,7 +38,7 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
         this.blockingCallableGroupCollapseExecutor = blockingCallableGroupCollapseExecutor;
     }
 
-    public void setCollapseGroupResolver(CollapseGroupResolver collapseGroupResolver) {
+    public void setCollapseGroupResolver(@Nullable CollapseGroupResolver collapseGroupResolver) {
         this.collapseGroupResolver = collapseGroupResolver;
     }
 
@@ -46,7 +47,8 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
     }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    @NonNull
+    public ClientHttpResponse intercept(@NonNull HttpRequest request, @NonNull byte[] body, @NonNull ClientHttpRequestExecution execution) throws IOException {
         if (!allowCollapse(request)) {
             return execution.execute(request, body);
         }

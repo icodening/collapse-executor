@@ -13,6 +13,9 @@ import java.util.List;
 @ConfigurationProperties(prefix = "collapse.executor.rest-template")
 public class CollapseRestTemplateProperties extends CollapseDefinitionProperties {
 
+    /**
+     * Specify the RestTemplate bean that needs to take effect
+     */
     private List<String> applyBeanNames = new ArrayList<>();
 
     public List<String> getApplyBeanNames() {

@@ -9,6 +9,7 @@ import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
 import javax.servlet.ServletResponse;
+import javax.servlet.ServletResponseWrapper;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -59,8 +60,12 @@ public class AsyncServletExecutor extends CollapseExecutorAsyncSupport<ServletCo
         @Override
         public void onComplete(AsyncEvent event) throws IOException {
             ServletResponse suppliedResponse = event.getSuppliedResponse();
-            RecordableServletResponse repeatableReadServletResponse = (RecordableServletResponse) suppliedResponse;
-            RecordableServletOutputStream outputStream = (RecordableServletOutputStream) repeatableReadServletResponse.getOutputStream();
+            RecordableServletResponse repeatableReadServletResponse = findRecordableServletResponse(suppliedResponse);
+            if (repeatableReadServletResponse == null) {
+                onError(new AsyncEvent(event.getAsyncContext(), new IllegalArgumentException("RecordableServletResponse not found.")));
+                return;
+            }
+            RecordableServletOutputStream outputStream = repeatableReadServletResponse.getOutputStream();
             ServletCollapseResponse servletCollapseResponse = new ServletCollapseResponse(repeatableReadServletResponse, outputStream);
             future.complete(servletCollapseResponse);
         }
@@ -78,6 +83,17 @@ public class AsyncServletExecutor extends CollapseExecutorAsyncSupport<ServletCo
         @Override
         public void onStartAsync(AsyncEvent event) throws IOException {
 
+        }
+
+        private static RecordableServletResponse findRecordableServletResponse(ServletResponse servletResponse) {
+            ServletResponse response = servletResponse;
+            while (response instanceof ServletResponseWrapper) {
+                if (response instanceof RecordableServletResponse) {
+                    return (RecordableServletResponse) response;
+                }
+                response = ((ServletResponseWrapper) servletResponse).getResponse();
+            }
+            return null;
         }
     }
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
  * @author icodening
  * @date 2023.05.20
  */
-class RecordableServletOutputStream extends ServletOutputStream {
+public class RecordableServletOutputStream extends ServletOutputStream {
 
     private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(512);
 

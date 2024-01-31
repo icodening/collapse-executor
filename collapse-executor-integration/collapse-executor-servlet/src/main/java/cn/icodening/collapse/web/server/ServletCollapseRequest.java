@@ -9,7 +9,7 @@ import java.util.Objects;
  * @author icodening
  * @date 2023.05.22
  */
-class ServletCollapseRequest {
+public class ServletCollapseRequest {
 
     private final RequestCollapseGroup groupKey;
 

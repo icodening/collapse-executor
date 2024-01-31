@@ -1,0 +1,6 @@
+cn.icodening.collapse.spring.boot.autoconfigure.CollapseComponentScanner
+cn.icodening.collapse.spring.boot.autoconfigure.CollapseExecutorAutoConfiguration
+cn.icodening.collapse.spring.boot.autoconfigure.aop.CollapseAopAutoConfiguration
+cn.icodening.collapse.spring.boot.autoconfigure.web.server.CollapseServletAutoConfiguration
+cn.icodening.collapse.spring.boot.autoconfigure.web.client.reactive.CollapseWebClientAutoConfiguration
+cn.icodening.collapse.spring.boot.autoconfigure.web.client.CollapseRestTemplateAutoConfiguration

@@ -52,7 +52,7 @@ public class CollapseHttpRequestServletFilter extends HttpFilter {
             chain.doFilter(request, response);
             return;
         }
-        doFilterInternal(request, (HttpServletResponse) response, chain);
+        doFilterInternal(request, response, chain);
     }
 
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain chain) throws ServletException, IOException {

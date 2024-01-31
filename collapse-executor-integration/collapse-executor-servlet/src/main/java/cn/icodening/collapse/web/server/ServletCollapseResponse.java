@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author icodening
  * @date 2023.05.22
  */
-class ServletCollapseResponse {
+public class ServletCollapseResponse {
 
     private final HttpServletResponse response;
 

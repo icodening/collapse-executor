@@ -77,7 +77,6 @@ public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> impl
 
     protected abstract void bindingOutput(BATCH_OUTPUT batchOutput, List<Bundle<INPUT, OUTPUT>> bundles);
 
-    @SuppressWarnings("unchecked")
     private Bundle<INPUT, OUTPUT> createBundle(INPUT input, Executor executor, CompletableFuture<OUTPUT> completableFuture) {
         return new Bundle<>(this, input, executor, completableFuture);
     }
@@ -115,7 +114,7 @@ public abstract class AbstractCollapseExecutor<INPUT, OUTPUT, BATCH_OUTPUT> impl
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return super.hashCode();
     }
 }

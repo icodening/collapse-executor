@@ -28,7 +28,7 @@ public abstract class BatchCollector<E> implements Closeable {
     private volatile boolean close = false;
 
     public BatchCollector() {
-        this(new SingleThreadExecutor(), new ConcurrentLinkedQueue<>());
+        this(new SingleThreadExecutor());
     }
 
     public BatchCollector(Executor dispatcher) {
@@ -76,7 +76,7 @@ public abstract class BatchCollector<E> implements Closeable {
     private void doDispatch() {
         try {
             preparedCollect();
-            Itr itr = new Itr();
+            Itr<E> itr = new Itr<>(this.queue);
             Collection<E> collection = onCollecting(itr);
             onCollected(collection);
         } finally {
@@ -102,11 +102,17 @@ public abstract class BatchCollector<E> implements Closeable {
 
     protected abstract void onCollected(Collection<E> elements);
 
-    private class Itr implements Iterator<E> {
+    private static class Itr<T> implements Iterator<T> {
+
+        private final Queue<T> queue;
 
         private boolean hasNext = true;
 
-        private E next;
+        private T next;
+
+        private Itr(Queue<T> queue) {
+            this.queue = queue;
+        }
 
         @Override
         public boolean hasNext() {
@@ -119,7 +125,7 @@ public abstract class BatchCollector<E> implements Closeable {
         }
 
         @Override
-        public E next() {
+        public T next() {
             if (!hasNext) {
                 throw new NoSuchElementException();
             }
