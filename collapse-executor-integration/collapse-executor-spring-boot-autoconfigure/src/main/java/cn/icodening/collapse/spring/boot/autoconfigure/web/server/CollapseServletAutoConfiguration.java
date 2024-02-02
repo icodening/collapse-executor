@@ -22,6 +22,8 @@ import cn.icodening.collapse.spring.web.pattern.PathPatternCollapseGroupResolver
 import cn.icodening.collapse.web.server.AsyncServletExecutor;
 import cn.icodening.collapse.web.server.CollapseHttpRequestServletFilter;
 import io.undertow.Undertow;
+import org.apache.catalina.startup.Tomcat;
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.thread.ThreadPool;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -74,7 +76,7 @@ public class CollapseServletAutoConfiguration {
         return asyncServletExecutor;
     }
 
-    @ConditionalOnClass(name = "org.apache.catalina.startup.Tomcat")
+    @ConditionalOnClass(Tomcat.class)
     static class CollapseTomcatServerConfiguration {
 
         @Bean
@@ -83,7 +85,7 @@ public class CollapseServletAutoConfiguration {
         }
     }
 
-    @ConditionalOnClass(name = "io.undertow.Undertow")
+    @ConditionalOnClass(Undertow.class)
     static class CollapseUndertowServerConfiguration {
 
         @Bean
@@ -109,7 +111,7 @@ public class CollapseServletAutoConfiguration {
         }
     }
 
-    @ConditionalOnClass(name = {"org.eclipse.jetty.util.thread.ThreadPool", "org.eclipse.jetty.server.Server"})
+    @ConditionalOnClass(value = {ThreadPool.class, Server.class})
     static class CollapseJettyServerConfiguration {
 
         @Bean
