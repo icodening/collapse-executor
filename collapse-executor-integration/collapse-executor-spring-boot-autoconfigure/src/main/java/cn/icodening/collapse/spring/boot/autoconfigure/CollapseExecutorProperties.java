@@ -101,8 +101,6 @@ public class CollapseExecutorProperties {
 
         public static class Platform {
 
-            private boolean enabled = true;
-
             private int corePoolSize = 200;
 
             private int maximumPoolSize = corePoolSize;
@@ -112,14 +110,6 @@ public class CollapseExecutorProperties {
             private int queueSize = 0;
 
             private String prefix = "collapse-async";
-
-            public boolean isEnabled() {
-                return enabled;
-            }
-
-            public void setEnabled(boolean enabled) {
-                this.enabled = enabled;
-            }
 
             public int getCorePoolSize() {
                 return corePoolSize;
