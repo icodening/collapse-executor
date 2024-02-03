@@ -16,12 +16,14 @@
 package cn.icodening.collapse.core;
 
 import java.util.Objects;
+import java.util.SortedSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 /**
  * @author icodening
@@ -29,14 +31,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SingleThreadExecutor implements Executor {
 
-    private static final ThreadFactory THREAD_FACTORY = new InternalThreadFactory();
-
     private final ExecutorService delegate;
 
     private volatile boolean closed = false;
 
     public SingleThreadExecutor() {
-        this.delegate = Executors.newSingleThreadExecutor(THREAD_FACTORY);
+        this.delegate = DelegateExecutorServiceProvider.getDelegateExecutorService();
     }
 
     @Override
@@ -56,16 +56,68 @@ public class SingleThreadExecutor implements Executor {
         this.delegate.shutdown();
     }
 
-    private static class InternalThreadFactory implements ThreadFactory {
+    private static class DelegateExecutorServiceProvider {
 
-        private static final AtomicInteger COUNT = new AtomicInteger(0);
+        private static final String THREAD_PREFIX = "SingleThreadExecutor";
 
-        @Override
-        public Thread newThread(Runnable r) {
-            Thread thread = new Thread(r);
-            thread.setName("SingleEventLoop-" + COUNT.incrementAndGet());
-            thread.setDaemon(true);
-            return thread;
+        private static final ExecutorService DELEGATE_EXECUTOR_SERVICE;
+
+        static {
+            ExecutorService delegate = null;
+            if (isJava21()) {
+                delegate = initVirtualThreadExecutorService();
+            }
+            if (delegate == null) {
+                delegate = initGenericExecutorService();
+            }
+            DELEGATE_EXECUTOR_SERVICE = delegate;
+        }
+
+        private static ExecutorService getDelegateExecutorService() {
+            return DELEGATE_EXECUTOR_SERVICE;
+        }
+
+        private DelegateExecutorServiceProvider() {
+        }
+
+        private static boolean isJava21() {
+            try {
+                //'getFirst' since 21
+                SortedSet.class.getDeclaredMethod("getFirst");
+                return true;
+            } catch (NoSuchMethodException e) {
+                return false;
+            }
+        }
+
+        private static ExecutorService initVirtualThreadExecutorService() {
+            try {
+                return (ExecutorService) Executors.class
+                        .getDeclaredMethod("newVirtualThreadPerTaskExecutor")
+                        .invoke(null);
+            } catch (Throwable ignored) {
+                Logger logger = Logger.getLogger(DelegateExecutorServiceProvider.class.getName());
+                logger.warning("Current java version is 21+, but initialize 'VirtualThreadPerTaskExecutor' failed, will use default executor instead.");
+            }
+            return null;
+        }
+
+        private static ExecutorService initGenericExecutorService() {
+            ThreadFactory threadFactory = new ThreadFactory() {
+
+                private final AtomicInteger COUNT = new AtomicInteger(0);
+
+                @Override
+                public Thread newThread(Runnable r) {
+                    Thread thread = new Thread(r);
+                    thread.setName(THREAD_PREFIX + "-Platform-" + COUNT.incrementAndGet());
+                    thread.setDaemon(true);
+                    return thread;
+                }
+            };
+            return Executors.newSingleThreadExecutor(threadFactory);
         }
     }
 }
+
+
