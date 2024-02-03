@@ -3,7 +3,7 @@
 
 ### 1.同步阻塞调用
 
-[BlockingCollapseExecutorExample.java](./src/main/java/cn/icodening/collapse/sample/simple/BlockingCollapseExecutorExample.java)
+[BlockingCollapseExecutorExample.java](src/main/java/com/icodening/collapse/sample/simple/BlockingCollapseExecutorExample.java)
 
 ````java
 public class BlockingCollapseExecutorExample {
@@ -18,7 +18,7 @@ public class BlockingCollapseExecutorExample {
 
 ### 2.异步调用
 
-[AsyncCollapseExecutorExample.java](./src/main/java/cn/icodening/collapse/sample/simple/AsyncCollapseExecutorExample.java)
+[AsyncCollapseExecutorExample.java](src/main/java/com/icodening/collapse/sample/simple/AsyncCollapseExecutorExample.java)
 
 ````java
 public class AsyncCollapseExecutorExample {
@@ -40,7 +40,7 @@ public class AsyncCollapseExecutorExample {
 
 ### 3.非阻塞异步调用
 
-[FutureCollapseExecutorExample.java](./src/main/java/cn/icodening/collapse/sample/simple/FutureCollapseExecutorExample.java)
+[FutureCollapseExecutorExample.java](src/main/java/com/icodening/collapse/sample/simple/FutureCollapseExecutorExample.java)
 > 这种方式必须保证Callable中的处理逻辑是非阻塞的！！！
 
 ````java
