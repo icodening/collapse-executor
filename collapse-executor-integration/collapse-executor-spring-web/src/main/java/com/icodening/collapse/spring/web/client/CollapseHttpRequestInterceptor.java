@@ -79,7 +79,7 @@ public class CollapseHttpRequestInterceptor implements ClientHttpRequestIntercep
         } catch (RuntimeException | IOException e) {
             throw e;
         } catch (Throwable throwable) {
-            throw new RuntimeException(throwable);
+            throw new IllegalStateException(throwable);
         }
     }
 
