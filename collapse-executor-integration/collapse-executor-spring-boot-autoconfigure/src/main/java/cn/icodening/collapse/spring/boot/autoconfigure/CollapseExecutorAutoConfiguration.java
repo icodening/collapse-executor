@@ -20,6 +20,7 @@ import cn.icodening.collapse.core.SuspendableCollector;
 import cn.icodening.collapse.core.support.AsyncCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.BlockingCallableGroupCollapseExecutor;
 import cn.icodening.collapse.core.support.FutureCallableGroupCollapseExecutor;
+import cn.icodening.collapse.core.util.VirtualThreadExecutorServiceProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -74,7 +75,14 @@ public class CollapseExecutorAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "collapseExecutorService")
     public ExecutorService collapseExecutorService(CollapseExecutorProperties collapseExecutorProperties) {
-        CollapseExecutorProperties.ThreadPool threadPool = collapseExecutorProperties.getThreadPool();
+        CollapseExecutorProperties.ThreadPool.Virtual virtual = collapseExecutorProperties.getThreadPool().getVirtual();
+        if (virtual.isEnabled()) {
+            ExecutorService executorService = VirtualThreadExecutorServiceProvider.tryInstantiateVitrualThreadExecutorService();
+            if (executorService != null) {
+                return executorService;
+            }
+        }
+        CollapseExecutorProperties.ThreadPool.Platform threadPool = collapseExecutorProperties.getThreadPool().getPlatform();
         int corePoolSize = threadPool.getCorePoolSize();
         int maximumPoolSize = threadPool.getMaximumPoolSize();
         int queueSize = threadPool.getQueueSize();

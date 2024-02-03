@@ -66,54 +66,102 @@ public class CollapseExecutorProperties {
 
     public static class ThreadPool {
 
-        private int corePoolSize = 200;
+        private Virtual virtual = new Virtual();
 
-        private int maximumPoolSize = corePoolSize;
+        private Platform platform = new Platform();
 
-        private int keepAliveTime = 0;
-
-        private int queueSize = 0;
-
-        private String prefix = "collapse-async";
-
-        public int getCorePoolSize() {
-            return corePoolSize;
+        public Virtual getVirtual() {
+            return virtual;
         }
 
-        public void setCorePoolSize(int corePoolSize) {
-            this.corePoolSize = corePoolSize;
+        public void setVirtual(Virtual virtual) {
+            this.virtual = virtual;
         }
 
-        public int getMaximumPoolSize() {
-            return maximumPoolSize;
+        public Platform getPlatform() {
+            return platform;
         }
 
-        public void setMaximumPoolSize(int maximumPoolSize) {
-            this.maximumPoolSize = maximumPoolSize;
+        public void setPlatform(Platform platform) {
+            this.platform = platform;
         }
 
-        public int getKeepAliveTime() {
-            return keepAliveTime;
+        public static class Virtual {
+
+            private boolean enabled = false;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
         }
 
-        public void setKeepAliveTime(int keepAliveTime) {
-            this.keepAliveTime = keepAliveTime;
-        }
+        public static class Platform {
 
-        public int getQueueSize() {
-            return queueSize;
-        }
+            private boolean enabled = true;
 
-        public void setQueueSize(int queueSize) {
-            this.queueSize = queueSize;
-        }
+            private int corePoolSize = 200;
 
-        public String getPrefix() {
-            return prefix;
-        }
+            private int maximumPoolSize = corePoolSize;
 
-        public void setPrefix(String prefix) {
-            this.prefix = prefix;
+            private int keepAliveTime = 0;
+
+            private int queueSize = 0;
+
+            private String prefix = "collapse-async";
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public int getCorePoolSize() {
+                return corePoolSize;
+            }
+
+            public void setCorePoolSize(int corePoolSize) {
+                this.corePoolSize = corePoolSize;
+            }
+
+            public int getMaximumPoolSize() {
+                return maximumPoolSize;
+            }
+
+            public void setMaximumPoolSize(int maximumPoolSize) {
+                this.maximumPoolSize = maximumPoolSize;
+            }
+
+            public int getKeepAliveTime() {
+                return keepAliveTime;
+            }
+
+            public void setKeepAliveTime(int keepAliveTime) {
+                this.keepAliveTime = keepAliveTime;
+            }
+
+            public int getQueueSize() {
+                return queueSize;
+            }
+
+            public void setQueueSize(int queueSize) {
+                this.queueSize = queueSize;
+            }
+
+            public String getPrefix() {
+                return prefix;
+            }
+
+            public void setPrefix(String prefix) {
+                this.prefix = prefix;
+            }
+
         }
     }
+
 }

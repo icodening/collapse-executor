@@ -15,6 +15,8 @@
  */
 package cn.icodening.collapse.core;
 
+import cn.icodening.collapse.core.util.VirtualThreadExecutorServiceProvider;
+
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.concurrent.Executor;
@@ -65,7 +67,11 @@ public class SingleThreadExecutor implements Executor {
         static {
             ExecutorService delegate = null;
             if (isJava21()) {
-                delegate = initVirtualThreadExecutorService();
+                delegate = VirtualThreadExecutorServiceProvider.tryInstantiateVitrualThreadExecutorService();
+                if (delegate == null) {
+                    Logger logger = Logger.getLogger(DelegateExecutorServiceProvider.class.getName());
+                    logger.warning("Current java version is 21+, but initialize 'VirtualThreadPerTaskExecutor' failed, will use default executor instead.");
+                }
             }
             if (delegate == null) {
                 delegate = initGenericExecutorService();
@@ -88,18 +94,6 @@ public class SingleThreadExecutor implements Executor {
             } catch (NoSuchMethodException e) {
                 return false;
             }
-        }
-
-        private static ExecutorService initVirtualThreadExecutorService() {
-            try {
-                return (ExecutorService) Executors.class
-                        .getDeclaredMethod("newVirtualThreadPerTaskExecutor")
-                        .invoke(null);
-            } catch (Throwable ignored) {
-                Logger logger = Logger.getLogger(DelegateExecutorServiceProvider.class.getName());
-                logger.warning("Current java version is 21+, but initialize 'VirtualThreadPerTaskExecutor' failed, will use default executor instead.");
-            }
-            return null;
         }
 
         private static ExecutorService initGenericExecutorService() {
